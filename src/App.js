@@ -1,14 +1,21 @@
 import './App.css';
-import CrearOferta from './OfertasLaborales/components/CrearOferta';
-
+import CrearOferta from './OfertasLaborales/CrearOferta';
+import {BrowserRouter, Route, Routes} from 'react-router-dom'
+import Home from './Home/Home.js'
+import Header from './Header/Header.js'
 function App() {
   return (
-    <>
-    <div className="App">
-      Hola Mundo
-    </div>
-    <CrearOferta />
-    </>
+  
+  <BrowserRouter>
+    <Header />
+    <Routes>
+      <Route path='/crearOferta' element={<CrearOferta/>} />
+      <Route path='/' element={<Home/>} />
+    </Routes>
+  </BrowserRouter>
+
+
+
   );
 }
 
