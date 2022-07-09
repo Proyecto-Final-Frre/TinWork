@@ -1,37 +1,19 @@
-import logo from "./logo.svg";
 import "./App.css";
-
-import { authentication, getUsers, logOut } from "./config/firebase";
-
-const users = async () => {
-  const users = await getUsers();
-  console.log(users);
-};
-
+import CrearOferta from "./OfertasLaborales/CrearOferta";
+import MostrarOfertas from "./OfertasLaborales/MostrarOfertas";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Home from "./Home/Home.js";
+import Header from "./Header/Header.js";
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-
-      <div>
-        <button onClick={() => authentication()}>Iniciar</button>
-        <button onClick={() => users()}>Obtener Usuarios</button>
-        <button onClick={() => logOut()}>Cerrar Sesion</button>
-      </div>
-    </div>
+    <BrowserRouter>
+      <Header />
+      <Routes>
+        <Route path="/verOfertas" element={<MostrarOfertas />} />
+        <Route path="/crearOferta" element={<CrearOferta />} />
+        <Route path="/" element={<Home />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
