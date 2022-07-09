@@ -30,7 +30,7 @@ const Abilities = () => {
           />
         ))
       }
-      style={{ width: 500 }}
+      style={{ width: 500, marginBottom: 10 }}
       renderInput={(params) => (
         <TextField
           {...params}
