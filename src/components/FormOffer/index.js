@@ -1,11 +1,12 @@
 import { Button, Card, Form } from "react-bootstrap";
-import Habilidades from "./Habilidades.js";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 //import {Link} from 'react-router-dom'
 import { useNavigate } from "react-router-dom";
-import { createOffer } from "../services/OfferService.js";
+import { createOffer } from "../../services/OfferService";
+import Abilities from "../Abilities";
+import "./style.css";
 
-function CrearOferta() {
+const FormOffer = () => {
   // configuramos los hooks
   const [tituloPosicion, setTituloPosicion] = useState("");
   const [descPosicion, setDescPosicion] = useState("");
@@ -29,7 +30,6 @@ function CrearOferta() {
     navigate("/");
     //console.log(e.target[0])
   };
-
   return (
     <Card>
       <Card.Body>
@@ -58,7 +58,7 @@ function CrearOferta() {
             />
           </Form.Group>
 
-          <Habilidades />
+          <Abilities />
           <hr />
           <hr />
           <Button variant="primary" type="submit">
@@ -68,6 +68,6 @@ function CrearOferta() {
       </Card.Body>
     </Card>
   );
-}
+};
 
-export default CrearOferta;
+export default FormOffer;
