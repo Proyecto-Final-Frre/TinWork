@@ -1,5 +1,12 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from "./logo.svg";
+import "./App.css";
+
+import { authentication, getUsers, logOut } from "./config/firebase";
+
+const users = async () => {
+  const users = await getUsers();
+  console.log(users);
+};
 
 function App() {
   return (
@@ -18,6 +25,12 @@ function App() {
           Learn React
         </a>
       </header>
+
+      <div>
+        <button onClick={() => authentication()}>Iniciar</button>
+        <button onClick={() => users()}>Obtener Usuarios</button>
+        <button onClick={() => logOut()}>Cerrar Sesion</button>
+      </div>
     </div>
   );
 }
