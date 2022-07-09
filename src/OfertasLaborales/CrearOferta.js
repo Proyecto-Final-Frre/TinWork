@@ -1,5 +1,5 @@
 import { Button, Card, Form } from 'react-bootstrap';
-import CargarHabilidad from './CargarHabilidad';
+import Habilidades from './Habilidades.js';
 import React, {useState, useEffect} from 'react';
 //import {Link} from 'react-router-dom'
 import {collection, getDocs, getDoc, deleteDoc, doc, addDoc} from 'firebase/firestore';
@@ -51,8 +51,9 @@ function CrearOferta() {
             className='form-control' />
           </Form.Group>
           
-          <CargarHabilidad />
-          <div>Mostrar habilidades</div>
+          <Habilidades/>
+          <hr/>
+          <hr />
           <Button variant="primary" type="submit">
             Cargar posición
           </Button>
