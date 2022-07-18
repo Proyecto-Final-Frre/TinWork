@@ -1,12 +1,13 @@
-import * as React from "react";
+import "./style.css";
+
 import Chip from "@mui/material/Chip";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
+import React, { useState } from "react";
 
-export default function FixedTags() {
+const Abilities = () => {
   const fixedOptions = [top100Films[0]];
-  const [value, setValue] = React.useState([...fixedOptions, top100Films[5]]);
-
+  const [value, setValue] = useState([...fixedOptions, top100Films[5]]);
   return (
     <Autocomplete
       multiple
@@ -29,7 +30,7 @@ export default function FixedTags() {
           />
         ))
       }
-      style={{ width: 500 }}
+      style={{ width: 500, marginBottom: 10 }}
       renderInput={(params) => (
         <TextField
           {...params}
@@ -39,7 +40,7 @@ export default function FixedTags() {
       )}
     />
   );
-}
+};
 
 // Top 100 films as rated by IMDb users. http://www.imdb.com/chart/top
 const top100Films = [
@@ -51,3 +52,5 @@ const top100Films = [
   { title: "Node.js" },
   { title: "Pulp Fiction" },
 ];
+
+export default Abilities;
