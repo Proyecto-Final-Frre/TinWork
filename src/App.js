@@ -1,23 +1,19 @@
-import './App.css';
-import CrearOferta from './OfertasLaborales/CrearOferta';
-import MostrarOfertas from './OfertasLaborales/MostrarOfertas';
-import {BrowserRouter, Route, Routes} from 'react-router-dom'
-import Home from './Home/Home.js'
-import Header from './Header/Header.js'
+import "./App.css";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Home from "./containers/Home/Home.js";
+import Header from "./components/Header";
+import FormOffer from "./components/FormOffer";
+import OfferList from "./components/OfferList";
 function App() {
   return (
-  
-  <BrowserRouter>
-    <Header />
-    <Routes>
-      <Route path='/verOfertas' element={<MostrarOfertas/>} />
-      <Route path='/crearOferta' element={<CrearOferta/>} />
-      <Route path='/' element={<Home/>} />
-    </Routes>
-  </BrowserRouter>
-
-
-
+    <BrowserRouter>
+      <Header />
+      <Routes>
+        <Route path="/offers" element={<OfferList />} />
+        <Route path="/create-offer" element={<FormOffer />} />
+        <Route path="/" element={<Home />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
