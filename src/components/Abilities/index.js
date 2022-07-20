@@ -3,31 +3,34 @@ import "./style.css";
 import Chip from "@mui/material/Chip";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { findAll } from "../../services/AbilityService";
 
-const Abilities = () => {
-  const fixedOptions = [top100Films[0]];
-  const [value, setValue] = useState([...fixedOptions, top100Films[5]]);
+const Abilities = ({ abilities, addAbilities }) => {
+  const [selectableAbilities, setSelectableAbilities] = useState([]);
+
+  useEffect(() => {
+    abilitiesFunc();
+  }, [selectableAbilities]);
+
+  const abilitiesFunc = async () => {
+    const result = await findAll();
+    setSelectableAbilities(result);
+  };
+
   return (
     <Autocomplete
       multiple
       id="fixed-tags-demo"
-      value={value}
-      onChange={(event, newValue) => {
-        setValue([
-          //...fixedOptions,
-          ...newValue.filter((option) => fixedOptions.indexOf(option) === -1),
-        ]);
+      value={abilities}
+      onChange={(event, newAbility) => {
+        addAbilities(newAbility);
       }}
-      options={top100Films}
+      options={selectableAbilities}
       getOptionLabel={(option) => option.title}
       renderTags={(tagValue, getTagProps) =>
         tagValue.map((option, index) => (
-          <Chip
-            label={option.title}
-            {...getTagProps({ index })}
-            disabled={fixedOptions.indexOf(option) !== -1}
-          />
+          <Chip label={option.title} {...getTagProps({ index })} />
         ))
       }
       style={{ width: 500, marginBottom: 10 }}

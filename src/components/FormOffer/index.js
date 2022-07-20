@@ -8,17 +8,26 @@ import "./style.css";
 const FormOffer = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [abilities, setAbilities] = useState([]);
 
   const navigate = useNavigate();
 
   const store = async (e) => {
     e.preventDefault();
+
+    console.log("habilidades", abilities);
+
     const offer = {
       title,
       description,
+      abilities,
     };
     await createOffer(offer);
     navigate("/");
+  };
+
+  const addAbilities = (ability) => {
+    setAbilities(ability);
   };
 
   return (
@@ -48,7 +57,7 @@ const FormOffer = () => {
             />
           </Form.Group>
 
-          <Abilities />
+          <Abilities addAbilities={addAbilities} abilities={abilities} />
           <Button variant="primary" type="submit">
             Cargar posición
           </Button>
