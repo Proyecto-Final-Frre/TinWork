@@ -16,7 +16,7 @@ const Abilities = ({ abilities, addAbilities }) => {
   const abilitiesFunc = async () => {
     const result = await findAll();
     setSelectableAbilities(result);
-  };
+  }
 
   return (
     <Autocomplete

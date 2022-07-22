@@ -3,6 +3,7 @@ import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getFirestore, collection, getDocs } from "firebase/firestore";
 
+
 import {
   getAuth,
   signInWithPopup,
@@ -47,6 +48,7 @@ export function authentication() {
     .catch((error) => {
       // Handle Errors here.
       const errorCode = error.code;
+      console.log(errorCode)
       const errorMessage = error.message;
       // The email of the user's account used.
       const email = error.customData.email;
@@ -82,3 +84,5 @@ export async function getUsers() {
 }
 
 export { db };
+
+
