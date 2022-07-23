@@ -15,8 +15,6 @@ const FormOffer = () => {
   const store = async (e) => {
     e.preventDefault();
 
-    console.log("habilidades", abilities);
-
     const offer = {
       title,
       description,
@@ -32,10 +30,10 @@ const FormOffer = () => {
 
   return (
     
-    <div class="card-principal" >
+    <div className="card-principal" >
       <Card.Body >
         <Card.Title className="mb-4" >Nueva posición</Card.Title>                     
-        <Form onSubmit={store}>
+        <Form onSubmit={(e)=> store(e)}>
           
           <Form.Group className="mb-4"  controlId="position-title">
             <Form.Control
@@ -54,15 +52,16 @@ const FormOffer = () => {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               type="text"
-              className="form-control"
+              className="col-md-12"
             />
           </Form.Group>
           <Abilities  addAbilities={addAbilities} abilities={abilities} />
-          
+        <div className="text-right">
+          <Button variant="primary" type="submit">
+              Cargar posición
+          </Button>
+        </div>
         </Form>
-        <Button  variant="primary" type="submit">
-            Cargar posición
-        </Button>
       </Card.Body>
       
     </div>
