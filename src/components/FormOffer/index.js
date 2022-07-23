@@ -31,7 +31,8 @@ const FormOffer = () => {
   };
 
   return (
-    <Card >
+    
+    <div class="card-principal" >
       <Card.Body >
         <Card.Title className="mb-4" >Nueva posición</Card.Title>                     
         <Form onSubmit={store}>
@@ -59,12 +60,13 @@ const FormOffer = () => {
           <Abilities  addAbilities={addAbilities} abilities={abilities} />
           
         </Form>
-        <Button   variant="primary" type="submit">
+        <Button  variant="primary" type="submit">
             Cargar posición
-           </Button>
+        </Button>
       </Card.Body>
       
-    </Card>
+    </div>
+    
   );
 };
 

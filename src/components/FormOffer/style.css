@@ -1,11 +1,22 @@
+.mb-2 {
+
+}
 
 .mb-4 {
-    width: 1500px;
+    width: 1550px;
     margin-left: auto;
     margin-right: auto;
 }
+
 .btn-primary {
     
-    margin-left: 190px;
+    margin-left: 155px;
     margin-right: auto;
+}
+
+.card-principal {
+    margin-top: 20px;
+    margin-inline: 10px;
+    border: 5px solid #b2d3f4;
+    border-radius: 10px;
 }

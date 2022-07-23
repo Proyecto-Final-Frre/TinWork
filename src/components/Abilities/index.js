@@ -2,7 +2,7 @@ import "./style.css";
 
 import Chip from "@mui/material/Chip";
 import TextField from "@mui/material/TextField";
-import Autocomplete from "@mui/material/Autocomplete";
+import Autocomplete, { autocompleteClasses } from "@mui/material/Autocomplete";
 import React, { useEffect, useState } from "react";
 import { findAll } from "../../services/AbilityService";
 
@@ -40,7 +40,8 @@ const Abilities = ({ abilities, addAbilities }) => {
           <Chip label={option.title} {...getTagProps({ index })} />
         ))
       }
-      style={{ width: 1700, marginBottom: 10, paddingLeft:190,  }}
+      
+      className="autocomplete"
       renderInput={(params) => (
         <TextField
           {...params}
