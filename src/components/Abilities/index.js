@@ -7,11 +7,14 @@ import React, { useEffect, useState } from "react";
 import { findAll } from "../../services/AbilityService";
 
 const Abilities = ({ abilities, addAbilities }) => {
+
+
+
   const [selectableAbilities, setSelectableAbilities] = useState([]);
 
   useEffect(() => {
     abilitiesFunc();
-  }, [selectableAbilities]);
+  }, []);
 
   const abilitiesFunc = async () => {
     const result = await findAll();
@@ -23,8 +26,12 @@ const Abilities = ({ abilities, addAbilities }) => {
       multiple
       id="fixed-tags-demo"
       value={abilities}
-      onChange={(event, newAbility) => {
-        addAbilities(newAbility);
+      onChange={(event, newAbilities) => {
+        let abilities = newAbilities.map(ability => {
+          return { title: ability.title, category: ability.category }
+        })
+        addAbilities(abilities);
+
       }}
       options={selectableAbilities}
       getOptionLabel={(option) => option.title}
@@ -33,7 +40,7 @@ const Abilities = ({ abilities, addAbilities }) => {
           <Chip label={option.title} {...getTagProps({ index })} />
         ))
       }
-      style={{ width: 500, marginBottom: 10 }}
+      style={{ width: 1700, marginBottom: 10, paddingLeft:190,  }}
       renderInput={(params) => (
         <TextField
           {...params}
@@ -45,15 +52,5 @@ const Abilities = ({ abilities, addAbilities }) => {
   );
 };
 
-// Top 100 films as rated by IMDb users. http://www.imdb.com/chart/top
-const top100Films = [
-  { title: "Angular" },
-  { title: "PHP" },
-  { title: "React.js" },
-  { title: "Mongo DB" },
-  { title: "Proactivo" },
-  { title: "Node.js" },
-  { title: "Pulp Fiction" },
-];
 
 export default Abilities;

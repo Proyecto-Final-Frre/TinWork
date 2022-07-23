@@ -31,12 +31,12 @@ const FormOffer = () => {
   };
 
   return (
-    <Card>
-      <Card.Body>
-        <Card.Title>Nueva posición</Card.Title>
-        <hr />
+    <Card >
+      <Card.Body >
+        <Card.Title className="mb-4" >Nueva posición</Card.Title>                     
         <Form onSubmit={store}>
-          <Form.Group className="mb-3" controlId="position-title">
+          
+          <Form.Group className="mb-4"  controlId="position-title">
             <Form.Control
               type="text"
               placeholder="Título de la posición"
@@ -45,7 +45,7 @@ const FormOffer = () => {
               className="form-control"
             />
           </Form.Group>
-          <Form.Group className="mb-3" controlId="position-description">
+          <Form.Group className="mb-4" controlId="position-description">
             <Form.Control
               as="textarea"
               rows={6}
@@ -56,13 +56,14 @@ const FormOffer = () => {
               className="form-control"
             />
           </Form.Group>
-
-          <Abilities addAbilities={addAbilities} abilities={abilities} />
-          <Button variant="primary" type="submit">
-            Cargar posición
-          </Button>
+          <Abilities  addAbilities={addAbilities} abilities={abilities} />
+          
         </Form>
+        <Button   variant="primary" type="submit">
+            Cargar posición
+           </Button>
       </Card.Body>
+      
     </Card>
   );
 };
