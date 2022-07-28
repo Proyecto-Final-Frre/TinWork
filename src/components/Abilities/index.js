@@ -2,13 +2,11 @@ import "./style.css";
 
 import Chip from "@mui/material/Chip";
 import TextField from "@mui/material/TextField";
-import Autocomplete, { autocompleteClasses } from "@mui/material/Autocomplete";
+import Autocomplete from "@mui/material/Autocomplete";
 import React, { useEffect, useState } from "react";
 import { findAll } from "../../services/AbilityService";
 
 const Abilities = ({ abilities, addAbilities }) => {
-
-
 
   const [selectableAbilities, setSelectableAbilities] = useState([]);
 
@@ -27,6 +25,7 @@ const Abilities = ({ abilities, addAbilities }) => {
       id="fixed-tags-demo"
       value={abilities}
       onChange={(event, newAbilities) => {
+        
         let abilities = newAbilities.map(ability => {
           return { title: ability.title, category: ability.category }
         })
