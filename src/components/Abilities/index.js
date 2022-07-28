@@ -7,7 +7,6 @@ import React, { useEffect, useState } from "react";
 import { findAll } from "../../services/AbilityService";
 
 const Abilities = ({ abilities, addAbilities }) => {
-
   const [selectableAbilities, setSelectableAbilities] = useState([]);
 
   useEffect(() => {
@@ -17,7 +16,7 @@ const Abilities = ({ abilities, addAbilities }) => {
   const abilitiesFunc = async () => {
     const result = await findAll();
     setSelectableAbilities(result);
-  }
+  };
 
   return (
     <Autocomplete
@@ -25,12 +24,14 @@ const Abilities = ({ abilities, addAbilities }) => {
       id="fixed-tags-demo"
       value={abilities}
       onChange={(event, newAbilities) => {
-        
-        let abilities = newAbilities.map(ability => {
-          return { title: ability.title, category: ability.category }
-        })
+        let abilities = newAbilities.map((ability) => {
+          return { title: ability.title, category: ability.category };
+        });
         addAbilities(abilities);
-
+        let result = selectableAbilities.filter(
+          (selectableAbility) => !newAbilities.includes(selectableAbility)
+        );
+        setSelectableAbilities(result);
       }}
       options={selectableAbilities}
       getOptionLabel={(option) => option.title}
@@ -39,7 +40,6 @@ const Abilities = ({ abilities, addAbilities }) => {
           <Chip label={option.title} {...getTagProps({ index })} />
         ))
       }
-      
       className="autocomplete"
       renderInput={(params) => (
         <TextField
@@ -51,6 +51,5 @@ const Abilities = ({ abilities, addAbilities }) => {
     />
   );
 };
-
 
 export default Abilities;
