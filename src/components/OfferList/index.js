@@ -2,7 +2,7 @@ import Offer from "../Offer";
 import "./style.css";
 
 const OfferList = () => {
-  const list = [1, 2, 3, 4, 5];
+  const list = [1];
 
   return list.map(() => <Offer />);
 };
