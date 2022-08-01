@@ -9,7 +9,7 @@ const Offer = () => {
     <div className="card-offer">
       <div class="card-header">     
             <AiOutlineFileSearch class="search" type="button"/> 
-            <h5 class="card-title "> Web Mobile Developer</h5>
+            <h5 > Web Mobile Developer</h5>
       </div>
       <h7 ><GrLocation /> Buenos aires </h7>
       <h7><BiBriefcase /> Jornada Completa</h7>

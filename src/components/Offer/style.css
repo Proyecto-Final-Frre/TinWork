@@ -18,6 +18,8 @@
 
 }
 
+
+
 .search {
     margin-inline: auto;
     margin-left: auto;
@@ -25,6 +27,7 @@
     font-size: 40px;
     color: white;
     background-color: #2E81FB;
+    border-radius: 8%;
 }
 
 .people {
@@ -33,7 +36,5 @@
     background-color: #2E81FB;
     color: white;
     border-radius: 100px;
-    
-
     
 }
