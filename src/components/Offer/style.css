@@ -1,33 +1,43 @@
 .card-offer {
+    border: 1px solid #b2d3f4;
+    border-radius: 10px;
+}
+
+.offer-header {
+    border-bottom: 1px solid #E8E8E8;
+    padding: 0.5rem 1rem;
     margin-left: 10px;
-    margin-top: 20px;
-    border: 5px solid #b2d3f4;
-    border-radius: 10px;
-    width: 15%;
-    
-   
-
-}
-
-.card-header {
+    margin-right: 10px;
     display: flex;
-    margin-inline: auto;
-    margin-left: auto;
-    margin-right: auto;
-    border-radius: 10px;
-
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: flex-start;
+    gap: 5%;
 }
 
-
+.card-header h5 {
+    font-size: x-large;
+}
 
 .search {
-    margin-inline: auto;
-    margin-left: auto;
-    margin-right: auto;
-    font-size: 40px;
+    margin: 0;
+    font-size: 35px;
     color: white;
     background-color: #2E81FB;
-    border-radius: 8%;
+    border-radius: 15%;
+}
+
+.card-location {
+    margin: 10px;
+    padding: 1%;
+    display: grid;
+    gap: 3%;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.offer-description {
+    padding: 0 5%;
+    text-align: justify;
 }
 
 .people {
@@ -36,5 +46,5 @@
     background-color: #2E81FB;
     color: white;
     border-radius: 100px;
-    
+
 }
