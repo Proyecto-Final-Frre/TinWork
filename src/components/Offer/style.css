@@ -1,0 +1,50 @@
+.card-offer {
+    border: 1px solid #b2d3f4;
+    border-radius: 10px;
+}
+
+.offer-header {
+    border-bottom: 1px solid #E8E8E8;
+    padding: 0.5rem 1rem;
+    margin-left: 10px;
+    margin-right: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: flex-start;
+    gap: 5%;
+}
+
+.card-header h5 {
+    font-size: x-large;
+}
+
+.search {
+    margin: 0;
+    font-size: 35px;
+    color: white;
+    background-color: #2E81FB;
+    border-radius: 15%;
+}
+
+.card-location {
+    margin: 10px;
+    padding: 1%;
+    display: grid;
+    gap: 3%;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.offer-description {
+    padding: 0 5%;
+    text-align: justify;
+}
+
+.people {
+    margin-left: 65%;
+    font-size: 25px;
+    background-color: #2E81FB;
+    color: white;
+    border-radius: 100px;
+
+}

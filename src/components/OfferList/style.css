@@ -1,0 +1,9 @@
+.offer-list-container {
+    width: 90%;
+    max-width: 1300x;
+    margin: auto;
+    padding: 40px 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
