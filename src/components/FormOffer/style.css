@@ -1,0 +1,10 @@
+.btn-primary {
+    justify-content: flex-end;
+}
+
+.card-principal {
+    margin-top: 20px;
+    margin-inline: 10px;
+    border: 5px solid #b2d3f4;
+    border-radius: 10px;
+}
