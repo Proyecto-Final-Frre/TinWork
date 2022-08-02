@@ -2,9 +2,15 @@
     justify-content: flex-end;
 }
 
+.container-card {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 3%;
+}
+
 .card-principal {
-    margin-top: 20px;
-    margin-inline: 10px;
-    border: 5px solid #b2d3f4;
+    width: 75%;
+    border: 1px solid #b2d3f4;
     border-radius: 10px;
 }
