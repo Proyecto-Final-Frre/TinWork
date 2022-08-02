@@ -3,21 +3,16 @@ import "./style.css";
 import Chip from "@mui/material/Chip";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
-import React, { useEffect, useState } from "react";
-import { findAll } from "../../services/AbilityService";
+import React from "react";
 
-const Abilities = ({ abilities, addAbilities }) => {
-  const [selectableAbilities, setSelectableAbilities] = useState([]);
-
-  useEffect(() => {
-    abilitiesFunc();
-  }, []);
-
-  const abilitiesFunc = async () => {
-    const result = await findAll();
-    setSelectableAbilities(result);
-  };
-
+const Abilities = ({
+  abilities,
+  addAbilities,
+  selectableAbilities,
+  setSelectableAbilities,
+  label,
+  placeholder,
+}) => {
   return (
     <Autocomplete
       multiple
@@ -42,11 +37,7 @@ const Abilities = ({ abilities, addAbilities }) => {
       }
       className="autocomplete"
       renderInput={(params) => (
-        <TextField
-          {...params}
-          label="Habilidades"
-          placeholder="Cargar habilidades"
-        />
+        <TextField {...params} label={label} placeholder={placeholder} />
       )}
     />
   );
