@@ -1,32 +1,51 @@
 import { Button, Card, Form } from "react-bootstrap";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createOffer } from "../../services/OfferService";
 import Abilities from "../Abilities";
 import "./style.css";
+import { findAll } from "../../services/AbilityService";
 
 const FormOffer = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [abilities, setAbilities] = useState([]);
+  const [selectableAbilities, setSelectableAbilities] = useState([]);
+  const [requiredAbilities, setRequiredAbilities] = useState([]);
+  const [desiredAbilities, setDesiredAbilities] = useState([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    abilitiesFunc();
+  }, []);
+
+  const abilitiesFunc = async () => {
+    const result = await findAll();
+    setSelectableAbilities(result);
+  };
 
   const store = async (e) => {
     e.preventDefault();
-    let abilitiesStr = abilities.map((ability) => ability.title);
+    let requiredAbilitiesStr = requiredAbilities.map(
+      (ability) => ability.title
+    );
+    let desiredAbilitiesStr = desiredAbilities.map((ability) => ability.title);
 
     const offer = {
       title,
       description,
-      abilities: abilitiesStr,
+      requiredAbilities: requiredAbilitiesStr,
+      desiredAbilities: desiredAbilitiesStr,
     };
-    console.log("Offer", offer);
     await createOffer(offer);
-    navigate("/");
+    navigate("/offers");
   };
 
-  const addAbilities = (abilities) => {
-    setAbilities(abilities);
+  const addRequiredAbilities = (abilities) => {
+    setRequiredAbilities(abilities);
+  };
+
+  const addDesiredAbilities = (abilities) => {
+    setDesiredAbilities(abilities);
   };
 
   return (
@@ -55,7 +74,22 @@ const FormOffer = () => {
                 className="col-md-12"
               />
             </Form.Group>
-            <Abilities addAbilities={addAbilities} abilities={abilities} />
+            <Abilities
+              addAbilities={addRequiredAbilities}
+              abilities={requiredAbilities}
+              selectableAbilities={selectableAbilities}
+              setSelectableAbilities={setSelectableAbilities}
+              label={"Habilidades Requeridas"}
+              placeholder={"Cargar Habilidades Requeridas"}
+            />
+            <Abilities
+              addAbilities={addDesiredAbilities}
+              abilities={desiredAbilities}
+              selectableAbilities={selectableAbilities}
+              setSelectableAbilities={setSelectableAbilities}
+              label={"Habilidades Deseadas"}
+              placeholder={"Cargar Habilidades Deseadas"}
+            />
             <div className="text-right">
               <Button variant="primary" type="submit">
                 Cargar posición
