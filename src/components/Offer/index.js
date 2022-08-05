@@ -4,32 +4,30 @@ import { AiOutlineFileSearch } from "react-icons/ai";
 import { GrLocation } from "react-icons/gr";
 import { BiBriefcase } from "react-icons/bi";
 import { BsCalendarDate, BsPeople } from "react-icons/bs";
-const Offer = () => {
+const Offer = ({ title, description }) => {
   return (
     <div className="card-offer">
-      <div class="offer-header">
-        <AiOutlineFileSearch class="search" type="button" />
-        <h5> Web Mobile Developer</h5>
+      <div className="offer-header">
+        <AiOutlineFileSearch className="search" type="button" />
+        <h5>{title}</h5>
       </div>
       <div className="card-location">
-        <h7>
+        <h6>
           <GrLocation /> Buenos aires{" "}
-        </h7>
-        <h7>
+        </h6>
+        <h6>
           <BiBriefcase /> Jornada Completa
-        </h7>
-        <h7>
+        </h6>
+        <h6>
           <BsCalendarDate /> Hace un mes{" "}
-        </h7>
+        </h6>
       </div>
-      <p class="offer-description">
-        With supporting text below as a natural lead-in to additional content.
-      </p>
-      <a href="#" class="btn">
+      <p className="offer-description">{description}</p>
+      <a href="#" className="btn">
         Ver mas
       </a>
       <div>
-        <BsPeople class="people" type="button" />
+        <BsPeople className="people" type="button" />
       </div>
     </div>
   );
