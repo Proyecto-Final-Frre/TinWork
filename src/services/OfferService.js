@@ -6,6 +6,7 @@ export const createOffer = async (offer) => {
   return await addDoc(offerCollection, {
     title: offer.title,
     description: offer.description,
-    abilities: offer.abilities,
+    requiredAbilities: offer.requiredAbilities,
+    desiredAbilities: offer.desiredAbilities,
   });
 };
