@@ -8,6 +8,7 @@ export const createOffer = async (offer) => {
     description: offer.description,
     requiredAbilities: offer.requiredAbilities,
     desiredAbilities: offer.desiredAbilities,
+    workDay: offer.workDay,
   });
 };
 

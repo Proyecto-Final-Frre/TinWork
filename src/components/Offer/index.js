@@ -1,10 +1,14 @@
-import React from "react";
+import {React, useState} from "react";
 import "./style.css";
 import { AiOutlineFileSearch } from "react-icons/ai";
 import { GrLocation } from "react-icons/gr";
 import { BiBriefcase } from "react-icons/bi";
 import { BsCalendarDate, BsPeople } from "react-icons/bs";
 const Offer = ({ title, description }) => {
+  const[isReadMoreShown,setReadMoreShown]=  useState(false)
+  const toggleBtn =()=>{
+    setReadMoreShown(prevState => !prevState) }
+
   return (
     <div className="card-offer">
       <div className="offer-header">
@@ -22,15 +26,21 @@ const Offer = ({ title, description }) => {
           <BsCalendarDate /> Hace un mes{" "}
         </h6>
       </div>
-      <p className="offer-description">{description}</p>
-      <a href="#" className="btn">
-        Ver mas
-      </a>
-      <div>
-        <BsPeople className="people" type="button" />
+            
+      <p className="offer-description">{isReadMoreShown ? description : description.substr(0,145) }</p>
+           
+      <a href="#" className="btn"  onClick={toggleBtn}>{isReadMoreShown ?  "Ver menos" : "Ver más"}        </a>
+      
+      <div class="footer">
+      <BsPeople className="people" type="button" />
+      <button type="button" class="btn btn-link" ><span>+5</span> interesados</button>
       </div>
+        
+      
     </div>
   );
 };
+
+
 
 export default Offer;

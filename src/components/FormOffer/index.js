@@ -5,6 +5,9 @@ import { createOffer } from "../../services/OfferService";
 import Abilities from "../Abilities";
 import "./style.css";
 import { findAll } from "../../services/AbilityService";
+import  Select  from "react-select";
+
+
 
 const FormOffer = () => {
   const [title, setTitle] = useState("");
@@ -12,7 +15,16 @@ const FormOffer = () => {
   const [selectableAbilities, setSelectableAbilities] = useState([]);
   const [requiredAbilities, setRequiredAbilities] = useState([]);
   const [desiredAbilities, setDesiredAbilities] = useState([]);
+  const [workDay,setWorkDay]=useState("")
   const navigate = useNavigate();
+
+
+  //Tipo de jornadas laborales
+  const worksDay=[
+    {label:'Jornada Completa',value:'Jornada Completa'},
+    {label:'Media Jornada',value:'Media Jornada'},
+    
+ ]
 
   useEffect(() => {
     abilitiesFunc();
@@ -35,6 +47,7 @@ const FormOffer = () => {
       description,
       requiredAbilities: requiredAbilitiesStr,
       desiredAbilities: desiredAbilitiesStr,
+      workDay,
     };
     await createOffer(offer);
     navigate("/offers");
@@ -47,6 +60,12 @@ const FormOffer = () => {
   const addDesiredAbilities = (abilities) => {
     setDesiredAbilities(abilities);
   };
+
+
+  //Agregar la jornada laboral
+  const addWorkDay =  ({value}) => {
+    setWorkDay(value)
+  }
 
   return (
     <div className="container-card">
@@ -91,9 +110,15 @@ const FormOffer = () => {
               placeholder={"Cargar Habilidades Deseadas"}
             />
             <div className="text-right">
+              <Select 
+                placeholder="Seleccionar el tipo de jornada laboral"
+                options={worksDay}
+                onChange={addWorkDay}
+              />
               <Button variant="primary" type="submit">
                 Cargar posición
               </Button>
+
             </div>
           </Form>
         </Card.Body>
