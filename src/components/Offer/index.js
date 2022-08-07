@@ -4,6 +4,7 @@ import { AiOutlineFileSearch } from "react-icons/ai";
 import { GrLocation } from "react-icons/gr";
 import { BiBriefcase } from "react-icons/bi";
 import { BsCalendarDate, BsPeople } from "react-icons/bs";
+
 const Offer = ({ title, description }) => {
   const[isReadMoreShown,setReadMoreShown]=  useState(false)
   const toggleBtn =()=>{

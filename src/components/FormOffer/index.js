@@ -6,7 +6,7 @@ import Abilities from "../Abilities";
 import "./style.css";
 import { findAll } from "../../services/AbilityService";
 import  Select  from "react-select";
-
+import { todasProvincias } from "../../services/ProvinceService";
 
 
 const FormOffer = () => {
@@ -16,6 +16,15 @@ const FormOffer = () => {
   const [requiredAbilities, setRequiredAbilities] = useState([]);
   const [desiredAbilities, setDesiredAbilities] = useState([]);
   const [workDay,setWorkDay]=useState("")
+  const [provincias, setProvincias] = useState([])
+
+  useEffect(() => {
+      todasProvincias(setProvincias);
+      
+
+  }, []);
+  
+ 
   const navigate = useNavigate();
 
 
@@ -26,9 +35,11 @@ const FormOffer = () => {
     
  ]
 
+
   useEffect(() => {
     abilitiesFunc();
   }, []);
+
 
   const abilitiesFunc = async () => {
     const result = await findAll();
@@ -66,7 +77,10 @@ const FormOffer = () => {
   const addWorkDay =  ({value}) => {
     setWorkDay(value)
   }
-
+  
+  
+  
+      
   return (
     <div className="container-card">
       <div className="card-principal">
@@ -115,6 +129,32 @@ const FormOffer = () => {
                 options={worksDay}
                 onChange={addWorkDay}
               />
+             
+              
+              <div>
+                <select class="form-select form-select-sm" aria-label=".form-select-sm example">
+                  
+                <option selected>Seleccionar la provincia</option>
+                {provincias.map(provincia => (
+                   <option key={provincia.id} > {provincia.nombre}</option>)) }
+                   
+
+                </select>
+              </div>
+
+              
+
+
+              
+              
+              
+             
+             
+                
+            
+              
+             
+              
               <Button variant="primary" type="submit">
                 Cargar posición
               </Button>
