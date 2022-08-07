@@ -35,6 +35,8 @@ const FormOffer = () => {
     { label: "Media Jornada", value: "Media Jornada" },
   ];
 
+  
+
   useEffect(() => {
     abilitiesFunc();
   }, []);
@@ -117,30 +119,34 @@ const FormOffer = () => {
               label={"Habilidades Deseadas"}
               placeholder={"Cargar Habilidades Deseadas"}
             />
-            <div className="text-right">
+            <div class="select-caja">
+              <div style={{width:"50%"}}>
               <Select
-                placeholder="Seleccionar el tipo de jornada laboral"
+                placeholder="Seleccione el tipo de jornada laboral"
                 options={worksDay}
                 onChange={addWorkDay}
                 defaultValue={"Seleccione algo"}
+                
               />
-
-              <div>
+              </div>
+                           
                 <select
                   className="form-select form-select-sm"
                   aria-label=".form-select-sm example"
+                  class="select"
                 >
-                  <option selected>Seleccionar la provincia</option>
+                  <option selected>Seleccione la provincia</option>
                   {provincias.map((provincia) => (
                     <option key={provincia.id}> {provincia.nombre}</option>
                   ))}
                 </select>
               </div>
 
+
+
               <Button variant="primary" type="submit">
                 Cargar posición
               </Button>
-            </div>
           </Form>
         </Card.Body>
       </div>

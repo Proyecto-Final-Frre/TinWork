@@ -15,3 +15,14 @@
     border: 1px solid #b2d3f4;
     border-radius: 10px;
 }
+
+
+.select{
+    margin: 1%;
+    font-size: 180%;
+
+}
+
+.select-caja {
+    display: flex;
+}
