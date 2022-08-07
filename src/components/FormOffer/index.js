@@ -7,6 +7,7 @@ import "./style.css";
 import { findAll } from "../../services/AbilityService";
 import Select from "react-select";
 import { todasProvincias } from "../../services/ProvinceService";
+import {getCurrentDate} from "../../services/Date";
 
 const FormOffer = () => {
   const [title, setTitle] = useState("");
