@@ -5,9 +5,8 @@ import { createOffer } from "../../services/OfferService";
 import Abilities from "../Abilities";
 import "./style.css";
 import { findAll } from "../../services/AbilityService";
-import  Select  from "react-select";
+import Select from "react-select";
 import { todasProvincias } from "../../services/ProvinceService";
-
 
 const FormOffer = () => {
   const [title, setTitle] = useState("");
@@ -15,31 +14,30 @@ const FormOffer = () => {
   const [selectableAbilities, setSelectableAbilities] = useState([]);
   const [requiredAbilities, setRequiredAbilities] = useState([]);
   const [desiredAbilities, setDesiredAbilities] = useState([]);
-  const [workDay,setWorkDay]=useState("")
-  const [provincias, setProvincias] = useState([])
+  const [workDay, setWorkDay] = useState("");
+  const [provincias, setProvincias] = useState([]);
+
+  const findAllProvinces = async () => {
+    const prov = await todasProvincias();
+    console.log(prov);
+    setProvincias(prov);
+  };
 
   useEffect(() => {
-      todasProvincias(setProvincias);
-      
-
+    findAllProvinces();
   }, []);
-  
- 
+
   const navigate = useNavigate();
 
-
   //Tipo de jornadas laborales
-  const worksDay=[
-    {label:'Jornada Completa',value:'Jornada Completa'},
-    {label:'Media Jornada',value:'Media Jornada'},
-    
- ]
-
+  const worksDay = [
+    { label: "Jornada Completa", value: "Jornada Completa" },
+    { label: "Media Jornada", value: "Media Jornada" },
+  ];
 
   useEffect(() => {
     abilitiesFunc();
   }, []);
-
 
   const abilitiesFunc = async () => {
     const result = await findAll();
@@ -72,15 +70,11 @@ const FormOffer = () => {
     setDesiredAbilities(abilities);
   };
 
-
   //Agregar la jornada laboral
-  const addWorkDay =  ({value}) => {
-    setWorkDay(value)
-  }
-  
-  
-  
-      
+  const addWorkDay = ({ value }) => {
+    setWorkDay(value);
+  };
+
   return (
     <div className="container-card">
       <div className="card-principal">
@@ -124,41 +118,28 @@ const FormOffer = () => {
               placeholder={"Cargar Habilidades Deseadas"}
             />
             <div className="text-right">
-              <Select 
+              <Select
                 placeholder="Seleccionar el tipo de jornada laboral"
                 options={worksDay}
                 onChange={addWorkDay}
+                defaultValue={"Seleccione algo"}
               />
-             
-              
-              <div>
-                <select class="form-select form-select-sm" aria-label=".form-select-sm example">
-                  
-                <option selected>Seleccionar la provincia</option>
-                {provincias.map(provincia => (
-                   <option key={provincia.id} > {provincia.nombre}</option>)) }
-                   
 
+              <div>
+                <select
+                  className="form-select form-select-sm"
+                  aria-label=".form-select-sm example"
+                >
+                  <option selected>Seleccionar la provincia</option>
+                  {provincias.map((provincia) => (
+                    <option key={provincia.id}> {provincia.nombre}</option>
+                  ))}
                 </select>
               </div>
 
-              
-
-
-              
-              
-              
-             
-             
-                
-            
-              
-             
-              
               <Button variant="primary" type="submit">
                 Cargar posición
               </Button>
-
             </div>
           </Form>
         </Card.Body>
