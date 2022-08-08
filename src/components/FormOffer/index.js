@@ -7,7 +7,7 @@ import "./style.css";
 import { findAll } from "../../services/AbilityService";
 import Select from "react-select";
 import { todasProvincias } from "../../services/ProvinceService";
-import {getCurrentDate} from "../../services/Date";
+import { getCurrentDate } from "../../services/Date";
 
 const FormOffer = () => {
   const [title, setTitle] = useState("");
@@ -37,7 +37,7 @@ const FormOffer = () => {
     { label: "Media Jornada", value: "Media Jornada" },
   ];
 
-  
+
 
   useEffect(() => {
     abilitiesFunc();
@@ -80,7 +80,7 @@ const FormOffer = () => {
     setWorkDay(value);
   };
 
-  
+
 
   return (
     <div className="container-card">
@@ -97,12 +97,10 @@ const FormOffer = () => {
                 className="form-control"
                 required
               />
-             
+
             </Form.Group>
             <Form.Group className="mb-4" controlId="position-description">
-
-            <div class="col-md-6">
-               <Form.Control
+              <Form.Control
                 as="textarea"
                 rows={6}
                 placeholder="Descripción de la posición"
@@ -112,10 +110,7 @@ const FormOffer = () => {
                 className="col-md-12"
                 required
               />
-              
-            </div>
-          
-             
+
             </Form.Group>
             <Abilities
               addAbilities={addRequiredAbilities}
@@ -134,30 +129,30 @@ const FormOffer = () => {
               placeholder={"Cargar Habilidades Deseadas"}
             />
             <div class="select-caja">
-              <div style={{width:"50%"}}>
-              <Select
-                placeholder="Seleccione el tipo de jornada laboral"
-                options={worksDay}
-                onChange={addWorkDay}
-                defaultValue={"Seleccione algo"}                
-              />
-              </div>                         
-                <select
-                  className="form-select form-select-sm"
-                  aria-label=".form-select-sm example"
-                  class="select"
-                  onChange={(e) => setProvince(e.target.value)} 
-                                                  
-                >
-                  <option selected>Seleccione la provincia</option>
-                  {provincias.map((provincia) => (
-                    <option key={provincia.id} > {provincia.nombre}</option>
-                  ))}
-                </select>
+              <div style={{ width: "50%" }}>
+                <Select
+                  placeholder="Seleccione el tipo de jornada laboral"
+                  options={worksDay}
+                  onChange={addWorkDay}
+                  defaultValue={"Seleccione algo"}
+                />
               </div>
-              <Button variant="primary" type="submit">
-                Cargar posición
-              </Button>
+              <select
+                className="form-select form-select-sm"
+                aria-label=".form-select-sm example"
+                class="select"
+                onChange={(e) => setProvince(e.target.value)}
+
+              >
+                <option selected>Seleccione la provincia</option>
+                {provincias.map((provincia) => (
+                  <option key={provincia.id} > {provincia.nombre}</option>
+                ))}
+              </select>
+            </div>
+            <Button variant="primary" type="submit">
+              Cargar posición
+            </Button>
           </Form>
         </Card.Body>
       </div>
