@@ -16,6 +16,7 @@ const FormOffer = () => {
   const [desiredAbilities, setDesiredAbilities] = useState([]);
   const [workDay, setWorkDay] = useState("");
   const [provincias, setProvincias] = useState([]);
+  const [province, setProvince] = useState("")
 
   const findAllProvinces = async () => {
     const prov = await todasProvincias();
@@ -59,6 +60,7 @@ const FormOffer = () => {
       requiredAbilities: requiredAbilitiesStr,
       desiredAbilities: desiredAbilitiesStr,
       workDay,
+      province,
     };
     await createOffer(offer);
     navigate("/offers");
@@ -76,6 +78,8 @@ const FormOffer = () => {
   const addWorkDay = ({ value }) => {
     setWorkDay(value);
   };
+
+  
 
   return (
     <div className="container-card">
@@ -125,25 +129,21 @@ const FormOffer = () => {
                 placeholder="Seleccione el tipo de jornada laboral"
                 options={worksDay}
                 onChange={addWorkDay}
-                defaultValue={"Seleccione algo"}
-                
+                defaultValue={"Seleccione algo"}                
               />
-              </div>
-                           
+              </div>                         
                 <select
                   className="form-select form-select-sm"
                   aria-label=".form-select-sm example"
                   class="select"
+                  onChange={(e) => setProvince(e.target.value)}                                 
                 >
                   <option selected>Seleccione la provincia</option>
                   {provincias.map((provincia) => (
-                    <option key={provincia.id}> {provincia.nombre}</option>
+                    <option key={provincia.id} > {provincia.nombre}</option>
                   ))}
                 </select>
               </div>
-
-
-
               <Button variant="primary" type="submit">
                 Cargar posición
               </Button>
