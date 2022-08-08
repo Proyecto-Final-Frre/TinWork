@@ -22,6 +22,8 @@ const OfferList = () => {
           key={offer.title}
           title={offer.title}
           description={offer.description}
+          province={offer.province}
+          workDay={offer.workDay}
         />
       ))}
     </div>

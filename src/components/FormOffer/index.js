@@ -95,10 +95,14 @@ const FormOffer = () => {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 className="form-control"
+                required
               />
+             
             </Form.Group>
             <Form.Group className="mb-4" controlId="position-description">
-              <Form.Control
+
+            <div class="col-md-6">
+               <Form.Control
                 as="textarea"
                 rows={6}
                 placeholder="Descripción de la posición"
@@ -106,7 +110,12 @@ const FormOffer = () => {
                 onChange={(e) => setDescription(e.target.value)}
                 type="text"
                 className="col-md-12"
+                required
               />
+              
+            </div>
+          
+             
             </Form.Group>
             <Abilities
               addAbilities={addRequiredAbilities}
@@ -137,7 +146,8 @@ const FormOffer = () => {
                   className="form-select form-select-sm"
                   aria-label=".form-select-sm example"
                   class="select"
-                  onChange={(e) => setProvince(e.target.value)}                                 
+                  onChange={(e) => setProvince(e.target.value)} 
+                                                  
                 >
                   <option selected>Seleccione la provincia</option>
                   {provincias.map((provincia) => (

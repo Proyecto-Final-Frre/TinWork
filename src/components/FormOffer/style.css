@@ -18,8 +18,12 @@
 
 
 .select{
-    margin: 1%;
-    font-size: 180%;
+    margin-left: 1%;
+    font-size: 100%;
+    border: 1px solid #b2d3f4;
+    border-radius: 10px;
+    width: 30%;
+
 
 }
 
