@@ -5,6 +5,8 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import "./style.css";
+import { VscWand } from 'react-icons/vsc';
+import { RiNewspaperLine, RiNewspaperFill } from 'react-icons/ri';
 
 const Header = () => {
   return (
@@ -24,13 +26,13 @@ const Header = () => {
           <Nav className="me-auto">
             <NavDropdown title="Ofertas" id="basic-nav-dropdown">
               <NavDropdown.Item href="/create-offer">
-                Crear oferta
+                <VscWand /> Crear oferta
               </NavDropdown.Item>
               <NavDropdown.Item href="/offers">
-                Ver ofertas activas
+                <RiNewspaperLine /> Ver ofertas activas
               </NavDropdown.Item>
               <NavDropdown.Item href="/offers">
-                Ver ofertas inactivas
+                <RiNewspaperFill /> Ver ofertas inactivas
               </NavDropdown.Item>
             </NavDropdown>
           </Nav>
