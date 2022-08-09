@@ -9,6 +9,7 @@ export const createOffer = async (offer) => {
     requiredAbilities: offer.requiredAbilities,
     desiredAbilities: offer.desiredAbilities,
     workDay: offer.workDay,
+    province: offer.province,
   });
 };
 

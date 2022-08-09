@@ -10,7 +10,23 @@
 }
 
 .card-principal {
+    padding: 1%;
     width: 75%;
     border: 1px solid #b2d3f4;
     border-radius: 10px;
+}
+
+
+.select{
+    margin-left: 1%;
+    font-size: 100%;
+    border: 1px solid #b2d3f4;
+    border-radius: 10px;
+    width: 30%;
+
+
+}
+
+.select-caja {
+    display: flex;
 }

@@ -4,7 +4,8 @@ import { AiOutlineFileSearch } from "react-icons/ai";
 import { GrLocation } from "react-icons/gr";
 import { BiBriefcase } from "react-icons/bi";
 import { BsCalendarDate, BsPeople } from "react-icons/bs";
-const Offer = ({ title, description }) => {
+
+const Offer = ({ title, description, province, workDay }) => {
   const[isReadMoreShown,setReadMoreShown]=  useState(false)
   const toggleBtn =()=>{
     setReadMoreShown(prevState => !prevState) }
@@ -17,10 +18,10 @@ const Offer = ({ title, description }) => {
       </div>
       <div className="card-location">
         <h6>
-          <GrLocation /> Buenos aires{" "}
+          <GrLocation /> {province} 
         </h6>
         <h6>
-          <BiBriefcase /> Jornada Completa
+          <BiBriefcase /> {workDay}
         </h6>
         <h6>
           <BsCalendarDate /> Hace un mes{" "}

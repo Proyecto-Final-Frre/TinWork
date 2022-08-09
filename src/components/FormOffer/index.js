@@ -5,9 +5,9 @@ import { createOffer } from "../../services/OfferService";
 import Abilities from "../Abilities";
 import "./style.css";
 import { findAll } from "../../services/AbilityService";
-import  Select  from "react-select";
-
-
+import Select from "react-select";
+import { todasProvincias } from "../../services/ProvinceService";
+import { getCurrentDate } from "../../services/Date";
 
 const FormOffer = () => {
   const [title, setTitle] = useState("");
@@ -15,16 +15,29 @@ const FormOffer = () => {
   const [selectableAbilities, setSelectableAbilities] = useState([]);
   const [requiredAbilities, setRequiredAbilities] = useState([]);
   const [desiredAbilities, setDesiredAbilities] = useState([]);
-  const [workDay,setWorkDay]=useState("")
+  const [workDay, setWorkDay] = useState("");
+  const [provincias, setProvincias] = useState([]);
+  const [province, setProvince] = useState("")
+
+  const findAllProvinces = async () => {
+    const prov = await todasProvincias();
+    console.log(prov);
+    setProvincias(prov);
+  };
+
+  useEffect(() => {
+    findAllProvinces();
+  }, []);
+
   const navigate = useNavigate();
 
-
   //Tipo de jornadas laborales
-  const worksDay=[
-    {label:'Jornada Completa',value:'Jornada Completa'},
-    {label:'Media Jornada',value:'Media Jornada'},
-    
- ]
+  const worksDay = [
+    { label: "Jornada Completa", value: "Jornada Completa" },
+    { label: "Media Jornada", value: "Media Jornada" },
+  ];
+
+
 
   useEffect(() => {
     abilitiesFunc();
@@ -48,6 +61,7 @@ const FormOffer = () => {
       requiredAbilities: requiredAbilitiesStr,
       desiredAbilities: desiredAbilitiesStr,
       workDay,
+      province,
     };
     await createOffer(offer);
     navigate("/offers");
@@ -61,11 +75,12 @@ const FormOffer = () => {
     setDesiredAbilities(abilities);
   };
 
-
   //Agregar la jornada laboral
-  const addWorkDay =  ({value}) => {
-    setWorkDay(value)
-  }
+  const addWorkDay = ({ value }) => {
+    setWorkDay(value);
+  };
+
+
 
   return (
     <div className="container-card">
@@ -80,7 +95,9 @@ const FormOffer = () => {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 className="form-control"
+                required
               />
+
             </Form.Group>
             <Form.Group className="mb-4" controlId="position-description">
               <Form.Control
@@ -91,7 +108,9 @@ const FormOffer = () => {
                 onChange={(e) => setDescription(e.target.value)}
                 type="text"
                 className="col-md-12"
+                required
               />
+
             </Form.Group>
             <Abilities
               addAbilities={addRequiredAbilities}
@@ -109,17 +128,31 @@ const FormOffer = () => {
               label={"Habilidades Deseadas"}
               placeholder={"Cargar Habilidades Deseadas"}
             />
-            <div className="text-right">
-              <Select 
-                placeholder="Seleccionar el tipo de jornada laboral"
-                options={worksDay}
-                onChange={addWorkDay}
-              />
-              <Button variant="primary" type="submit">
-                Cargar posición
-              </Button>
+            <div class="select-caja">
+              <div style={{ width: "50%" }}>
+                <Select
+                  placeholder="Seleccione el tipo de jornada laboral"
+                  options={worksDay}
+                  onChange={addWorkDay}
+                  defaultValue={"Seleccione algo"}
+                />
+              </div>
+              <select
+                className="form-select form-select-sm"
+                aria-label=".form-select-sm example"
+                class="select"
+                onChange={(e) => setProvince(e.target.value)}
 
+              >
+                <option selected>Seleccione la provincia</option>
+                {provincias.map((provincia) => (
+                  <option key={provincia.id} > {provincia.nombre}</option>
+                ))}
+              </select>
             </div>
+            <Button variant="primary" type="submit">
+              Cargar posición
+            </Button>
           </Form>
         </Card.Body>
       </div>
