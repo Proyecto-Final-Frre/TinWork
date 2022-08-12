@@ -1,6 +1,7 @@
 .card-offer {
     border: 1px solid #b2d3f4;
     border-radius: 10px;
+    padding-right: 10px;
 }
 
 .offer-header {
@@ -33,15 +34,15 @@
     display: grid;
     gap: 3%;
     grid-template-columns: repeat(2, 1fr);
+    text-align: justify;
 }
 
 .offer-description {
-    padding: 0 5%;
+    padding: 0 10px;
     text-align: justify;
 }
 
 .people {
-    margin-left: 20px;
     font-size: 25px;
     background-color: #2E81FB;
     color: white;
@@ -49,7 +50,12 @@
 }
 
 .btn {
-    margin: 5px;    
+    margin: 5px;
+}
+
+.btn-ver {
+    width: 100%;
+    margin-bottom: 10px;
 }
 
 .footer {

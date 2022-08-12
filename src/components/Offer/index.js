@@ -29,14 +29,13 @@ const Offer = ({ title, description, province, workDay }) => {
       </div>
             
       <p className="offer-description">{isReadMoreShown ? description : description.substr(0,145) }</p>
-           
-      <a href="#" className="btn"  onClick={toggleBtn}>{isReadMoreShown ?  "Ver menos" : "Ver más"}        </a>
+      
+      <a href="#" className="btn btn-ver"  onClick={toggleBtn}>{isReadMoreShown ?  "Ver menos" : "Ver más"}        </a>
       
       <div class="footer">
-      <BsPeople className="people" type="button" />
-      <button type="button" class="btn btn-link" ><span>+5</span> interesados</button>
+        <BsPeople className="people" type="button" />
+        <button type="button" class="btn btn-link" ><span>+5</span> interesados</button>
       </div>
-        
       
     </div>
   );

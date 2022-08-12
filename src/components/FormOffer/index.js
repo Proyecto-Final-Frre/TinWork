@@ -81,14 +81,13 @@ const FormOffer = () => {
   };
 
 
-
   return (
     <div className="container-card">
       <div className="card-principal">
         <Card.Body>
           <Card.Title className="mb-4">Nueva posición</Card.Title>
           <Form onSubmit={(e) => store(e)}>
-            <Form.Group className="mb-4" controlId="position-title">
+            <Form.Group className="mb-2" controlId="position-title">
               <Form.Control
                 type="text"
                 placeholder="Título de la posición"
@@ -97,9 +96,30 @@ const FormOffer = () => {
                 className="form-control"
                 required
               />
-
             </Form.Group>
-            <Form.Group className="mb-4" controlId="position-description">
+            <div class="select-caja mb-2">
+              <div style={{ width: "50%" }}>
+                <Select
+                  placeholder="Seleccione el tipo de jornada laboral"
+                  options={worksDay}
+                  onChange={addWorkDay}
+                  defaultValue={"Seleccione algo"}
+                />
+              </div>
+              <select
+                className="form-select form-select-sm mb-2"
+                aria-label=".form-select-sm example"
+                class="select"
+                onChange={(e) => setProvince(e.target.value)}
+
+              >
+                <option selected>Seleccione la provincia</option>
+                {provincias.map((provincia) => (
+                  <option key={provincia.id} > {provincia.nombre}</option>
+                ))}
+              </select>
+            </div>
+            <Form.Group className="mb-2" controlId="position-description">
               <Form.Control
                 as="textarea"
                 rows={6}
@@ -128,28 +148,6 @@ const FormOffer = () => {
               label={"Habilidades Deseadas"}
               placeholder={"Cargar Habilidades Deseadas"}
             />
-            <div class="select-caja">
-              <div style={{ width: "50%" }}>
-                <Select
-                  placeholder="Seleccione el tipo de jornada laboral"
-                  options={worksDay}
-                  onChange={addWorkDay}
-                  defaultValue={"Seleccione algo"}
-                />
-              </div>
-              <select
-                className="form-select form-select-sm"
-                aria-label=".form-select-sm example"
-                class="select"
-                onChange={(e) => setProvince(e.target.value)}
-
-              >
-                <option selected>Seleccione la provincia</option>
-                {provincias.map((provincia) => (
-                  <option key={provincia.id} > {provincia.nombre}</option>
-                ))}
-              </select>
-            </div>
             <Button variant="primary" type="submit">
               Cargar posición
             </Button>
