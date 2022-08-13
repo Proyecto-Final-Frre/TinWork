@@ -10,6 +10,7 @@ export const createOffer = async (offer) => {
     desiredAbilities: offer.desiredAbilities,
     workDay: offer.workDay,
     province: offer.province,
+    country: offer.country
   });
 };
 

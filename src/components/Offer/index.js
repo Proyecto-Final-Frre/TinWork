@@ -5,7 +5,7 @@ import { GrLocation } from "react-icons/gr";
 import { BiBriefcase } from "react-icons/bi";
 import { BsCalendarDate, BsPeople } from "react-icons/bs";
 
-const Offer = ({ title, description, province, workDay }) => {
+const Offer = ({ title, description, province, workDay,country }) => {
   const[isReadMoreShown,setReadMoreShown]=  useState(false)
   const toggleBtn =()=>{
     setReadMoreShown(prevState => !prevState) }
@@ -17,8 +17,9 @@ const Offer = ({ title, description, province, workDay }) => {
         <h5>{title}</h5>
       </div>
       <div className="card-location">
+
         <h6>
-          <GrLocation /> {province} 
+          <GrLocation />{country} {province}
         </h6>
         <h6>
           <BiBriefcase /> {workDay}

@@ -18,13 +18,14 @@ const FormOffer = () => {
   const [workDay, setWorkDay] = useState("");
   const [provincias, setProvincias] = useState([]);
   const [province, setProvince] = useState("")
+  const [country,setCountry]=useState("Argentina")
 
   const findAllProvinces = async () => {
     const prov = await todasProvincias();
     console.log(prov);
     setProvincias(prov);
   };
-
+  
   useEffect(() => {
     findAllProvinces();
   }, []);
@@ -62,6 +63,7 @@ const FormOffer = () => {
       desiredAbilities: desiredAbilitiesStr,
       workDay,
       province,
+      country
     };
     await createOffer(offer);
     navigate("/offers");
@@ -80,6 +82,8 @@ const FormOffer = () => {
     setWorkDay(value);
   };
 
+ 
+
 
   return (
     <div className="container-card">
@@ -94,6 +98,7 @@ const FormOffer = () => {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 className="form-control"
+               
                 required
               />
             </Form.Group>
@@ -106,6 +111,15 @@ const FormOffer = () => {
                   defaultValue={"Seleccione algo"}
                 />
               </div>
+              <select className="form-select form-select-sm mb-2"
+                aria-label=".form-select-sm example"
+                class="select"
+                
+                >
+              
+                <option selected disabled>Argentina</option>
+                
+              </select>
               <select
                 className="form-select form-select-sm mb-2"
                 aria-label=".form-select-sm example"
@@ -118,6 +132,7 @@ const FormOffer = () => {
                   <option key={provincia.id} > {provincia.nombre}</option>
                 ))}
               </select>
+              
             </div>
             <Form.Group className="mb-2" controlId="position-description">
               <Form.Control
