@@ -27,12 +27,13 @@ const Offer = ({ title, description, province, workDay, country, dateOffer }) =>
         <h5>{title}</h5>
       </div>
       <div className="card-location">
-
         <h6>
           <GrLocation />{country} {province}
         </h6>
         <h6>
-          <BiBriefcase /> {workDay}
+          <div className="work">
+            <BiBriefcase /> {workDay}
+          </div>
         </h6>
         <h6>
           <BsCalendarDate /> {calculateDate} días
