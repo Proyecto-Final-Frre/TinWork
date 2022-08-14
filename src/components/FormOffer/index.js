@@ -18,7 +18,8 @@ const FormOffer = () => {
   const [workDay, setWorkDay] = useState("");
   const [provincias, setProvincias] = useState([]);
   const [province, setProvince] = useState("");
-  const [country,setCountry]=useState("Argentina");
+  const [buttonDisable, setButtonDisable] = useState(true);
+  const [country, setCountry] = useState("Argentina");
   const [dateOffer, setDateOffer] = useState("");
 
   const findAllProvinces = async () => {
@@ -26,7 +27,7 @@ const FormOffer = () => {
     console.log(prov);
     setProvincias(prov);
   };
-  
+
   useEffect(() => {
     findAllProvinces();
   }, []);
@@ -40,7 +41,7 @@ const FormOffer = () => {
   ];
 
   useEffect(() => {
-    setDateOffer(getCurrentDate(''));
+    setDateOffer(getCurrentDate(""));
   }, []);
 
   useEffect(() => {
@@ -86,9 +87,6 @@ const FormOffer = () => {
     setWorkDay(value);
   };
 
- 
-
-
   return (
     <div className="container-card">
       <div className="card-principal">
@@ -102,7 +100,6 @@ const FormOffer = () => {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 className="form-control"
-               
                 required
               />
             </Form.Group>
@@ -115,28 +112,26 @@ const FormOffer = () => {
                   defaultValue={"Seleccione algo"}
                 />
               </div>
-              <select className="form-select form-select-sm mb-2"
+              <select
+                className="form-select form-select-sm mb-2"
                 aria-label=".form-select-sm example"
                 class="select"
-                
-                >
-              
-                <option selected disabled>Argentina</option>
-                
+              >
+                <option selected disabled>
+                  Argentina
+                </option>
               </select>
               <select
                 className="form-select form-select-sm mb-2"
                 aria-label=".form-select-sm example"
                 class="select"
                 onChange={(e) => setProvince(e.target.value)}
-
               >
                 <option selected>Seleccione la provincia</option>
                 {provincias.map((provincia) => (
-                  <option key={provincia.id} > {provincia.nombre}</option>
+                  <option key={provincia.id}> {provincia.nombre}</option>
                 ))}
               </select>
-              
             </div>
             <Form.Group className="mb-2" controlId="position-description">
               <Form.Control
@@ -148,9 +143,23 @@ const FormOffer = () => {
                 type="text"
                 className="col-md-12"
                 required
+                onInput={(e) => {
+                  e.target.value.length > 130
+                    ? setButtonDisable(false)
+                    : setButtonDisable(true);
+                }}
               />
-
+              <label
+                style={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  marginRight: 5,
+                }}
+              >
+                {description.length - 130}
+              </label>
             </Form.Group>
+
             <Abilities
               addAbilities={addRequiredAbilities}
               abilities={requiredAbilities}
@@ -158,6 +167,7 @@ const FormOffer = () => {
               setSelectableAbilities={setSelectableAbilities}
               label={"Habilidades Requeridas"}
               placeholder={"Cargar Habilidades Requeridas"}
+              required={requiredAbilities.length === 0}
             />
             <Abilities
               addAbilities={addDesiredAbilities}
@@ -167,7 +177,7 @@ const FormOffer = () => {
               label={"Habilidades Deseadas"}
               placeholder={"Cargar Habilidades Deseadas"}
             />
-            <Button variant="primary" type="submit">
+            <Button variant="primary" type="submit" disabled={buttonDisable}>
               Cargar posición
             </Button>
           </Form>

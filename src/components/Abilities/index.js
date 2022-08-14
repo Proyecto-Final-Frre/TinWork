@@ -12,6 +12,7 @@ const Abilities = ({
   setSelectableAbilities,
   label,
   placeholder,
+  required = false,
 }) => {
   return (
     <Autocomplete
@@ -37,7 +38,12 @@ const Abilities = ({
       }
       className="autocomplete"
       renderInput={(params) => (
-        <TextField {...params} label={label} placeholder={placeholder} />
+        <TextField
+          {...params}
+          required={required}
+          label={label}
+          placeholder={placeholder}
+        />
       )}
     />
   );
