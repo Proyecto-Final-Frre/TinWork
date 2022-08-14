@@ -51,13 +51,25 @@
 
 .btn {
     margin: 5px;
+    border: none;
 }
 
 .btn-ver {
     width: 100%;
     margin-bottom: 10px;
+    border: none;
+}
+.btn-ver:focus{
+    border: none;
+}
+.btn-ver:hover{
+    border: none;
 }
 
 .footer {
+    float: right;
+}
+
+.work {
     float: right;
 }
