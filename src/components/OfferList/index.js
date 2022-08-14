@@ -25,6 +25,7 @@ const OfferList = () => {
           province={offer.province}
           workDay={offer.workDay}
           country={offer.country}
+          dateOffer={offer.dateOffer}
         />
       ))}
     </div>

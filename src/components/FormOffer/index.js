@@ -17,8 +17,9 @@ const FormOffer = () => {
   const [desiredAbilities, setDesiredAbilities] = useState([]);
   const [workDay, setWorkDay] = useState("");
   const [provincias, setProvincias] = useState([]);
-  const [province, setProvince] = useState("")
-  const [country,setCountry]=useState("Argentina")
+  const [province, setProvince] = useState("");
+  const [country,setCountry]=useState("Argentina");
+  const [dateOffer, setDateOffer] = useState("");
 
   const findAllProvinces = async () => {
     const prov = await todasProvincias();
@@ -38,7 +39,9 @@ const FormOffer = () => {
     { label: "Media Jornada", value: "Media Jornada" },
   ];
 
-
+  useEffect(() => {
+    setDateOffer(getCurrentDate(''));
+  }, []);
 
   useEffect(() => {
     abilitiesFunc();
@@ -63,7 +66,8 @@ const FormOffer = () => {
       desiredAbilities: desiredAbilitiesStr,
       workDay,
       province,
-      country
+      country,
+      dateOffer,
     };
     await createOffer(offer);
     navigate("/offers");

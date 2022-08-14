@@ -4,11 +4,21 @@ import { AiOutlineFileSearch } from "react-icons/ai";
 import { GrLocation } from "react-icons/gr";
 import { BiBriefcase } from "react-icons/bi";
 import { BsCalendarDate, BsPeople } from "react-icons/bs";
+import { getCurrentDate } from "../../services/Date";
 
-const Offer = ({ title, description, province, workDay,country }) => {
+const Offer = ({ title, description, province, workDay, country, dateOffer }) => {
+
   const[isReadMoreShown,setReadMoreShown]=  useState(false)
   const toggleBtn =()=>{
     setReadMoreShown(prevState => !prevState) }
+  
+  let calculateDate = "";
+  const calculateDateOffer = (dateOffer) => {
+    calculateDate = getCurrentDate("") - dateOffer;
+    return calculateDate;
+  }
+
+  calculateDateOffer(dateOffer);
 
   return (
     <div className="card-offer">
@@ -25,7 +35,7 @@ const Offer = ({ title, description, province, workDay,country }) => {
           <BiBriefcase /> {workDay}
         </h6>
         <h6>
-          <BsCalendarDate /> Hace un mes{" "}
+          <BsCalendarDate /> {calculateDate} días
         </h6>
       </div>
             
