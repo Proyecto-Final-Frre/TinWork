@@ -120,8 +120,11 @@ const FormOffer = () => {
               <select
                 className="form-select form-select-sm mb-2"
                 aria-label=".form-select-sm example"
+                onChange={(e) => setWorkDay(e.target.value)}
               >
-                <option>Seleccione tipo de Jornada</option>
+                <option disabled selected>
+                  Seleccione tipo de Jornada
+                </option>
                 <option>Jornada Completa</option>
                 <option>Media Jornada</option>
               </select>
@@ -138,7 +141,9 @@ const FormOffer = () => {
                 aria-label=".form-select-sm example"
                 onChange={(e) => setProvince(e.target.value)}
               >
-                <option selected>Seleccione la provincia</option>
+                <option disabled selected>
+                  Seleccione la provincia
+                </option>
                 {provincias.map((provincia) => (
                   <option key={provincia.id}> {provincia.nombre}</option>
                 ))}
