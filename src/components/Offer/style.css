@@ -38,6 +38,7 @@
 }
 
 .offer-description {
+    min-height: 110px;
     padding: 0 10px;
     text-align: justify;
 }
@@ -59,15 +60,19 @@
     margin-bottom: 10px;
     border: none;
 }
-.btn-ver:focus{
+
+.btn-ver:focus {
     border: none;
 }
-.btn-ver:hover{
+
+.btn-ver:hover {
     border: none;
 }
 
 .footer {
-    float: right;
+    display: flex;
+    align-items: center;
+    justify-content: end;
 }
 
 .work {
