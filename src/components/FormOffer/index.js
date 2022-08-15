@@ -8,6 +8,7 @@ import { findAll } from "../../services/AbilityService";
 import Select from "react-select";
 import { todasProvincias } from "../../services/ProvinceService";
 import { getCurrentDate } from "../../services/Date";
+import Swal from "sweetalert2";
 
 const FormOffer = () => {
   const [title, setTitle] = useState("");
@@ -70,8 +71,10 @@ const FormOffer = () => {
       country,
       dateOffer,
     };
-    await createOffer(offer);
-    navigate("/offers");
+    createOffer(offer).then(() => {
+      mostrarAlerta();
+      navigate("/offers");
+    });
   };
 
   const addRequiredAbilities = (abilities) => {
@@ -85,6 +88,16 @@ const FormOffer = () => {
   //Agregar la jornada laboral
   const addWorkDay = ({ value }) => {
     setWorkDay(value);
+  };
+
+  const mostrarAlerta = () => {
+    Swal.fire({
+      position: "top-center",
+      icon: "success",
+      title: "Se ha registrado correctamente su oferta laboral",
+      showConfirmButton: false,
+      timer: 2500,
+    });
   };
 
   return (
@@ -104,27 +117,25 @@ const FormOffer = () => {
               />
             </Form.Group>
             <div class="select-caja mb-2">
-              <div style={{ width: "50%" }}>
-                <Select
-                  placeholder="Seleccione el tipo de jornada laboral"
-                  options={worksDay}
-                  onChange={addWorkDay}
-                  defaultValue={"Seleccione algo"}
-                />
-              </div>
               <select
                 className="form-select form-select-sm mb-2"
                 aria-label=".form-select-sm example"
-                class="select"
+              >
+                <option>Seleccione tipo de Jornada</option>
+                <option>Jornada Completa</option>
+                <option>Media Jornada</option>
+              </select>
+              <select
+                className="select form-select form-select-sm mb-2"
+                aria-label=".form-select-sm example"
               >
                 <option selected disabled>
                   Argentina
                 </option>
               </select>
               <select
-                className="form-select form-select-sm mb-2"
+                className="select form-select form-select-sm mb-2"
                 aria-label=".form-select-sm example"
-                class="select"
                 onChange={(e) => setProvince(e.target.value)}
               >
                 <option selected>Seleccione la provincia</option>

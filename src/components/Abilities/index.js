@@ -17,17 +17,10 @@ const Abilities = ({
   return (
     <Autocomplete
       multiple
-      id="fixed-tags-demo"
       value={abilities}
+      isOptionEqualToValue={(option, value) => option.title === value.title}
       onChange={(event, newAbilities) => {
-        let abilities = newAbilities.map((ability) => {
-          return { title: ability.title, category: ability.category };
-        });
-        addAbilities(abilities);
-        let result = selectableAbilities.filter(
-          (selectableAbility) => !newAbilities.includes(selectableAbility)
-        );
-        setSelectableAbilities(result);
+        addAbilities(newAbilities);
       }}
       options={selectableAbilities}
       getOptionLabel={(option) => option.title}
