@@ -13,6 +13,7 @@ const Offer = ({
   workDay,
   country,
   dateOffer,
+  interestedUsers,
 }) => {
   const [isReadMoreShown, setReadMoreShown] = useState(false);
   const toggleBtn = () => {
@@ -36,7 +37,7 @@ const Offer = ({
       <div className="card-location">
         <h6>
           <GrLocation />
-          {country} {province}
+          {country}, {province}
         </h6>
         <h6>
           <div className="work">
@@ -58,10 +59,10 @@ const Offer = ({
         </button>
       )}
 
-      <div class="footer">
+      <div className="footer">
         <BsPeople className="people" type="button" />
         <button type="button" class="btn btn-link">
-          <span>+5</span> interesados
+          <span>{interestedUsers.length}</span> interesados
         </button>
       </div>
     </div>
