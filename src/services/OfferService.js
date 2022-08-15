@@ -12,6 +12,7 @@ export const createOffer = async (offer) => {
     province: offer.province,
     country: offer.country,
     dateOffer: offer.dateOffer,
+    interestedUsers: [],
   });
 };
 
