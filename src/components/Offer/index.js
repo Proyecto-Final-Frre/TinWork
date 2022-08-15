@@ -53,7 +53,7 @@ const Offer = ({
         {isReadMoreShown ? description : description.substr(0, 145)}
       </p>
 
-      {description.length > 131 && (
+      {description?.length > 300 && (
         <button className="btn btn-ver" onClick={toggleBtn}>
           {isReadMoreShown ? "Ver menos" : "Ver más"}{" "}
         </button>
@@ -62,7 +62,7 @@ const Offer = ({
       <div className="footer">
         <BsPeople className="people" type="button" />
         <button type="button" class="btn btn-link">
-          <span>{interestedUsers.length}</span> interesados
+          <span>{interestedUsers?.length}</span> interesados
         </button>
       </div>
     </div>
