@@ -8,6 +8,7 @@ import { findAll } from "../../services/AbilityService";
 import Select from "react-select";
 import { todasProvincias } from "../../services/ProvinceService";
 import { getCurrentDate } from "../../services/Date";
+import Swal from "sweetalert2";
 
 const FormOffer = () => {
   const [title, setTitle] = useState("");
@@ -70,8 +71,11 @@ const FormOffer = () => {
       country,
       dateOffer,
     };
-    await createOffer(offer);
-    navigate("/offers");
+    createOffer(offer).then(()=> {
+      mostrarAlerta();
+      navigate("/offers");
+    })
+    
   };
 
   const addRequiredAbilities = (abilities) => {
@@ -86,6 +90,19 @@ const FormOffer = () => {
   const addWorkDay = ({ value }) => {
     setWorkDay(value);
   };
+
+
+
+  const mostrarAlerta = () =>{
+    Swal.fire({
+      position: 'top-center',
+      icon: 'success',
+      title: 'Se ha registrado correctamente su oferta laboral',
+      showConfirmButton: false,
+      timer: 2500
+    })
+  }
+
 
   return (
     <div className="container-card">
@@ -178,6 +195,7 @@ const FormOffer = () => {
               placeholder={"Cargar Habilidades Deseadas"}
             />
             <Button variant="primary" type="submit" disabled={buttonDisable}>
+
               Cargar posición
             </Button>
           </Form>

@@ -20,7 +20,7 @@ const Abilities = ({
       id="fixed-tags-demo"
       value={abilities}
       onChange={(event, newAbilities) => {
-        let abilities = newAbilities.map((ability) => {
+          let abilities = newAbilities.map((ability) => {
           return { title: ability.title, category: ability.category };
         });
         addAbilities(abilities);
