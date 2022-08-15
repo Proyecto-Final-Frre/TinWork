@@ -17,7 +17,10 @@ const FormOffer = () => {
   const [desiredAbilities, setDesiredAbilities] = useState([]);
   const [workDay, setWorkDay] = useState("");
   const [provincias, setProvincias] = useState([]);
-  const [province, setProvince] = useState("")
+  const [province, setProvince] = useState("");
+  const [buttonDisable, setButtonDisable] = useState(true);
+  const [country, setCountry] = useState("Argentina");
+  const [dateOffer, setDateOffer] = useState("");
 
   const findAllProvinces = async () => {
     const prov = await todasProvincias();
@@ -37,7 +40,9 @@ const FormOffer = () => {
     { label: "Media Jornada", value: "Media Jornada" },
   ];
 
-
+  useEffect(() => {
+    setDateOffer(getCurrentDate(""));
+  }, []);
 
   useEffect(() => {
     abilitiesFunc();
@@ -62,6 +67,8 @@ const FormOffer = () => {
       desiredAbilities: desiredAbilitiesStr,
       workDay,
       province,
+      country,
+      dateOffer,
     };
     await createOffer(offer);
     navigate("/offers");
@@ -80,15 +87,13 @@ const FormOffer = () => {
     setWorkDay(value);
   };
 
-
-
   return (
     <div className="container-card">
       <div className="card-principal">
         <Card.Body>
           <Card.Title className="mb-4">Nueva posición</Card.Title>
           <Form onSubmit={(e) => store(e)}>
-            <Form.Group className="mb-4" controlId="position-title">
+            <Form.Group className="mb-2" controlId="position-title">
               <Form.Control
                 type="text"
                 placeholder="Título de la posición"
@@ -97,38 +102,8 @@ const FormOffer = () => {
                 className="form-control"
                 required
               />
-
             </Form.Group>
-            <Form.Group className="mb-4" controlId="position-description">
-              <Form.Control
-                as="textarea"
-                rows={6}
-                placeholder="Descripción de la posición"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                type="text"
-                className="col-md-12"
-                required
-              />
-
-            </Form.Group>
-            <Abilities
-              addAbilities={addRequiredAbilities}
-              abilities={requiredAbilities}
-              selectableAbilities={selectableAbilities}
-              setSelectableAbilities={setSelectableAbilities}
-              label={"Habilidades Requeridas"}
-              placeholder={"Cargar Habilidades Requeridas"}
-            />
-            <Abilities
-              addAbilities={addDesiredAbilities}
-              abilities={desiredAbilities}
-              selectableAbilities={selectableAbilities}
-              setSelectableAbilities={setSelectableAbilities}
-              label={"Habilidades Deseadas"}
-              placeholder={"Cargar Habilidades Deseadas"}
-            />
-            <div class="select-caja">
+            <div class="select-caja mb-2">
               <div style={{ width: "50%" }}>
                 <Select
                   placeholder="Seleccione el tipo de jornada laboral"
@@ -138,19 +113,71 @@ const FormOffer = () => {
                 />
               </div>
               <select
-                className="form-select form-select-sm"
+                className="form-select form-select-sm mb-2"
+                aria-label=".form-select-sm example"
+                class="select"
+              >
+                <option selected disabled>
+                  Argentina
+                </option>
+              </select>
+              <select
+                className="form-select form-select-sm mb-2"
                 aria-label=".form-select-sm example"
                 class="select"
                 onChange={(e) => setProvince(e.target.value)}
-
               >
                 <option selected>Seleccione la provincia</option>
                 {provincias.map((provincia) => (
-                  <option key={provincia.id} > {provincia.nombre}</option>
+                  <option key={provincia.id}> {provincia.nombre}</option>
                 ))}
               </select>
             </div>
-            <Button variant="primary" type="submit">
+            <Form.Group className="mb-2" controlId="position-description">
+              <Form.Control
+                as="textarea"
+                rows={6}
+                placeholder="Descripción de la posición"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                type="text"
+                className="col-md-12"
+                required
+                onInput={(e) => {
+                  e.target.value.length > 130
+                    ? setButtonDisable(false)
+                    : setButtonDisable(true);
+                }}
+              />
+              <label
+                style={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  marginRight: 5,
+                }}
+              >
+                {description.length - 130}
+              </label>
+            </Form.Group>
+
+            <Abilities
+              addAbilities={addRequiredAbilities}
+              abilities={requiredAbilities}
+              selectableAbilities={selectableAbilities}
+              setSelectableAbilities={setSelectableAbilities}
+              label={"Habilidades Requeridas"}
+              placeholder={"Cargar Habilidades Requeridas"}
+              required={requiredAbilities.length === 0}
+            />
+            <Abilities
+              addAbilities={addDesiredAbilities}
+              abilities={desiredAbilities}
+              selectableAbilities={selectableAbilities}
+              setSelectableAbilities={setSelectableAbilities}
+              label={"Habilidades Deseadas"}
+              placeholder={"Cargar Habilidades Deseadas"}
+            />
+            <Button variant="primary" type="submit" disabled={buttonDisable}>
               Cargar posición
             </Button>
           </Form>

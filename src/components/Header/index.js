@@ -1,14 +1,29 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Dropdown } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import "./style.css";
-import { VscWand } from 'react-icons/vsc';
-import { RiNewspaperLine, RiNewspaperFill } from 'react-icons/ri';
+import { VscWand } from "react-icons/vsc";
+import { RiNewspaperLine, RiNewspaperFill } from "react-icons/ri";
+import { getUserAuthenticated, logout } from "../../services/UserService";
+import { authentication } from "../../config/firebase";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
+  const navigate = useNavigate();
+
+  const [user, setUser] = useState();
+  const [reload, setReload] = useState(false);
+
+  const findUser = async () => {
+    const userAuth = await getUserAuthenticated();
+    setUser(userAuth);
+  };
+
+  useEffect(() => findUser, []);
+
   return (
     <Navbar bg="light" expand="lg">
       <Container>
@@ -37,17 +52,45 @@ const Header = () => {
             </NavDropdown>
           </Nav>
         </Navbar.Collapse>
-        <Dropdown className="dropdown-cuenta">
-          <Dropdown.Toggle variant="light" id="dropdown-basic">
-            Mi Cuenta
-          </Dropdown.Toggle>
-          <Dropdown.Menu>
-            <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-            <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-            <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
-        <Button variant="primary">log out</Button>
+        {user && (
+          <Dropdown className="dropdown-cuenta">
+            <Dropdown.Toggle variant="light" id="dropdown-basic">
+              {user.displayName}
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
+              <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
+              <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        )}
+
+        {!user ? (
+          <Button
+            onClick={async () => {
+              const result = await authentication();
+              console.log(result);
+              if (result) {
+                setReload(!reload);
+              }
+            }}
+            variant="primary"
+          >
+            log in
+          </Button>
+        ) : (
+          <Button
+            onClick={async () => {
+              const result = await logout();
+              if (result) {
+                setReload(!reload);
+              }
+            }}
+            variant="primary"
+          >
+            log out
+          </Button>
+        )}
       </Container>
     </Navbar>
   );
