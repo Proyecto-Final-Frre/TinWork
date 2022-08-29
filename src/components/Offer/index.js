@@ -4,10 +4,7 @@ import { AiOutlineFileSearch } from "react-icons/ai";
 import { GrLocation } from "react-icons/gr";
 import { BiBriefcase } from "react-icons/bi";
 import { BsCalendarDate, BsPeople } from "react-icons/bs";
-import { formatDistance } from "date-fns";
-
-
-
+import { intlFormatDistance } from "date-fns";
 
 const Offer = ({
   title,
@@ -22,8 +19,14 @@ const Offer = ({
   const toggleBtn = () => {
     setReadMoreShown((prevState) => !prevState);
   };
+
 //Obtener hace cuanto se publico la oferta, resta fecha de creación - fecha actual
-const dataOffer=formatDistance(new Date(), dateOffer.toDate() )
+const dataOffer = intlFormatDistance(
+  dateOffer.toDate(),
+  new Date(),
+   
+  { locale: 'es' }
+)
 
   return (
     <div className="card-offer">
