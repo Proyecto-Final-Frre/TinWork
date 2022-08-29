@@ -4,7 +4,10 @@ import { AiOutlineFileSearch } from "react-icons/ai";
 import { GrLocation } from "react-icons/gr";
 import { BiBriefcase } from "react-icons/bi";
 import { BsCalendarDate, BsPeople } from "react-icons/bs";
-import { getCurrentDate } from "../../services/Date";
+import { formatDistance } from "date-fns";
+
+
+
 
 const Offer = ({
   title,
@@ -19,14 +22,8 @@ const Offer = ({
   const toggleBtn = () => {
     setReadMoreShown((prevState) => !prevState);
   };
-
-  let calculateDate = "";
-  const calculateDateOffer = (dateOffer) => {
-    calculateDate = getCurrentDate("") - dateOffer;
-    return calculateDate;
-  };
-
-  calculateDateOffer(dateOffer);
+//Obtener hace cuanto se publico la oferta, resta fecha de creación - fecha actual
+const dataOffer=formatDistance(new Date(), dateOffer.toDate() )
 
   return (
     <div className="card-offer">
@@ -44,8 +41,8 @@ const Offer = ({
             <BiBriefcase /> {workDay}
           </div>
         </h6>
-        <h6>
-          <BsCalendarDate /> {calculateDate} días
+        <h6 >
+          <BsCalendarDate  /> {dataOffer} 
         </h6>
       </div>
 

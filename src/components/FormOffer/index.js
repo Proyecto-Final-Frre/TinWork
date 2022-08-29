@@ -5,9 +5,7 @@ import { createOffer } from "../../services/OfferService";
 import Abilities from "../Abilities";
 import "./style.css";
 import { findAll } from "../../services/AbilityService";
-import Select from "react-select";
 import { todasProvincias } from "../../services/ProvinceService";
-import { getCurrentDate } from "../../services/Date";
 import Swal from "sweetalert2";
 
 const FormOffer = () => {
@@ -21,7 +19,7 @@ const FormOffer = () => {
   const [province, setProvince] = useState("");
   const [buttonDisable, setButtonDisable] = useState(true);
   const [country, setCountry] = useState("Argentina");
-  const [dateOffer, setDateOffer] = useState("");
+
 
   const findAllProvinces = async () => {
     const prov = await todasProvincias();
@@ -29,22 +27,15 @@ const FormOffer = () => {
     setProvincias(prov);
   };
 
+  //Fecha creación de la oferta
+  const dateOffer= new Date() 
+  
   useEffect(() => {
     findAllProvinces();
   }, []);
 
   const navigate = useNavigate();
-
-  //Tipo de jornadas laborales
-  const worksDay = [
-    { label: "Jornada Completa", value: "Jornada Completa" },
-    { label: "Media Jornada", value: "Media Jornada" },
-  ];
-
-  useEffect(() => {
-    setDateOffer(getCurrentDate(""));
-  }, []);
-
+  
   useEffect(() => {
     abilitiesFunc();
   }, []);
@@ -85,10 +76,7 @@ const FormOffer = () => {
     setDesiredAbilities(abilities);
   };
 
-  //Agregar la jornada laboral
-  const addWorkDay = ({ value }) => {
-    setWorkDay(value);
-  };
+  
 
   const mostrarAlerta = () => {
     Swal.fire({
