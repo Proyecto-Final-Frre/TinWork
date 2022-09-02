@@ -1,0 +1,22 @@
+.header {
+    display:flex;
+    border: 1px solid #b2d3f4;
+    justify-content: center;
+}
+
+.card-title {
+    color: white;
+    margin-right: 50%;
+}
+
+.elment{
+    font-size: 30px;
+    color: white;
+    margin-left: 10%;
+}
+
+.nav{
+    background-color: gray;
+   width: 280px;
+    
+}
