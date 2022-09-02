@@ -20,3 +20,12 @@
    width: 280px;
     
 }
+
+.container-sidebar{
+    display: flex;
+    
+}
+
+.table{
+    width: 350%;
+}
