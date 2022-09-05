@@ -16,6 +16,7 @@ const tablaCandidatos =[
   { id:4, apynombr: "Dimaria Angel",aptcoincidentes:"5",estado:"Matcheado"  } ,
 ];
 
+
 const columnas = [
   {name :"ID ",
   selector:"id",
