@@ -2,6 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getFirestore, collection, getDocs } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 
 import {
   getAuth,
@@ -32,6 +33,8 @@ const analytics = getAnalytics(app);
 
 const provider = new GoogleAuthProvider();
 const auth = getAuth();
+
+export const storage = getStorage(app);
 
 export function authentication() {
   return signInWithPopup(auth, provider)

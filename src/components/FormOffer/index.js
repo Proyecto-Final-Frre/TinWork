@@ -9,6 +9,9 @@ import Select from "react-select";
 import { todasProvincias } from "../../services/ProvinceService";
 import { getCurrentDate } from "../../services/Date";
 import Swal from "sweetalert2";
+import { storage } from "../../config/firebase";
+import { ref, uploadBytes } from "firebase/storage";
+import { v4 } from "uuid";
 
 const FormOffer = () => {
   const [title, setTitle] = useState("");
@@ -22,11 +25,24 @@ const FormOffer = () => {
   const [buttonDisable, setButtonDisable] = useState(true);
   const [country, setCountry] = useState("Argentina");
   const [dateOffer, setDateOffer] = useState("");
+  const [image, setImage] = useState();
 
   const findAllProvinces = async () => {
     const prov = await todasProvincias();
     console.log(prov);
     setProvincias(prov);
+  };
+
+  const fileSelectedHandler = (event) => {
+    setImage(event.target.files[0]);
+  };
+
+  const fileUploadHandler = () => {
+    if (image == null) return;
+    const imageRef = ref(storage, `images/${image.name + v4()}`);
+    uploadBytes(imageRef, image).then(() => {
+      return true;
+    });
   };
 
   useEffect(() => {
@@ -56,6 +72,9 @@ const FormOffer = () => {
 
   const store = async (e) => {
     e.preventDefault();
+
+    await fileUploadHandler();
+
     let requiredAbilitiesStr = requiredAbilities.map(
       (ability) => ability.title
     );
@@ -196,6 +215,8 @@ const FormOffer = () => {
             <Button variant="primary" type="submit" disabled={buttonDisable}>
               Cargar posición
             </Button>
+
+            <input type="file" onChange={fileSelectedHandler} />
           </Form>
         </Card.Body>
       </div>
