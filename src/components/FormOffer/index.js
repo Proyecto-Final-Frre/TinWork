@@ -39,7 +39,7 @@ const FormOffer = () => {
 
   const fileUploadHandler = () => {
     if (image == null) return;
-    const imageRef = ref(storage, `images/${image.name + v4()}`);
+    const imageRef = ref(storage, `images/${v4()}`);
     uploadBytes(imageRef, image).then(() => {
       return true;
     });
@@ -89,6 +89,7 @@ const FormOffer = () => {
       province,
       country,
       dateOffer,
+      image,
     };
     createOffer(offer).then(() => {
       mostrarAlerta();

@@ -5,6 +5,7 @@ import { GrLocation } from "react-icons/gr";
 import { BiBriefcase } from "react-icons/bi";
 import { BsCalendarDate, BsPeople } from "react-icons/bs";
 import { getCurrentDate } from "../../services/Date";
+import { storage } from "../../config/firebase";
 
 const Offer = ({
   title,
@@ -14,6 +15,7 @@ const Offer = ({
   country,
   dateOffer,
   interestedUsers,
+  image,
 }) => {
   const [isReadMoreShown, setReadMoreShown] = useState(false);
   const toggleBtn = () => {
@@ -30,6 +32,7 @@ const Offer = ({
 
   return (
     <div className="card-offer">
+      <img src={storage+"/"+image}></img>
       <div className="offer-header">
         <AiOutlineFileSearch className="search" type="button" />
         <h5>{title}</h5>

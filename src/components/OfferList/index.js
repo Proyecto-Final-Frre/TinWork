@@ -27,6 +27,7 @@ const OfferList = () => {
           country={offer.country}
           dateOffer={offer.dateOffer}
           interestedUsers={offer.interestedUsers}
+          image={offer.image}
         />
       ))}
     </div>
