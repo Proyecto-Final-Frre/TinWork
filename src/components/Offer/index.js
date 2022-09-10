@@ -32,7 +32,7 @@ const Offer = ({
 
   return (
     <div className="card-offer">
-      <img src={storage+"/"+image}></img>
+      <img src={"image/"+image}></img>
       <div className="offer-header">
         <AiOutlineFileSearch className="search" type="button" />
         <h5>{title}</h5>
