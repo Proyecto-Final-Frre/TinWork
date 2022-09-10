@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { findAll } from "../../services/OfferService";
 import Offer from "../Offer";
 import "./style.css";
-
+/*abilitiesUser.forEach(ability => {if(abilitiesOffer.includes(ability)){count++; return true} return false})*/ 
+//Para sacar la cantidad de aptitudes coincidentes
 const OfferList = () => {
   const [offers, setOffers] = useState([]);
 
@@ -27,6 +28,7 @@ const OfferList = () => {
           country={offer.country}
           dateOffer={offer.dateOffer}
           interestedUsers={offer.interestedUsers}
+          offerObj={offer}
         />
       ))}
     </div>

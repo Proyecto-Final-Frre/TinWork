@@ -5,9 +5,11 @@ import { GrLocation } from "react-icons/gr";
 import { BiBriefcase } from "react-icons/bi";
 import { BsCalendarDate, BsPeople } from "react-icons/bs";
 import { intlFormatDistance } from "date-fns";
+import {useNavigate}  from "react-router-dom";
 
 const Offer = ({
   title,
+  offerObj,
   description,
   province,
   workDay,
@@ -27,6 +29,14 @@ const dataOffer = intlFormatDistance(
    
   { locale: 'es' }
 )
+const navigate = useNavigate();
+
+const obtnInteresed = () =>{
+  navigate("/candidates",{state:offerObj}) 
+  console.log("Usuarios interesados",interestedUsers)
+  console.log("Tipo de dato",typeof(interestedUsers))
+}
+
 
   return (
     <div className="card-offer">
@@ -61,8 +71,9 @@ const dataOffer = intlFormatDistance(
 
       <div className="footer">
         <BsPeople className="people" type="button" />
-        <button type="button" class="btn btn-link">
-          <span>{interestedUsers?.length}</span> interesados
+        <button type="button" class="btn btn-link"  onClick={obtnInteresed}>
+          <span>{interestedUsers?.length}</span> interesados 
+         
         </button>
       </div>
     </div>

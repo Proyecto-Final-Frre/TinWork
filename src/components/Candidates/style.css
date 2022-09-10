@@ -16,19 +16,27 @@
 }
 
 
-.nav{
-     background-color:#D9D9D9;
-     width: 280px;
-     min-height: 715px;    
+.container-sidebar-table{
+display: flex;
 }
 
 .container-sidebar{
-    display: flex;
-    
+  height: 100%;
+  width: auto;
+  position: initial;
+  z-index: 1;
+  top: 0;
+  left: 0;
+    overflow-x: hidden;
+  padding-top: 16px;   
+  background-color:#D9D9D9;
+     width: 280px;
+     min-height: 500px;    
     
 }
 
 .table{
     width: 550%;
+    
 }
 
