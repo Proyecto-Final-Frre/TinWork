@@ -33,8 +33,7 @@ const navigate = useNavigate();
 
 const obtnInteresed = () =>{
   navigate("/candidates",{state:offerObj}) 
-  console.log("Usuarios interesados",interestedUsers)
-  console.log("Tipo de dato",typeof(interestedUsers))
+  
 }
 
 

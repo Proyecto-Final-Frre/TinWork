@@ -12,11 +12,6 @@ import DataTable from "react-data-table-component";
 import { useLocation } from "react-router-dom";
 
 
-const like=() => {
-  console.log("Likeee")
-}
-
-
 const columnas = [
   {
 
@@ -24,19 +19,17 @@ const columnas = [
     cell: () => (
       <div>
         <BsPersonCircle size="2em" type="button" />
-
       </div>)
-
-
 
   },
   {
+
     name: "Apellidos y nombres",
-    selector: "name",
+    selector: row => row.name,
     sortable: true,
     width: '25%',
-  },
 
+  },
   {
     name: "Aptitudes coincidentes",
     selector: "aptcoincidentes",
@@ -90,15 +83,12 @@ const columnas = [
     name: "Acciones",
     grow: 1,
     center: true,
-    selector: row => row.estado,
 
-    cell: () => (
-
+    cell: row => (
 
       <div>
         <TiDeleteOutline size="2em" type="button" />
-
-        <IoMdHeartEmpty onClick={like} size="2em" type="button" />
+        <IoMdHeartEmpty onClick={e => console.log("haciendo click devolves?", e, row.name)} size="2em" type="button" />
       </div>
     ),
 
@@ -106,16 +96,18 @@ const columnas = [
   }
 ]
 
+
+
 const Candidates = () => {
-    
+
   const { state } = useLocation();
-  
+
 
   //Para sacar la cantidad de aptitudes coincidentes
   let count = 0
   const abilitiesOffer = state.requiredAbilities
-  state.interestedUsers.map(function (e) {
-    
+  state.interestedUsers.map((e) => {
+
     const abilitiesUser = e.abilities
     abilitiesUser.forEach(ability => { if (abilitiesOffer.includes(ability)) { count++; return true } return false })
     const apt = {
@@ -123,11 +115,12 @@ const Candidates = () => {
     }
 
     Object.assign(e, apt);
-    count= 0
+    count = 0
   })
 
-  
-  
+
+
+
 
 
   return (
@@ -171,11 +164,7 @@ const Candidates = () => {
 
           />
         </div>
-        <div>
 
-          {console.log("Valor de interesd", state)
-          }
-        </div>
       </div>
     </div>
 
