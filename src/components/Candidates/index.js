@@ -124,8 +124,64 @@ const Candidates = () => {
 
 
   return (
-    <div>
-      <nav class="navbar navbar-expand-lg bg-primary">
+    <div >
+
+      <nav className="navbar navbar-expand-lg bg-primary">
+        <div className="container-fluid">
+          <a className="element" href="/Offers"><BsArrowLeftSquare /></a>
+          <Card.Title>{state.title}</Card.Title>
+        </div>
+      </nav>
+      
+        <aside className="sidebar">
+        
+          <ul className="nav  flex-column ">
+            <IconContext.Provider value={{ size: "3em" }}>
+              <li className="nav-item ">
+                <a href="/candidates" className="nav-link link-dark"   >
+                  <IoIosPeople />Candidatos
+                </a>
+
+              </li>
+              <li>
+                <a href="#" className="nav-link link-dark">
+                  <TbFileDescription />Descripción
+                </a>
+              </li>
+              <li>
+                <a href="#" className="nav-link link-dark">
+                  <AiOutlineStar />Aptitudes requeridas
+                </a>
+              </li>
+            </IconContext.Provider>
+
+
+          </ul>
+
+        
+       
+        </aside>
+
+        <section className="table-candidates">
+          <DataTable
+            columns={columnas}
+            data={state.interestedUsers}
+          />
+        </section>
+
+
+
+      
+    </div>
+
+
+
+
+  );
+};
+
+
+/*<nav class="navbar navbar-expand-lg bg-primary">
         <div class="container-fluid">
           <a class="elment" href="/Offers"><BsArrowLeftSquare /></a>
           <Card.Title>{state.title}</Card.Title>
@@ -165,13 +221,5 @@ const Candidates = () => {
           />
         </div>
 
-      </div>
-    </div>
-
-
-
-
-  );
-};
-
+      </div>*/
 export default Candidates;

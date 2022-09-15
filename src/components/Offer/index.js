@@ -70,7 +70,7 @@ const obtnInteresed = () =>{
 
       <div className="footer">
         <BsPeople className="people" type="button" />
-        <button type="button" class="btn btn-link"  onClick={obtnInteresed}>
+        <button type="button" className="btn btn-link"  onClick={obtnInteresed}>
           <span>{interestedUsers?.length}</span> interesados 
          
         </button>
