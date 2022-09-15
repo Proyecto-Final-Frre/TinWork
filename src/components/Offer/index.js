@@ -5,7 +5,7 @@ import { GrLocation } from "react-icons/gr";
 import { BiBriefcase } from "react-icons/bi";
 import { BsCalendarDate, BsPeople } from "react-icons/bs";
 import { intlFormatDistance } from "date-fns";
-import {useNavigate}  from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Offer = ({
   title,
@@ -22,20 +22,18 @@ const Offer = ({
     setReadMoreShown((prevState) => !prevState);
   };
 
-//Obtener hace cuanto se publico la oferta, resta fecha de creación - fecha actual
-const dataOffer = intlFormatDistance(
-  dateOffer.toDate(),
-  new Date(),
-   
-  { locale: 'es' }
-)
-const navigate = useNavigate();
+  //Obtener hace cuanto se publico la oferta, resta fecha de creación - fecha actual
+  const dataOffer = intlFormatDistance(
+    dateOffer.toDate(),
+    new Date(),
 
-const obtnInteresed = () =>{
-  navigate("/candidates",{state:offerObj}) 
-  
-}
+    { locale: "es" }
+  );
+  const navigate = useNavigate();
 
+  const obtnInteresed = () => {
+    navigate("/candidates", { state: offerObj });
+  };
 
   return (
     <div className="card-offer">
@@ -53,8 +51,8 @@ const obtnInteresed = () =>{
             <BiBriefcase /> {workDay}
           </div>
         </h6>
-        <h6 >
-          <BsCalendarDate  /> {dataOffer} 
+        <h6>
+          <BsCalendarDate /> {dataOffer}
         </h6>
       </div>
 
@@ -70,9 +68,8 @@ const obtnInteresed = () =>{
 
       <div className="footer">
         <BsPeople className="people" type="button" />
-        <button type="button" class="btn btn-link"  onClick={obtnInteresed}>
-          <span>{interestedUsers?.length}</span> interesados 
-         
+        <button type="button" class="btn btn-link" onClick={obtnInteresed}>
+          <span>{interestedUsers?.length}</span> interesados
         </button>
       </div>
     </div>
