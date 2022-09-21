@@ -7,47 +7,63 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import "./style.css";
 import { VscWand } from "react-icons/vsc";
 import { RiNewspaperLine, RiNewspaperFill } from "react-icons/ri";
-import { getUserAuthenticated, logout } from "../../services/UserService";
+import { logout } from "../../services/UserService";
 import { authentication } from "../../config/firebase";
-import { useNavigate } from "react-router-dom";
+import { useUserContext } from "../../contexts/UserContext";
+import { Link } from "react-router-dom";
 
 const Header = () => {
-  const navigate = useNavigate();
+  const { addOn, userAuth } = useUserContext();
+
+  useEffect(() => setUser(userAuth), [userAuth]);
 
   const [user, setUser] = useState();
   const [reload, setReload] = useState(false);
 
-  const findUser = async () => {
-    const userAuth = await getUserAuthenticated();
-    setUser(userAuth);
-  };
-
-  useEffect(() => findUser, []);
-
   return (
     <Navbar bg="light" expand="lg">
       <Container>
-        <Navbar.Brand href="/">
-          <img
-            src="/logo_tinwork.svg"
-            width="120"
-            height="39"
-            className="d-inline-block align-top"
-            alt="TinWork"
-          />
-        </Navbar.Brand>
+        <Link to={"/"}>
+          <Navbar.Brand>
+            <img
+              src="/logo_tinwork.svg"
+              width="120"
+              height="39"
+              className="d-inline-block align-top"
+              alt="TinWork"
+            />
+          </Navbar.Brand>
+        </Link>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             <NavDropdown title="Ofertas" id="basic-nav-dropdown">
-              <NavDropdown.Item href="/create-offer">
-                <VscWand /> Crear oferta
+              <NavDropdown.Item>
+                <VscWand />{" "}
+                <Link
+                  to={"/create-offer"}
+                  style={{ textDecoration: "none", color: "black" }}
+                >
+                  Crear oferta
+                </Link>
               </NavDropdown.Item>
-              <NavDropdown.Item href="/offers">
-                <RiNewspaperLine /> Ver ofertas activas
+              <NavDropdown.Item>
+                <RiNewspaperLine />{" "}
+                <Link
+                  to={"/offers"}
+                  style={{ textDecoration: "none", color: "black" }}
+                >
+                  Ver ofertas activas
+                </Link>
               </NavDropdown.Item>
-              <NavDropdown.Item href="/offers">
-                <RiNewspaperFill /> Ver ofertas inactivas
+              <NavDropdown.Item>
+                <RiNewspaperFill />{" "}
+                <Link
+                  to={"/offers"}
+                  style={{ textDecoration: "none", color: "black" }}
+                >
+                  Ver ofertas inactivas
+                </Link>
               </NavDropdown.Item>
             </NavDropdown>
           </Nav>
@@ -69,7 +85,7 @@ const Header = () => {
           <Button
             onClick={async () => {
               const result = await authentication();
-              console.log(result);
+              addOn(result);
               if (result) {
                 setReload(!reload);
               }
