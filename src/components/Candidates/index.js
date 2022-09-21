@@ -9,7 +9,7 @@ import { IconContext } from "react-icons";
 import { TiDeleteOutline } from "react-icons/ti";
 import { BsPersonCircle } from "react-icons/bs";
 import DataTable from "react-data-table-component";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { findUserByUid, pushNotification } from "../../services/UserService";
 
 const handleMatch = async (element, titleOffer) => {
@@ -122,9 +122,12 @@ const Candidates = () => {
     <div>
       <nav className="navbar navbar-expand-lg bg-primary">
         <div className="container-fluid">
-          <a className="element" href="/Offers">
-            <BsArrowLeftSquare />
-          </a>
+          <Link to={"/Offers"}>
+            <div className="element">
+              <BsArrowLeftSquare />
+            </div>
+          </Link>
+
           <Card.Title>{state.title}</Card.Title>
         </div>
       </nav>

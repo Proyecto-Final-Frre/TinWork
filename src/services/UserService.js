@@ -12,7 +12,8 @@ import { db } from "../config/firebase.js";
 const auth = getAuth();
 
 export const getUserAuthenticated = () => {
-  return auth.currentUser;
+  const user = auth.currentUser;
+  return user;
 };
 
 export const logout = () => {

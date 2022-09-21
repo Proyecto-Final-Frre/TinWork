@@ -1,18 +1,19 @@
 import { useEffect, useState } from "react";
-import { findAll } from "../../services/OfferService";
+import { findOfferByUserUid } from "../../services/OfferService";
 import Offer from "../Offer";
 import "./style.css";
-/*abilitiesUser.forEach(ability => {if(abilitiesOffer.includes(ability)){count++; return true} return false})*/ 
-//Para sacar la cantidad de aptitudes coincidentes
+import { auth } from "../../config/firebase";
+
 const OfferList = () => {
   const [offers, setOffers] = useState([]);
 
   useEffect(() => {
     offersFunc();
-  }, []);
+  }, [auth.currentUser]);
 
   const offersFunc = async () => {
-    const result = await findAll();
+    const userAuth = auth.currentUser;
+    const result = await findOfferByUserUid(userAuth.uid);
     setOffers(result);
   };
 
