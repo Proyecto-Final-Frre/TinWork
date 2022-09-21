@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./style.css";
 import { Card } from "react-bootstrap";
 import { BsArrowLeftSquare } from "react-icons/bs";
@@ -10,84 +10,93 @@ import { TiDeleteOutline } from "react-icons/ti";
 import { BsPersonCircle } from "react-icons/bs";
 import DataTable from "react-data-table-component";
 import { useLocation } from "react-router-dom";
+import { findUserByUid, pushNotification } from "../../services/UserService";
 
-const columnas = [
-  {
-    center: true,
-    cell: () => (
-      <div>
-        <BsPersonCircle size="2em" type="button" />
-      </div>
-    ),
-  },
-  {
-    name: "Apellidos y nombres",
-    selector: (row) => row.name,
-    sortable: true,
-    width: "25%",
-  },
-  {
-    name: "Aptitudes coincidentes",
-    selector: "aptcoincidentes",
-    sortable: true,
-    width: "30%",
-    center: true,
-  },
-  {
-    name: "Estado",
-    selector: (row) =>
-      (row.status === "wait" ? "En Espera" : "none") ||
-      (row.status === "match" ? "Matcheado" : "none") ||
-      (row.status === "no-match" ? "Descartado" : "none"),
-    sortable: true,
-    center: true,
-    conditionalCellStyles: [
-      {
-        when: (row) => row.status === "match",
-        style: {
-          backgroundColor: "rgba(63, 195, 128, 0.9)",
-          color: "white",
-        },
-      },
-      {
-        when: (row) => row.status === "wait",
+const handleMatch = async (element, titleOffer) => {
+  const user = await findUserByUid(element.uid);
 
-        style: {
-          backgroundColor: "#D9D9D9",
-          color: "white",
-        },
-      },
-      {
-        when: (row) => row.status === "no-match",
-        style: {
-          backgroundColor: "rgba(242, 38, 19, 0.9)",
-          color: "white",
-        },
-      },
-    ],
-  },
-  {
-    name: "Acciones",
-    grow: 1,
-    center: true,
-
-    cell: (row) => (
-      <div>
-        <TiDeleteOutline size="2em" type="button" />
-        <IoMdHeartEmpty
-          onClick={(e) => console.log("haciendo click devolves?", e, row.name)}
-          size="2em"
-          type="button"
-        />
-      </div>
-    ),
-  },
-];
+  await pushNotification(user.tokenNotification, titleOffer);
+};
 
 const Candidates = () => {
   const { state } = useLocation();
 
-  console.log("state", state);
+  const [titleOffer, setTitleOffer] = useState(null);
+
+  useEffect(() => setTitleOffer(state.title), [state]);
+
+  const columnas = [
+    {
+      center: true,
+      cell: () => (
+        <div>
+          <BsPersonCircle size="2em" type="button" />
+        </div>
+      ),
+    },
+    {
+      name: "Apellidos y nombres",
+      selector: (row) => row.name,
+      sortable: true,
+      width: "25%",
+    },
+    {
+      name: "Aptitudes coincidentes",
+      selector: "aptcoincidentes",
+      sortable: true,
+      width: "30%",
+      center: true,
+    },
+    {
+      name: "Estado",
+      selector: (row) =>
+        (row.status === "wait" ? "En Espera" : "none") ||
+        (row.status === "match" ? "Matcheado" : "none") ||
+        (row.status === "no-match" ? "Descartado" : "none"),
+      sortable: true,
+      center: true,
+      conditionalCellStyles: [
+        {
+          when: (row) => row.status === "match",
+          style: {
+            backgroundColor: "rgba(63, 195, 128, 0.9)",
+            color: "white",
+          },
+        },
+        {
+          when: (row) => row.status === "wait",
+
+          style: {
+            backgroundColor: "#D9D9D9",
+            color: "white",
+          },
+        },
+        {
+          when: (row) => row.status === "no-match",
+          style: {
+            backgroundColor: "rgba(242, 38, 19, 0.9)",
+            color: "white",
+          },
+        },
+      ],
+    },
+    {
+      name: "Acciones",
+      grow: 1,
+      center: true,
+
+      cell: (row) => (
+        <div>
+          <TiDeleteOutline size="2em" type="button" />
+          <IoMdHeartEmpty
+            onClick={() => handleMatch(row, titleOffer)}
+            size="2em"
+            type="button"
+          />
+        </div>
+      ),
+    },
+  ];
 
   //Para sacar la cantidad de aptitudes coincidentes
   let count = 0;
@@ -113,43 +122,42 @@ const Candidates = () => {
     <div>
       <nav className="navbar navbar-expand-lg bg-primary">
         <div className="container-fluid">
-          <a className="elment" href="/Offers">
+          <a className="element" href="/Offers">
             <BsArrowLeftSquare />
           </a>
           <Card.Title>{state.title}</Card.Title>
         </div>
       </nav>
-      <div className="container-sidebar-table">
-        <div className="container-sidebar">
-          <ul className="nav  flex-column ">
-            <IconContext.Provider value={{ size: "2em" }}>
-              <li className="nav-item">
-                <a href="#" className="nav-link link-dark">
-                  <IoIosPeople />
-                  Candidatos
-                </a>
-              </li>
-              <li>
-                <a href="#" className="nav-link link-dark">
-                  <TbFileDescription />
-                  Descripción
-                </a>
-              </li>
-              <li>
-                <a href="#" className="nav-link link-dark">
-                  <AiOutlineStar />
-                  Aptitudes requeridas
-                </a>
-              </li>
-            </IconContext.Provider>
-          </ul>
-        </div>
-        <div className="table">
-          <DataTable columns={columnas} data={state.interestedUsers} />
-        </div>
-      </div>
+
+      <aside className="sidebar">
+        <ul className="nav  flex-column ">
+          <IconContext.Provider value={{ size: "3em" }}>
+            <li className="nav-item ">
+              <a href="/candidates" className="nav-link link-dark">
+                <IoIosPeople />
+                Candidatos
+              </a>
+            </li>
+            <li>
+              <a href="#" className="nav-link link-dark">
+                <TbFileDescription />
+                Descripción
+              </a>
+            </li>
+            <li>
+              <a href="#" className="nav-link link-dark">
+                <AiOutlineStar />
+                Aptitudes requeridas
+              </a>
+            </li>
+          </IconContext.Provider>
+        </ul>
+      </aside>
+
+      <section className="table-candidates">
+        <DataTable columns={columnas} data={state.interestedUsers} />
+      </section>
     </div>
   );
 };
-
 export default Candidates;
