@@ -5,10 +5,18 @@ import Header from "./components/Header";
 import FormOffer from "./components/FormOffer";
 import OfferList from "./components/OfferList";
 import Candidates from "./components/Candidates";
+import { createContext } from "react";
+
+
+export const UserContext = createContext()
+
+
+
 
 function App() {
   return (
-    <BrowserRouter>
+    <UserContext.Provider>
+      <BrowserRouter>
       <Header />
       <Routes>
         <Route path="/offers" element={<OfferList />} />
@@ -17,6 +25,8 @@ function App() {
         <Route path="/candidates" element={<Candidates />} />
       </Routes>
     </BrowserRouter>
+    </UserContext.Provider>
+    
   );
 }
 

@@ -7,6 +7,8 @@ import "./style.css";
 import { findAll } from "../../services/AbilityService";
 import { todasProvincias } from "../../services/ProvinceService";
 import Swal from "sweetalert2";
+import { app, auth } from "../../config/firebase"
+import { getUserAuthenticated } from "../../services/UserService";
 
 const FormOffer = () => {
   const [title, setTitle] = useState("");
@@ -21,6 +23,22 @@ const FormOffer = () => {
   const [country, setCountry] = useState("Argentina");
 
 
+  //Obtener la user.uid del usuario autenticado
+  const [user, setUser] = useState(null);
+
+  const getUser = async () => {
+    const user = await getUserAuthenticated()
+    console.log("User autenticado",user)
+  }
+
+  useEffect(() => {
+    getUser()
+    auth.onAuthStateChanged((usuarioFirebase) => {
+      console.log("ya tienes sesión iniciada con:", usuarioFirebase);
+      setUser(usuarioFirebase);
+    });
+  }, []);
+
   const findAllProvinces = async () => {
     const prov = await todasProvincias();
     console.log(prov);
@@ -28,14 +46,14 @@ const FormOffer = () => {
   };
 
   //Fecha creación de la oferta
-  const dateOffer= new Date() 
-  
+  const dateOffer = new Date()
+
   useEffect(() => {
     findAllProvinces();
   }, []);
 
   const navigate = useNavigate();
-  
+
   useEffect(() => {
     abilitiesFunc();
   }, []);
@@ -61,10 +79,11 @@ const FormOffer = () => {
       province,
       country,
       dateOffer,
+      uid: user.uid
     };
     createOffer(offer).then(() => {
       mostrarAlerta();
-      navigate("/offers");
+      navigate("/offers", { state: user.uid })
     });
   };
 
@@ -76,7 +95,7 @@ const FormOffer = () => {
     setDesiredAbilities(abilities);
   };
 
-  
+
 
   const mostrarAlerta = () => {
     Swal.fire({
