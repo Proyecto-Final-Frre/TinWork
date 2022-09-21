@@ -1,4 +1,12 @@
-import { collection, addDoc, getDocs, query, where } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  getDocs,
+  query,
+  where,
+  doc,
+  updateDoc,
+} from "firebase/firestore";
 import { db } from "../config/firebase.js";
 
 export const createOffer = async (offer) => {
@@ -16,6 +24,16 @@ export const createOffer = async (offer) => {
   });
 };
 
+export const updateOffer = async (offer) => {
+  const offerRef = doc(db, "Offers", offer.id);
+
+  await updateDoc(offerRef, {
+    interestedUsers: offer.interestedUsers,
+  });
+
+  return true;
+};
+
 export const findAll = async () => {
   const querySnapshot = await getDocs(collection(db, "Offers"));
 
@@ -28,7 +46,9 @@ export const findOfferByUserUid = async (uid) => {
   const q = query(collection(db, "Offers"), where("uid", "==", uid));
   const querySnapshot = await getDocs(q);
   if (!querySnapshot.empty) {
-    return querySnapshot.docs.map((doc) => doc.data());
+    return querySnapshot.docs.map((doc) => {
+      return { ...doc.data(), id: doc.id };
+    });
   } else {
     console.log("No document corresponding to the query!");
     return [];

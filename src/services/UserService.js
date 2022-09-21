@@ -35,7 +35,7 @@ export const findUserByUid = async (uid) => {
   }
 };
 
-export const pushNotification = (token, titleOffer) => {
+export const pushNotification = (token, offer) => {
   const headers = {
     "Content-Type": "application/json",
   };
@@ -45,7 +45,7 @@ export const pushNotification = (token, titleOffer) => {
       {
         token: token,
         title: "Un reclutador se intereso en ti.",
-        body: `El puesto de ${titleOffer} puede ser para vos.`,
+        body: `El puesto de ${offer.title} puede ser para vos.`,
       },
       headers
     )

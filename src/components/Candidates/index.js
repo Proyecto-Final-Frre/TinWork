@@ -11,19 +11,23 @@ import { BsPersonCircle } from "react-icons/bs";
 import DataTable from "react-data-table-component";
 import { Link, useLocation } from "react-router-dom";
 import { findUserByUid, pushNotification } from "../../services/UserService";
-
-const handleMatch = async (element, titleOffer) => {
-  const user = await findUserByUid(element.uid);
-
-  await pushNotification(user.tokenNotification, titleOffer);
-};
+import { updateOffer } from "../../services/OfferService";
 
 const Candidates = () => {
   const { state } = useLocation();
 
-  const [titleOffer, setTitleOffer] = useState(null);
+  const handleMatch = async (element) => {
+    const user = await findUserByUid(element.uid);
+    await pushNotification(user.tokenNotification, state);
 
-  useEffect(() => setTitleOffer(state.title), [state]);
+    state.interestedUsers.forEach((interestedUser) => {
+      if (interestedUser.uid === element.uid) {
+        interestedUser.status = "match";
+      }
+    });
+
+    await updateOffer(state);
+  };
 
   const columnas = [
     {
@@ -49,10 +53,18 @@ const Candidates = () => {
     },
     {
       name: "Estado",
-      selector: (row) =>
-        (row.status === "wait" ? "En Espera" : "none") ||
-        (row.status === "match" ? "Matcheado" : "none") ||
-        (row.status === "no-match" ? "Descartado" : "none"),
+      selector: (row) => {
+        switch (row.status) {
+          case "wait":
+            return "En Espera";
+          case "match":
+            return "Matcheado";
+          case "no-match":
+            return "Descartado";
+          default:
+            return "none";
+        }
+      },
       sortable: true,
       center: true,
       conditionalCellStyles: [
@@ -89,7 +101,7 @@ const Candidates = () => {
         <div>
           <TiDeleteOutline size="2em" type="button" />
           <IoMdHeartEmpty
-            onClick={() => handleMatch(row, titleOffer)}
+            onClick={() => handleMatch(row)}
             size="2em"
             type="button"
           />
