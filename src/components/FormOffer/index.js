@@ -7,8 +7,7 @@ import "./style.css";
 import { findAll } from "../../services/AbilityService";
 import { todasProvincias } from "../../services/ProvinceService";
 import Swal from "sweetalert2";
-import { app, auth } from "../../config/firebase"
-import { getUserAuthenticated } from "../../services/UserService";
+import { auth } from "../../config/firebase";
 
 const FormOffer = () => {
   const [title, setTitle] = useState("");
@@ -20,33 +19,22 @@ const FormOffer = () => {
   const [provincias, setProvincias] = useState([]);
   const [province, setProvince] = useState("");
   const [buttonDisable, setButtonDisable] = useState(true);
-  const [country, setCountry] = useState("Argentina");
-
+  const [country] = useState("Argentina");
 
   //Obtener la user.uid del usuario autenticado
   const [user, setUser] = useState(null);
 
-  const getUser = async () => {
-    const user = await getUserAuthenticated()
-    console.log("User autenticado",user)
-  }
-
   useEffect(() => {
-    getUser()
-    auth.onAuthStateChanged((usuarioFirebase) => {
-      console.log("ya tienes sesión iniciada con:", usuarioFirebase);
-      setUser(usuarioFirebase);
-    });
-  }, []);
+    setUser(auth.currentUser);
+  }, [auth.currentUser]);
 
   const findAllProvinces = async () => {
     const prov = await todasProvincias();
-    console.log(prov);
     setProvincias(prov);
   };
 
   //Fecha creación de la oferta
-  const dateOffer = new Date()
+  const dateOffer = new Date();
 
   useEffect(() => {
     findAllProvinces();
@@ -79,11 +67,11 @@ const FormOffer = () => {
       province,
       country,
       dateOffer,
-      uid: user.uid
+      uid: user.uid,
     };
     createOffer(offer).then(() => {
       mostrarAlerta();
-      navigate("/offers", { state: user.uid })
+      navigate("/offers", { state: user.uid });
     });
   };
 
@@ -94,8 +82,6 @@ const FormOffer = () => {
   const addDesiredAbilities = (abilities) => {
     setDesiredAbilities(abilities);
   };
-
-
 
   const mostrarAlerta = () => {
     Swal.fire({
@@ -123,7 +109,7 @@ const FormOffer = () => {
                 required
               />
             </Form.Group>
-            <div class="select-caja mb-2">
+            <div className="select-caja mb-2">
               <select
                 className="form-select form-select-sm mb-2"
                 aria-label=".form-select-sm example"

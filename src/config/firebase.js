@@ -6,7 +6,6 @@ import { getFirestore, collection, getDocs } from "firebase/firestore";
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 
-
 import {
   getAuth,
   signInWithPopup,
@@ -30,7 +29,7 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-export const app=initializeApp(firebaseConfig);
+export const app = initializeApp(firebaseConfig);
 
 /*
 export const app = firebase.initializeApp({

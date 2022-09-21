@@ -3,12 +3,9 @@ import { getAuth, signOut } from "firebase/auth";
 const auth = getAuth();
 
 export const getUserAuthenticated = () => {
-  console.log("usuario autenticado",auth.currentUser)
-  return auth.currentUser;
+  const user = auth.currentUser;
+  return user;
 };
-
-
-
 
 export const logout = () => {
   return signOut(auth)
