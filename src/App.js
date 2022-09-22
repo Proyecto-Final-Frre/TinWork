@@ -4,6 +4,7 @@ import Home from "./containers/Home/Home.js";
 import Header from "./components/Header";
 import FormOffer from "./components/FormOffer";
 import OfferList from "./components/OfferList";
+import FormUser from "./components/FormUser";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
       <Routes>
         <Route path="/offers" element={<OfferList />} />
         <Route path="/create-offer" element={<FormOffer />} />
+        <Route path="/register-user" element={<FormUser />} />
         <Route path="/" element={<Home />} />
       </Routes>
     </BrowserRouter>
