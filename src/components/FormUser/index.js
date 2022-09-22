@@ -70,13 +70,13 @@ function FormUser() {
                 } = props;
                 return (
                   <Form onSubmit={handleSubmit}>
-                    <h1>Form</h1>
+                    <h1>Registro de usuario </h1>
                     <FormGroup>
-                      <Label for="name">Name</Label>
+                      <Label for="name">Apellido y Nombre</Label>
                       <Input
                         type="text"
                         name="name"
-                        placeholder="Woody Allen"
+                        placeholder="Perez Juan"
                         invalid={errors.name && touched.name}
                         onChange={handleChange}
                         onBlur={handleBlur}
@@ -89,7 +89,7 @@ function FormUser() {
                       <Input
                         type="email"
                         name="email"
-                        placeholder="contoso@domain.com"
+                        placeholder="ejemplo@dominio.com"
                         invalid={errors.email && touched.email}
                         onChange={handleChange}
                         onBlur={handleBlur}
@@ -98,11 +98,11 @@ function FormUser() {
                       <FormFeedback>{errors.email}</FormFeedback>
                     </FormGroup>
                     <FormGroup>
-                      <Label for="password">Password</Label>
+                      <Label for="password">Constraseña</Label>
                       <Input
                         type="password"
                         name="password"
-                        placeholder="Provide a password"
+                        placeholder="***********"
                         invalid={errors.password && touched.password}
                         onChange={handleChange}
                         onBlur={handleBlur}
@@ -113,8 +113,11 @@ function FormUser() {
                    
   
                     <Button type="submit" disabled={isSubmitting}>
-                      {isSubmitting ? `Loading` : `Submit`}
+                      {isSubmitting ? `Loading` : `Registrate`}
+                      
                     </Button>
+                    <h7>Ya tienes una cuenta?</h7>
+                    <Button>Iniciar sesión</Button>
                   </Form>
                 );
               }}
