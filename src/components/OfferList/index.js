@@ -14,6 +14,8 @@ const OfferList = () => {
   const offersFunc = async () => {
     const userAuth = auth.currentUser;
     const result = await findOfferByUserUid(userAuth.uid);
+    console.log(result);
+
     setOffers(result);
   };
 
