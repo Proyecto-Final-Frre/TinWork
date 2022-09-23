@@ -26,11 +26,7 @@ export const createOffer = async (offer) => {
 
 export const updateOffer = async (offer) => {
   const offerRef = doc(db, "Offers", offer.id);
-
-  await updateDoc(offerRef, {
-    interestedUsers: offer.interestedUsers,
-  });
-
+  await updateDoc(offerRef, offer);
   return true;
 };
 

@@ -15,6 +15,9 @@ import { updateOffer } from "../../services/OfferService";
 
 const Candidates = () => {
   const { state } = useLocation();
+  const [refresh, setRefresh] = useState(false);
+
+  useEffect(() => {}, [refresh]);
 
   const handleMatch = async (element) => {
     const user = await findUserByUid(element.uid);
@@ -26,7 +29,29 @@ const Candidates = () => {
       }
     });
 
-    await updateOffer(state);
+    const offerUpdate = {
+      id: state.id,
+      interestedUsers: state.interestedUsers,
+    };
+
+    await updateOffer(offerUpdate);
+    setRefresh(!refresh);
+  };
+
+  const handleNoMatch = async (element) => {
+    state.interestedUsers.forEach((interestedUser) => {
+      if (interestedUser.uid === element.uid) {
+        interestedUser.status = "no-match";
+      }
+    });
+
+    const offerUpdate = {
+      id: state.id,
+      interestedUsers: state.interestedUsers,
+    };
+
+    await updateOffer(offerUpdate);
+    setRefresh(!refresh);
   };
 
   const columnas = [
@@ -99,7 +124,11 @@ const Candidates = () => {
 
       cell: (row) => (
         <div>
-          <TiDeleteOutline size="2em" type="button" />
+          <TiDeleteOutline
+            size="2em"
+            type="button"
+            onClick={() => handleNoMatch(row)}
+          />
           <IoMdHeartEmpty
             onClick={() => handleMatch(row)}
             size="2em"
