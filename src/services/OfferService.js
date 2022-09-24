@@ -42,9 +42,11 @@ export const findAll = async () => {
 export const findOfferByUserUid = (uid, setOffers) => {
   const q = query(collection(db, "Offers"), where("uid", "==", uid));
   const unsubscribe = onSnapshot(q, (querySnapshot) => {
+    const offers = [];
     querySnapshot.forEach((doc) => {
-      setOffers({ ...doc.data(), id: doc.id });
+      offers.push({ ...doc.data(), id: doc.id });
     });
+    setOffers(offers);
   });
 
   return unsubscribe;

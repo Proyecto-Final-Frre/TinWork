@@ -19,19 +19,22 @@ const OfferList = () => {
 
   return (
     <div className="offer-list-container">
-      {offers.map((offer) => (
-        <Offer
-          key={offer.title}
-          title={offer.title}
-          description={offer.description}
-          province={offer.province}
-          workDay={offer.workDay}
-          country={offer.country}
-          dateOffer={offer.dateOffer}
-          interestedUsers={offer.interestedUsers}
-          offerObj={offer}
-        />
-      ))}
+      {console.log(offers)}
+
+      {offers.length > 0 &&
+        offers.map((offer) => (
+          <Offer
+            key={offer.title}
+            title={offer.title}
+            description={offer.description}
+            province={offer.province}
+            workDay={offer.workDay}
+            country={offer.country}
+            dateOffer={offer.dateOffer}
+            interestedUsers={offer.interestedUsers}
+            offerObj={offer}
+          />
+        ))}
     </div>
   );
 };
