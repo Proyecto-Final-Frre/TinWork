@@ -21,6 +21,9 @@ const Candidates = () => {
 
   const handleMatch = async (element) => {
     const user = await findUserByUid(element.uid);
+
+    console.log("user", user);
+
     await pushNotification(user.token, state);
 
     state.interestedUsers.forEach((interestedUser) => {
