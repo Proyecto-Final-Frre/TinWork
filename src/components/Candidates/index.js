@@ -12,20 +12,21 @@ import DataTable from "react-data-table-component";
 import { Link, useLocation } from "react-router-dom";
 import { findUserByUid, pushNotification } from "../../services/UserService";
 import { updateOffer } from "../../services/OfferService";
+import Modal from "react-bootstrap/Modal";
 
 const Candidates = () => {
   const { state } = useLocation();
   const [refresh, setRefresh] = useState(false);
-
+  const [show, setShow] = useState(false);
   useEffect(() => {}, [refresh]);
+
+  function handleShow(breakpoint) {
+    setShow(true);
+  }
 
   const handleMatch = async (element) => {
     const user = await findUserByUid(element.uid);
-
-    console.log("user", user);
-
     await pushNotification(user.token, state);
-
     state.interestedUsers.forEach((interestedUser) => {
       if (interestedUser.uid === element.uid) {
         interestedUser.status = "match";
@@ -62,7 +63,11 @@ const Candidates = () => {
       center: true,
       cell: () => (
         <div>
-          <BsPersonCircle size="2em" type="button" />
+          <BsPersonCircle
+            size="2em"
+            type="button"
+            onClick={() => handleShow()}
+          />
         </div>
       ),
     },
@@ -204,6 +209,18 @@ const Candidates = () => {
       <section className="table-candidates">
         <DataTable columns={columnas} data={state.interestedUsers} />
       </section>
+
+      <Modal
+        show={show}
+        size="xl"
+        centered={true}
+        onHide={() => setShow(false)}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Modal</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Modal body content</Modal.Body>
+      </Modal>
     </div>
   );
 };
