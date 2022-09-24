@@ -19,8 +19,6 @@ const OfferList = () => {
 
   return (
     <div className="offer-list-container">
-      {console.log(offers)}
-
       {offers.length > 0 &&
         offers.map((offer) => (
           <Offer
