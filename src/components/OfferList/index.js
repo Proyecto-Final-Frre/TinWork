@@ -1,23 +1,21 @@
 import { useEffect, useState } from "react";
-import { findOfferByUserUid } from "../../services/OfferService";
 import Offer from "../Offer";
 import "./style.css";
 import { auth } from "../../config/firebase";
+import { findOfferByUserUid } from "../../services/OfferService";
 
 const OfferList = () => {
   const [offers, setOffers] = useState([]);
 
   useEffect(() => {
-    offersFunc();
-  }, [auth.currentUser]);
-
-  const offersFunc = async () => {
-    const userAuth = auth.currentUser;
-    const result = await findOfferByUserUid(userAuth.uid);
-    console.log(result);
-
-    setOffers(result);
-  };
+    const user = auth.currentUser;
+    if (user) {
+      const unsubscribe = findOfferByUserUid(user.uid, setOffers);
+      return () => {
+        unsubscribe();
+      };
+    }
+  }, []);
 
   return (
     <div className="offer-list-container">

@@ -6,6 +6,7 @@ import {
   where,
   doc,
   updateDoc,
+  onSnapshot,
 } from "firebase/firestore";
 import { db } from "../config/firebase.js";
 
@@ -38,15 +39,13 @@ export const findAll = async () => {
   return results;
 };
 
-export const findOfferByUserUid = async (uid) => {
+export const findOfferByUserUid = (uid, setOffers) => {
   const q = query(collection(db, "Offers"), where("uid", "==", uid));
-  const querySnapshot = await getDocs(q);
-  if (!querySnapshot.empty) {
-    return querySnapshot.docs.map((doc) => {
-      return { ...doc.data(), id: doc.id };
+  const unsubscribe = onSnapshot(q, (querySnapshot) => {
+    querySnapshot.forEach((doc) => {
+      setOffers({ ...doc.data(), id: doc.id });
     });
-  } else {
-    console.log("No document corresponding to the query!");
-    return [];
-  }
+  });
+
+  return unsubscribe;
 };
