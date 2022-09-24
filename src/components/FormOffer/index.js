@@ -7,9 +7,11 @@ import "./style.css";
 import { findAll } from "../../services/AbilityService";
 import { todasProvincias } from "../../services/ProvinceService";
 import Swal from "sweetalert2";
-import { auth } from "../../config/firebase";
+import { useUserContext } from "../../contexts/UserContext";
 
 const FormOffer = () => {
+  const { userAuth } = useUserContext();
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [selectableAbilities, setSelectableAbilities] = useState([]);
@@ -25,8 +27,8 @@ const FormOffer = () => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    setUser(auth.currentUser);
-  }, [auth.currentUser]);
+    setUser(userAuth);
+  }, [userAuth]);
 
   const findAllProvinces = async () => {
     const prov = await todasProvincias();

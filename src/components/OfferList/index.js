@@ -1,21 +1,23 @@
 import { useEffect, useState } from "react";
 import Offer from "../Offer";
 import "./style.css";
-import { auth } from "../../config/firebase";
 import { findOfferByUserUid } from "../../services/OfferService";
+import { useUserContext } from "../../contexts/UserContext";
 
 const OfferList = () => {
+  const { userAuth } = useUserContext();
+
   const [offers, setOffers] = useState([]);
 
   useEffect(() => {
-    const user = auth.currentUser;
-    if (user) {
-      const unsubscribe = findOfferByUserUid(user.uid, setOffers);
-      return () => {
-        unsubscribe();
-      };
-    }
-  }, []);
+    const unsubscribe = findOfferByUserUid(
+      userAuth ? userAuth.uid : null,
+      setOffers
+    );
+    return () => {
+      unsubscribe();
+    };
+  }, [userAuth]);
 
   return (
     <div className="offer-list-container">

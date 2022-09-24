@@ -8,17 +8,22 @@ import "./style.css";
 import { VscWand } from "react-icons/vsc";
 import { RiNewspaperLine, RiNewspaperFill } from "react-icons/ri";
 import { logout } from "../../services/UserService";
-import { authentication } from "../../config/firebase";
-import { useUserContext } from "../../contexts/UserContext";
+import { auth, authentication } from "../../config/firebase";
 import { Link } from "react-router-dom";
+import { useUserContext } from "../../contexts/UserContext";
 
 const Header = () => {
-  const { addOn, userAuth } = useUserContext();
-
-  useEffect(() => setUser(userAuth), [userAuth]);
+  const { addOn } = useUserContext();
 
   const [user, setUser] = useState();
   const [reload, setReload] = useState(false);
+
+  useEffect(() => {
+    auth.onAuthStateChanged((userAuthenticated) => {
+      setUser(userAuthenticated);
+      addOn(userAuthenticated);
+    });
+  }, []);
 
   return (
     <Navbar bg="light" expand="lg">
@@ -80,13 +85,12 @@ const Header = () => {
             </Dropdown.Menu>
           </Dropdown>
         )}
-
         {!user ? (
           <Button
             onClick={async () => {
               const result = await authentication();
-              addOn(result);
               if (result) {
+                setUser(result);
                 setReload(!reload);
               }
             }}
