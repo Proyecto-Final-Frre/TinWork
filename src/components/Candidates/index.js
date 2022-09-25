@@ -17,11 +17,13 @@ import Modal from "react-bootstrap/Modal";
 const Candidates = () => {
   const { state } = useLocation();
   const [refresh, setRefresh] = useState(false);
+  const [candidate, setCandidate] = useState(null);
   const [show, setShow] = useState(false);
   useEffect(() => {}, [refresh]);
 
-  function handleShow(breakpoint) {
+  function handleShow(candidateSelected) {
     setShow(true);
+    setCandidate(candidateSelected);
   }
 
   const handleMatch = async (element) => {
@@ -61,12 +63,12 @@ const Candidates = () => {
   const columnas = [
     {
       center: true,
-      cell: () => (
+      cell: (row) => (
         <div>
           <BsPersonCircle
             size="2em"
             type="button"
-            onClick={() => handleShow()}
+            onClick={() => handleShow(row)}
           />
         </div>
       ),
@@ -217,7 +219,7 @@ const Candidates = () => {
         onHide={() => setShow(false)}
       >
         <Modal.Header closeButton>
-          <Modal.Title>Modal</Modal.Title>
+          <Modal.Title>{candidate?.name}</Modal.Title>
         </Modal.Header>
         <Modal.Body>Modal body content</Modal.Body>
       </Modal>
