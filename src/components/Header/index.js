@@ -11,9 +11,11 @@ import { logout } from "../../services/UserService";
 import { auth, authentication } from "../../config/firebase";
 import { Link } from "react-router-dom";
 import { useUserContext } from "../../contexts/UserContext";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
   const { addOn } = useUserContext();
+  const navigate = useNavigate();
 
   const [user, setUser] = useState();
   const [reload, setReload] = useState(false);
@@ -92,6 +94,7 @@ const Header = () => {
               if (result) {
                 setUser(result);
                 setReload(!reload);
+                navigate("/offers");
               }
             }}
             variant="primary"
@@ -103,6 +106,7 @@ const Header = () => {
             onClick={async () => {
               const result = await logout();
               if (result) {
+                navigate("/");
                 setReload(!reload);
               }
             }}
