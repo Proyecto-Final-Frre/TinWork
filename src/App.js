@@ -5,18 +5,36 @@ import Header from "./components/Header";
 import FormOffer from "./components/FormOffer";
 import OfferList from "./components/OfferList";
 import FormUser from "./components/FormUser";
+import Register from "./components/Register";
+import { AuthProvider } from "./context/AuthContext";
+import Login from "./components/Login/Login";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Header />
-      <Routes>
-        <Route path="/offers" element={<OfferList />} />
-        <Route path="/create-offer" element={<FormOffer />} />
-        <Route path="/register-user" element={<FormUser />} />
-        <Route path="/" element={<Home />} />
-      </Routes>
-    </BrowserRouter>
+    <AuthProvider>
+      <BrowserRouter>
+
+
+        <Header />
+        <Routes>
+          <Route path="/offers" element={<OfferList />} />
+          <Route path="/create-offer" element={<FormOffer />} />
+          <Route path="/register-user" element={<FormUser />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/" element={    
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>  
+            
+          } />
+        </Routes>
+
+
+      </BrowserRouter>
+    </AuthProvider>
+
   );
 }
 

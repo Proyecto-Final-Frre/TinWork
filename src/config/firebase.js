@@ -31,7 +31,7 @@ const db = getFirestore(app);
 const analytics = getAnalytics(app);
 
 const provider = new GoogleAuthProvider();
-const auth = getAuth();
+export const auth = getAuth();
 
 export function authentication() {
   return signInWithPopup(auth, provider)
