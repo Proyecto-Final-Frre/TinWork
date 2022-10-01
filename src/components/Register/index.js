@@ -53,7 +53,7 @@ function Register() {
       
       
         <Card.Body>
-          <Card.Title className="mb-4">Registro candidato</Card.Title>
+          <Card.Title className="mb-4">Registro reclutador</Card.Title>
           <Form onSubmit={handleSubmit}>
 
             <label
