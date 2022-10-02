@@ -4,7 +4,7 @@ import { useAuth } from "../../context/AuthContext";
 import { Button, Card, Form } from "react-bootstrap";
 import "./style.css";
 import Alert from "react-bootstrap/Alert";
-
+import logoRecrutier from '../../logos/Reclutier.png';
 
 function Register() {
   const { signup } = useAuth();
@@ -41,9 +41,8 @@ function Register() {
 
     <div className="principal">
       
-      <img src="/logos/logoTin.png" alt="" className="logo" />
-
       <div className="register">
+      <img src={logoRecrutier} alt="logo" /> 
       {error &&
      <Alert variant="danger" style={{ width: "34rem" }}>
         <Alert.Heading>

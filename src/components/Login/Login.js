@@ -4,6 +4,7 @@ import { useAuth } from "../../context/AuthContext";
 import { Button, Card, Form } from "react-bootstrap";
 import "./style.css";
 import Alert from "react-bootstrap/Alert";
+import logoRecrutier from '../../logos/Reclutier.png';
 
 function Login() {
   const [user, setUser] = useState({
@@ -59,6 +60,8 @@ function Login() {
   return (
     <div className="principal-login">
       <div className="login">
+      <img src={logoRecrutier} alt="logo" /> 
+
       {error &&
      <Alert variant="danger" style={{ width: "34rem" }}>
         <Alert.Heading>
