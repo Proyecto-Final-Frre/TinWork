@@ -15,13 +15,20 @@ function App() {
       <BrowserRouter>
         <Header />
         <Routes>
-          <Route path="/offers" element={<OfferList />} />
+        <Route path="/offers" element={
+        <ProtectedRoute>
+          <OfferList />
+
+        </ProtectedRoute>
+        } />
           <Route path="/create-offer" element={<FormOffer />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/" element={
             <ProtectedRoute>
               <Home />
+              
+
             </ProtectedRoute>
           } />
         </Routes>

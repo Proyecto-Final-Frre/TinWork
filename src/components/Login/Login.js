@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { Button, Card, Form } from "react-bootstrap";
 import "./style.css";
-import Alert from "react-bootstrap/Alert";
 import logoRecrutier from '../../logos/Reclutier.png';
 
 function Login() {
@@ -59,17 +58,17 @@ function Login() {
 
   return (
     <div className="principal-login">
+      
+      
       <div className="login">
       <img src={logoRecrutier} alt="logo" /> 
 
-      {error &&
-     <Alert variant="danger" style={{ width: "34rem" }}>
-        <Alert.Heading>
-          {error}
-        </Alert.Heading>
-      </Alert> }
       
         <Card.Body>
+        {error &&
+          <div id="error" class="alert alert-danger" role="alert">
+             {error}
+          </div>}
           <Card.Title className="mb-4">Login Reclutador</Card.Title>
           <Form onSubmit={handleSubmit}>
 
