@@ -53,7 +53,7 @@ function Register() {
         
       <div className="register">
       
-        <img src={logoRecrutier} alt="logo" />
+        <img src={logoRecrutier} alt="logo"  />
         
          
         
@@ -136,7 +136,7 @@ function Register() {
                 Registrar
               </Button>
 
-              <p className="my-4 text-sm flex justify-between px-3">
+              <p className="my-2 text-sm flex justify-between px-3">
                 Ya tienes una cuenta ?
 
 

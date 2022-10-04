@@ -1,15 +1,15 @@
 .principal-login {
-    width: 50%;
-    display: flex;
+    width:35%;
     justify-content: center;
-    margin-top: 3%;
+    margin-top: 5%;
+    margin-left: 15%;
+    align-items: center;
 }
 
 
 .login {
+    padding: 2%;  
     display: flex;
-    padding: 10px;
-    width: 75%;
     border: 1px solid #b2d3f4;
     border-radius: 10px;
 }
