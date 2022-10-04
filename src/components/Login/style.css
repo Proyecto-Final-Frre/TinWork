@@ -1,8 +1,9 @@
 .principal-login {
-    width:35%;
+    width:auto;
     justify-content: center;
     margin-top: 5%;
-    margin-left: 15%;
+    margin-left: 25%;
+    margin-right: 25%;
     align-items: center;
 }
 

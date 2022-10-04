@@ -1,9 +1,10 @@
 .principal {
-    width:40%;
+    width:auto;
     justify-content: center;
-    margin-top: 3%;
-    margin-left: 15%;
+    margin-left: 25%;
+    margin-right: 20%;
     align-items: center;
+    margin-top: 5%;
     
 }
 

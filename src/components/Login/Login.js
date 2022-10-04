@@ -10,7 +10,7 @@ function Login() {
     email: "",
     password: "",
   });
-  const { login, loginWithGoogle, resetPassword } = useAuth();
+  const { login, loginWithGoogle } = useAuth();
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -27,48 +27,35 @@ function Login() {
       if (error.code === "auth/user-not-found") {
         setError("El usuario aún no esta registrado")
       }
-     
-      
     }
   };
 
-  const handleChange = ({ target: { value, name } }) =>
-    setUser({ ...user, [name]: value });
 
   const handleGoogleSignin = async () => {
     try {
       await loginWithGoogle();
       navigate("/");
     } catch (error) {
-      console.log("Error",error.message)
+      console.log("Error", error.message)
       setError(error.message);
     }
   };
 
-  const handleResetPassword = async (e) => {
-    e.preventDefault();
-    if (!user.email) return setError("Write an email to reset password");
-    try {
-      await resetPassword(user.email);
-      setError('We sent you an email. Check your inbox')
-    } catch (error) {
-      setError(error.message);
-    }
-  };
+
 
   return (
     <div className="principal-login">
-      
-      
-      <div className="login">
-      <img src={logoRecrutier} alt="logo" /> 
 
-      
+
+      <div className="login">
+        <img src={logoRecrutier} alt="logo" />
+
+
         <Card.Body>
-        {error &&
-          <div id="error" class="alert alert-danger" role="alert">
-             {error}
-          </div>}
+          {error &&
+            <div id="error" class="alert alert-danger" role="alert">
+              {error}
+            </div>}
           <Card.Title className="mb-4">Login Reclutador</Card.Title>
           <Form onSubmit={handleSubmit}>
 
@@ -112,9 +99,9 @@ function Login() {
               Login
             </Button>
             <Button variant="secondary" onClick={handleGoogleSignin}>
-            Google login
+              Google login
             </Button>
-           
+
             <p className="my-4 text-sm flex justify-between px-3">
               No tiene una cuenta?
               <Link to="/register" className="text-blue-700 hover:text-blue-900">
