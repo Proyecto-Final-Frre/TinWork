@@ -4,10 +4,12 @@ import { AiOutlineFileSearch } from "react-icons/ai";
 import { GrLocation } from "react-icons/gr";
 import { BiBriefcase } from "react-icons/bi";
 import { BsCalendarDate, BsPeople } from "react-icons/bs";
-import { getCurrentDate } from "../../services/Date";
+import { intlFormatDistance } from "date-fns";
+import { useNavigate } from "react-router-dom";
 
 const Offer = ({
   title,
+  offerObj,
   description,
   province,
   workDay,
@@ -20,13 +22,18 @@ const Offer = ({
     setReadMoreShown((prevState) => !prevState);
   };
 
-  let calculateDate = "";
-  const calculateDateOffer = (dateOffer) => {
-    calculateDate = getCurrentDate("") - dateOffer;
-    return calculateDate;
-  };
+  //Obtener hace cuanto se publico la oferta, resta fecha de creación - fecha actual
+  const dataOffer = intlFormatDistance(
+    dateOffer.toDate(),
+    new Date(),
 
-  calculateDateOffer(dateOffer);
+    { locale: "es" }
+  );
+  const navigate = useNavigate();
+
+  const obtnInteresed = () => {
+    navigate("/candidates", { state: offerObj });
+  };
 
   return (
     <div className="card-offer">
@@ -45,7 +52,7 @@ const Offer = ({
           </div>
         </h6>
         <h6>
-          <BsCalendarDate /> {calculateDate} días
+          <BsCalendarDate /> {dataOffer}
         </h6>
       </div>
 
@@ -61,7 +68,7 @@ const Offer = ({
 
       <div className="footer">
         <BsPeople className="people" type="button" />
-        <button type="button" class="btn btn-link">
+        <button type="button" className="btn btn-link" onClick={obtnInteresed}>
           <span>{interestedUsers?.length}</span> interesados
         </button>
       </div>
