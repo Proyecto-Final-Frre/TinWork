@@ -214,14 +214,42 @@ const Candidates = () => {
 
       <Modal
         show={show}
-        size="xl"
+        size="lg"
         centered={true}
         onHide={() => setShow(false)}
       >
         <Modal.Header closeButton>
           <Modal.Title>{candidate?.name}</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Modal body content</Modal.Body>
+        <Modal.Body className="modal-body">
+          <section className="section-figure">
+            <figure className="figure">
+              <img
+                width={210}
+                height={210}
+                src={candidate?.image}
+                alt={candidate?.name}
+              />
+            </figure>
+            <div className="section-figure__detail">
+              <h6>Correo</h6>
+              <h5>{candidate?.email}</h5>
+              <h6>Ubicacion</h6>
+              <h5>{candidate?.location}</h5>
+              <h6>Habilidades</h6>
+              <section className="modal-body-abilities">
+                {candidate?.abilities?.map((ability) => (
+                  <div className="modal-ability">{ability}</div>
+                ))}
+              </section>
+            </div>
+          </section>
+
+          <h6>Descripción</h6>
+          <section className="modal-body-description">
+            <p>{candidate?.description}</p>
+          </section>
+        </Modal.Body>
       </Modal>
     </div>
   );
