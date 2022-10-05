@@ -1,38 +1,92 @@
 .header {
-    display:flex;
-    border: 1px solid #b2d3f4;
-    justify-content: center;
+  display: flex;
+  border: 1px solid #b2d3f4;
+  justify-content: center;
 }
 
 .card-title {
-    color: white;
-    margin-right: 50%;
+  color: white;
+  margin-right: 50%;
 }
 
-.element{
-    font-size: 30px;
-    color: white;
-    margin-left: 10%;
+.element {
+  font-size: 30px;
+  color: white;
+  margin-left: 10%;
 }
-
 
 .sidebar {
-    position: fixed;
-    width: 12%;
-    height: 100vh;
-    background: #D9D9D9;
-    font-size: 0.85em;
-  }
+  position: fixed;
+  width: 12%;
+  height: 100vh;
+  background: #D9D9D9;
+  font-size: 0.85em;
+}
 
 .table-candidates {
   position: relative;
   width: 88%;
   float: right;
   height: 100%;
-  
+
 }
 
 .nav {
-    margin-top: 15%;
-    font-weight: bold;
-  }
+  margin-top: 15%;
+  font-weight: bold;
+}
+
+.modal-content .modal-header {
+  border-bottom: none;
+}
+
+.modal-header .modal-title {
+  font-size: 35px;
+  font-family: sans-serif;
+}
+
+.modal-content {
+  justify-content: center;
+}
+
+.modal-content {
+  padding: 0 50px;
+}
+
+.modal-body h6 {
+  color: gray;
+  font-size: 14px;
+}
+
+.modal-body h5 {
+  color: black;
+  font-size: 18px;
+}
+
+.modal-body-abilities {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: start;
+}
+
+.modal-ability {
+  display: inline-block;
+  background-color: #2E81FB;
+  margin: 0 10px 8px;
+  border-radius: 20px;
+  padding: 8px;
+  color: white;
+}
+
+.section-figure {
+  display: flex;
+  flex-direction: row;
+  margin: 0 0 10px 0;
+}
+
+.figure {
+  width: 210px;
+  height: 210px;
+  background-color: #2E81FB;
+  margin-right: 30px;
+}

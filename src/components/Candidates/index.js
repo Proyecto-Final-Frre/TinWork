@@ -12,20 +12,23 @@ import DataTable from "react-data-table-component";
 import { Link, useLocation } from "react-router-dom";
 import { findUserByUid, pushNotification } from "../../services/UserService";
 import { updateOffer } from "../../services/OfferService";
+import Modal from "react-bootstrap/Modal";
 
 const Candidates = () => {
   const { state } = useLocation();
   const [refresh, setRefresh] = useState(false);
-
+  const [candidate, setCandidate] = useState(null);
+  const [show, setShow] = useState(false);
   useEffect(() => {}, [refresh]);
+
+  function handleShow(candidateSelected) {
+    setShow(true);
+    setCandidate(candidateSelected);
+  }
 
   const handleMatch = async (element) => {
     const user = await findUserByUid(element.uid);
-
-    console.log("user", user);
-
     await pushNotification(user.token, state);
-
     state.interestedUsers.forEach((interestedUser) => {
       if (interestedUser.uid === element.uid) {
         interestedUser.status = "match";
@@ -60,9 +63,13 @@ const Candidates = () => {
   const columnas = [
     {
       center: true,
-      cell: () => (
+      cell: (row) => (
         <div>
-          <BsPersonCircle size="2em" type="button" />
+          <BsPersonCircle
+            size="2em"
+            type="button"
+            onClick={() => handleShow(row)}
+          />
         </div>
       ),
     },
@@ -204,6 +211,46 @@ const Candidates = () => {
       <section className="table-candidates">
         <DataTable columns={columnas} data={state.interestedUsers} />
       </section>
+
+      <Modal
+        show={show}
+        size="lg"
+        centered={true}
+        onHide={() => setShow(false)}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>{candidate?.name}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="modal-body">
+          <section className="section-figure">
+            <figure className="figure">
+              <img
+                width={210}
+                height={210}
+                src={candidate?.image}
+                alt={candidate?.name}
+              />
+            </figure>
+            <div className="section-figure__detail">
+              <h6>Correo</h6>
+              <h5>{candidate?.email}</h5>
+              <h6>Ubicacion</h6>
+              <h5>{candidate?.location}</h5>
+              <h6>Habilidades</h6>
+              <section className="modal-body-abilities">
+                {candidate?.abilities?.map((ability) => (
+                  <div className="modal-ability">{ability}</div>
+                ))}
+              </section>
+            </div>
+          </section>
+
+          <h6>Descripción</h6>
+          <section className="modal-body-description">
+            <p>{candidate?.description}</p>
+          </section>
+        </Modal.Body>
+      </Modal>
     </div>
   );
 };
