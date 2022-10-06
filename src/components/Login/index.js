@@ -47,7 +47,7 @@ function Login() {
 
         <Card.Body>
           {error && (
-            <div id="error" class="alert alert-danger" role="alert">
+            <div id="error" className="alert alert-danger" role="alert">
               {error}
             </div>
           )}

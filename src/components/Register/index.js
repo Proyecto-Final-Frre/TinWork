@@ -12,15 +12,23 @@ function Register() {
     email: "",
     password: "",
   });
+  const [password2, setPassword2] = useState(""); //Para validar campo repetir contraseña
 
-  const [password2, setPassword2] = useState("");
+  const expresionNombre=/^[a-zA-ZÀ-ÿ\s]{1,40}$/ // Para validar campo apynombre
+  const [name,setName]= useState("")
+
   const [error, setError] = useState("");
+
   const navigate = useNavigate();
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     setError("");
+    if (!expresionNombre.test(name) || name.length<6) {
+      setError("El nombre no es valido porfavor ingreselo nuevamente")
+    }else {
     if (user.password !== password2) {
       setError("Las contraseñas no coinciden vuelva a intentar!");
     } else {
@@ -41,6 +49,7 @@ function Register() {
         }
       }
     }
+  }
   };
 
   return (
@@ -50,7 +59,7 @@ function Register() {
 
         <Card.Body>
           {error && (
-            <div id="error" class="alert alert-danger" role="alert">
+            <div id="error" className="alert alert-danger" role="alert">
               {error}
             </div>
           )}
@@ -67,6 +76,7 @@ function Register() {
                 type="text"
                 placeholder="Perez Aliendro Carlos"
                 className="form-control"
+                onChange={(e) => setName(e.target.value)}
                 required
               />
             </Form.Group>
