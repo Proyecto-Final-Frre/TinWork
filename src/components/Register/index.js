@@ -4,6 +4,7 @@ import { useAuth } from "../../context/AuthContext";
 import { Button, Card, Form } from "react-bootstrap";
 import "./style.css";
 import logoRecrutier from "../../logos/Reclutier.png";
+import { createUser } from "../../services/UserService";
 
 function Register() {
   const { signup } = useAuth();
@@ -14,42 +15,49 @@ function Register() {
   });
   const [password2, setPassword2] = useState(""); //Para validar campo repetir contraseña
 
-  const expresionNombre=/^[a-zA-ZÀ-ÿ\s]{1,40}$/ // Para validar campo apynombre
-  const [name,setName]= useState("")
+  const expresionNombre = /^[a-zA-ZÀ-ÿ\s]{1,40}$/; // Para validar campo apynombre
+  const [name, setName] = useState("");
 
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     setError("");
-    if (!expresionNombre.test(name) || name.length<6) {
-      setError("El nombre no es valido porfavor ingreselo nuevamente")
-    }else {
-    if (user.password !== password2) {
-      setError("Las contraseñas no coinciden vuelva a intentar!");
+    if (!expresionNombre.test(name) || name.length < 6) {
+      setError("El nombre no es valido porfavor ingreselo nuevamente");
     } else {
-      try {
-        await signup(user.email, user.password);
-        navigate("/offers");
-      } catch (error) {
-        if (error.code === "auth/invalid-email") {
-          setError(
-            "Email invalido porfavor verifique e ingrese nuevamente el email"
-          );
-        }
-        if (error.code === "auth/weak-password") {
-          setError("Su contraseña debe tener al menos 6 caracteres");
-        }
-        if (error.code === "auth/email-already-in-use") {
-          setError("El email ingresado ya esta en uso");
+      if (user.password !== password2) {
+        setError("Las contraseñas no coinciden vuelva a intentar!");
+      } else {
+        try {
+          const auth = await signup(user.email, user.password);
+          if (auth) {
+            const userSave = {
+              name: name,
+              email: user.email,
+              uid: auth.user.uid,
+            };
+            createUser(userSave);
+            navigate("/offers");
+          }
+        } catch (error) {
+          if (error.code === "auth/invalid-email") {
+            setError(
+              "Email invalido porfavor verifique e ingrese nuevamente el email"
+            );
+          }
+          if (error.code === "auth/weak-password") {
+            setError("Su contraseña debe tener al menos 6 caracteres");
+          }
+          if (error.code === "auth/email-already-in-use") {
+            setError("El email ingresado ya esta en uso");
+          }
         }
       }
     }
-  }
   };
 
   return (
