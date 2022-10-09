@@ -1,0 +1,17 @@
+.principal-login {
+    width:auto;
+    justify-content: center;
+    margin-top: 5%;
+    margin-left: 25%;
+    margin-right: 25%;
+    align-items: center;
+}
+
+
+.login {
+    padding: 2%;  
+    display: flex;
+    border: 1px solid #b2d3f4;
+    border-radius: 10px;
+}
+

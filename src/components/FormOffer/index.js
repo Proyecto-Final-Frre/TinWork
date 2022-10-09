@@ -7,10 +7,10 @@ import "./style.css";
 import { findAll } from "../../services/AbilityService";
 import { todasProvincias } from "../../services/ProvinceService";
 import Swal from "sweetalert2";
-import { useUserContext } from "../../contexts/UserContext";
+import { useAuth } from "../../context/AuthContext";
 
 const FormOffer = () => {
-  const { userAuth } = useUserContext();
+  const { user } = useAuth();
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -23,19 +23,10 @@ const FormOffer = () => {
   const [buttonDisable, setButtonDisable] = useState(true);
   const [country] = useState("Argentina");
 
-  //Obtener la user.uid del usuario autenticado
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    setUser(userAuth);
-  }, [userAuth]);
-
   const findAllProvinces = async () => {
     const prov = await todasProvincias();
     setProvincias(prov);
   };
-
-  //Fecha creación de la oferta
   const dateOffer = new Date();
 
   useEffect(() => {

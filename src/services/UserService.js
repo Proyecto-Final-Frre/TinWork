@@ -35,6 +35,21 @@ export const findUserByUid = async (uid) => {
   }
 };
 
+export const createUser = async (user) => {
+  const userSaved = await findUserByUid(user.uid);
+  if (!userSaved) {
+    return addDoc(collection(db, "Users"), user)
+      .then(() => {
+        console.log("Successfully created user!");
+        return true;
+      })
+      .catch(() => {
+        console.log("Unsuccessfully created user!");
+        throw new Error("Unsuccessfully created user!");
+      });
+  }
+};
+
 export const pushNotification = (token, offer) => {
   const headers = {
     "Content-Type": "application/json",

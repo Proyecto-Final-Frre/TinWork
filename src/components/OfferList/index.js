@@ -2,22 +2,19 @@ import { useEffect, useState } from "react";
 import Offer from "../Offer";
 import "./style.css";
 import { findOfferByUserUid } from "../../services/OfferService";
-import { useUserContext } from "../../contexts/UserContext";
+import { useAuth } from "../../context/AuthContext";
 
 const OfferList = () => {
-  const { userAuth } = useUserContext();
+  const { user } = useAuth();
 
   const [offers, setOffers] = useState([]);
 
   useEffect(() => {
-    const unsubscribe = findOfferByUserUid(
-      userAuth ? userAuth.uid : null,
-      setOffers
-    );
+    const unsubscribe = findOfferByUserUid(user ? user.uid : null, setOffers);
     return () => {
       unsubscribe();
     };
-  }, [userAuth]);
+  }, [user]);
 
   return (
     <div className="offer-list-container">
