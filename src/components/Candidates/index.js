@@ -209,7 +209,11 @@ const Candidates = () => {
       </aside>
 
       <section className="table-candidates">
-        <DataTable columns={columnas} data={state.interestedUsers} />
+        <DataTable
+          columns={columnas}
+          data={state.interestedUsers}
+          noDataComponent={"No hay candidatos interesados"}
+        />
       </section>
 
       <Modal
