@@ -27,10 +27,10 @@ function Register() {
 
     setError("");
     if (!expresionNombre.test(name) || name.length < 6) {
-      setError("El nombre no es valido porfavor ingreselo nuevamente");
+      setError("El nombre no es valido por favor ingreselo nuevamente");
     } else {
       if (user.password !== password2) {
-        setError("Las contraseñas no coinciden vuelva a intentar!");
+        setError("Las contraseñas no coinciden, vuelva a intentar");
       } else {
         try {
           const auth = await signup(name, user.email, user.password);
@@ -44,7 +44,7 @@ function Register() {
         } catch (error) {
           if (error.code === "auth/invalid-email") {
             setError(
-              "Email invalido porfavor verifique e ingrese nuevamente el email"
+              "Email invalido por favor verifique e ingreselo nuevamente"
             );
           }
           if (error.code === "auth/weak-password") {
