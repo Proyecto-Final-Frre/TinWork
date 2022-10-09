@@ -75,12 +75,12 @@ function Register() {
               htmlFor="name"
               className="block text-gray-700 text-sm font-bold mb-2"
             >
-              Apellido/s y Nombre/s
+              Nombre y Apellido
             </label>
             <Form.Group className="mb-2" controlId="name">
               <Form.Control
                 type="text"
-                placeholder="Perez Aliendro Carlos"
+                placeholder="Ingresa tu nombre completo"
                 className="form-control"
                 onChange={(e) => setName(e.target.value)}
                 required
@@ -97,7 +97,8 @@ function Register() {
             <Form.Group className="mb-2" controlId="email">
               <Form.Control
                 type="email"
-                placeholder="email@gmail.com"
+                placeholder="Ingresa tu correo"
+                autoComplete="email"
                 onChange={(e) => setUser({ ...user, email: e.target.value })}
                 className="form-control"
                 required
@@ -114,6 +115,7 @@ function Register() {
               <Form.Control
                 type="password"
                 placeholder="******"
+                autoComplete="current-password"
                 onChange={(e) => setPassword2(e.target.value)}
                 className="form-control"
                 required
@@ -129,6 +131,7 @@ function Register() {
               <Form.Control
                 type="password"
                 placeholder="******"
+                autoComplete="current-password"
                 onChange={(e) => setUser({ ...user, password: e.target.value })}
                 className="form-control"
                 required
@@ -140,7 +143,7 @@ function Register() {
             </Button>
 
             <p className="my-2 text-sm flex justify-between px-3">
-              Ya tienes una cuenta ?
+              Ya tienes una cuenta?&nbsp;&nbsp;
               <Link to="/login" className="text-blue-700 hover:text-blue-900">
                 Inciar sesión
               </Link>

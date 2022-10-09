@@ -63,7 +63,8 @@ function Login() {
             <Form.Group className="mb-2" controlId="email">
               <Form.Control
                 type="email"
-                placeholder="email@gmail.com"
+                placeholder="Ingresa tu correo"
+                autoComplete="email"
                 onChange={(e) => setUser({ ...user, email: e.target.value })}
                 className="form-control"
                 required
@@ -80,6 +81,7 @@ function Login() {
               <Form.Control
                 type="password"
                 placeholder="******"
+                autoComplete="current-password"
                 onChange={(e) => setUser({ ...user, password: e.target.value })}
                 className="form-control"
                 required
@@ -92,14 +94,13 @@ function Login() {
             <Button variant="secondary" onClick={handleGoogleSignin}>
               Google login
             </Button>
-
             <p className="my-4 text-sm flex justify-between px-3">
-              No tiene una cuenta?
+              No tiene una cuenta?&nbsp;&nbsp;
               <Link
                 to="/register"
                 className="text-blue-700 hover:text-blue-900"
               >
-                Registrarse
+                Registrate
               </Link>
             </p>
           </Form>
