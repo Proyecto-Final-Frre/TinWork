@@ -6,6 +6,7 @@ import {
   onAuthStateChanged,
   GoogleAuthProvider,
   signInWithPopup,
+  updateProfile,
 } from "firebase/auth";
 import { auth } from "../config/firebase";
 
@@ -21,8 +22,18 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const signup = (email, password) => {
-    return createUserWithEmailAndPassword(auth, email, password);
+  const signup = async (name, email, password) => {
+    await createUserWithEmailAndPassword(auth, email, password);
+    await updateProfile(auth.currentUser, {
+      displayName: name,
+    })
+      .then(() => {
+        console.log("profile updated successfully");
+      })
+      .catch((err) => {
+        console.log("error updating profile", err);
+      });
+    return auth;
   };
 
   const login = (email, password) => {

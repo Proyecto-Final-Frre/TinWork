@@ -33,16 +33,14 @@ function Register() {
         setError("Las contraseñas no coinciden vuelva a intentar!");
       } else {
         try {
-          const auth = await signup(user.email, user.password);
-          if (auth) {
-            const userSave = {
-              name: name,
-              email: user.email,
-              uid: auth.user.uid,
-            };
-            createUser(userSave);
-            navigate("/offers");
-          }
+          const auth = await signup(name, user.email, user.password);
+          const userSave = {
+            name: name,
+            email: user.email,
+            uid: auth.currentUser.uid,
+          };
+          createUser(userSave);
+          navigate("/offers");
         } catch (error) {
           if (error.code === "auth/invalid-email") {
             setError(
