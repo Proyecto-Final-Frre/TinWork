@@ -8,6 +8,7 @@ import Login from "./components/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Register from "./components/Register";
 import Candidates from "./components/Candidates";
+import ProfileReclutier from "./components/ProfileReclutier";
 function App() {
   return (
     <AuthProvider>
@@ -41,6 +42,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/" element={<OfferList />} />
+          <Route path="/profile" element={<ProfileReclutier/>} />
         </Routes>
       </Router>
     </AuthProvider>
