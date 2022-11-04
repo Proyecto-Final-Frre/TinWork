@@ -3,40 +3,48 @@ import { useState } from "react";
 
 import { Button, Card, Form } from "react-bootstrap";
 import "./style.css";
-import logoRecrutier from "../../logos/Reclutier.png";
+import logoProfile from "../../logos/logoProfile.png";
+import {  BsPersonSquare } from "react-icons/bs";
+import { useAuth } from "../../context/AuthContext";
 
 function ProfileReclutier() {
-
-    const [editarCorreo, setEditarCorreo] = useState(true)
+    const { user } = useAuth();
+    //console.log("Usuario",user)
+    //console.log("Usuario",user.displayName)
+    const [editarDescrip, setEditarDescrip] = useState(true)
 
     return (
         <div className="principal">
             <div className="profile">
-                <img src={logoRecrutier} alt="logo" />
+                <div>
+                    <img src={logoProfile} alt="logo" width="200" className="image"/>
+                    <button type="button" class="boton ">Agregar</button>
+                </div>
                 <Card.Body>
                     <Form >
-                        <label htmlFor="name">
-                            Nombre
+                       
+                        <label htmlFor="name" >
+                           <font color="gray">Nombre/s y apellido/s</font> 
+                            
                         </label>
-                        <p className="card-text">Luciano</p>
-
+                        <p className="card-text">{user?.displayName  || ""}</p>
                         <label htmlFor="name">
-                            Apellido
+                            <font color="gray">Correo</font> 
                         </label>
-                        <p className="card-text">Lugo</p>
-                        <label htmlFor="name">
-                            Correo
-                        </label>
-                        <p className="card-text">prueba@gmail.com</p>
-                        <label htmlFor="name"> Ubicación </label>
+                        
+                        <p className="card-text">{user?.email  || ""}</p>
+                        <label htmlFor="name"><font color="gray">Ubicación</font> </label>
                         <button type="button" className="button" >Agregar</button>
                         <br></br>
                         <label htmlFor="name">
-                            Descripción
+                        <font color="gray">Descripción</font>
                         </label>
                         <button type="button" className="button" >Agregar</button>
+                        
+                    
                     </Form>
                 </Card.Body>
+                
             </div>
         </div>
     );
