@@ -1,11 +1,8 @@
 .principal {
-    width:35%;
+    width: 35%;
     justify-content: center;
-    margin-left: 25%;
-    margin-right: 20%;
+    margin: 5% 25%;
     align-items: center;
-    margin-top: 5%;
-    
 }
 
 
@@ -43,12 +40,18 @@
 
 .image{
     border-radius:2%;
+    width: 200px;
 }
 
 .boton{
-    width: 75%;
     background-color: #939393;
     border:none;
     border-radius:5%;
+    width: 200px;
+    margin-top: 10px;
 }
 
+.pie-foto{
+    clear: both;
+    margin-top: 10px;
+}
