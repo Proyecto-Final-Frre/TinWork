@@ -16,32 +16,33 @@ function ProfileReclutier() {
     return (
         <div className="principal">
             <div className="profile">
-                <div>
-                    <img src={logoProfile} alt="logo" className="image"/>
-                    <button type="button" class="boton">Agregar</button>
-                </div>
                 <Card.Body>
                     <Form >
-                            <label htmlFor="name" >
-                            <font color="gray">Nombre/s y apellido/s</font> 
-                                
-                            </label>
-                            <p className="card-text">{user?.displayName  || ""}</p>
-                            <label htmlFor="name">
-                                <font color="gray">Correo</font> 
-                            </label>
-                            
-                            <p className="card-text">{user?.email  || ""}</p>
-
-                        <p className="pie-foto">
+                        <div className="grid">
+                            <div className="grid-1">
+                                <img src={logoProfile} alt="logo" className="image"/>
+                                <button type="button" class="boton">Agregar</button>
+                            </div>
+                            <div className="grid-2">
+                                <label htmlFor="name" >
+                                <font color="gray">Nombre/s y apellido/s</font> 
+                                </label>
+                                <p className="card-text">{user?.displayName  || ""}</p>
+                                <label htmlFor="name">
+                                    <font color="gray">Correo</font> 
+                                </label>
+                                <p className="card-text">{user?.email  || ""}</p>
+                            </div>
+                        </div>
+                        <div className="pie-foto">
                             <label htmlFor="name"><font color="gray">Ubicación</font> </label>
                             <button type="button" className="button" >Agregar</button>
-                        
+                            <br></br>
                             <label htmlFor="name">
                             <font color="gray">Descripción</font>
                             </label>
                             <button type="button" className="button" >Agregar</button>
-                        </p>
+                        </div>
                     
                     </Form>
                 </Card.Body>

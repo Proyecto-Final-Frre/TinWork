@@ -1,10 +1,10 @@
 .principal {
     width: 35%;
+    min-width: 480px;
     justify-content: center;
     margin: 5% 25%;
     align-items: center;
 }
-
 
 .profile {  
     padding: 5%;  
@@ -28,6 +28,13 @@
     --bs-btn-focus-shadow-rgb: 49,132,253;
     text-decoration: none;
 }
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: 30px;
+}
+
 .button {
     background-color: transparent;
     border:transparent;
@@ -48,7 +55,6 @@
     border:none;
     border-radius:5%;
     width: 200px;
-    margin-top: 10px;
 }
 
 .pie-foto{
