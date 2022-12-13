@@ -61,3 +61,16 @@
     clear: both;
     margin-top: 10px;
 }
+
+.select-province{
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    padding-left: 0.5rem;
+    width: 45%;
+    margin-left: 10px;
+    font-size: 100%;
+    border: 1px solid #b2d3f4;
+    border-radius: 10px;
+    
+
+}

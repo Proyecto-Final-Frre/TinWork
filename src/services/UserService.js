@@ -7,6 +7,9 @@ import {
   query,
   where,
   limit,
+  doc,
+  updateDoc
+ 
 } from "firebase/firestore";
 import { db } from "../config/firebase.js";
 const auth = getAuth();
@@ -67,3 +70,27 @@ export const pushNotification = (token, offer) => {
     .then((response) => console.log("notificacion enviada"))
     .catch((err) => console.log("error", err));
 };
+
+ 
+
+export const updateProfile = async (dataProfile,uid) => {
+  const q = query(collection(db, "Users"), where("uid", "==", uid), limit(1));
+
+  const querySnapshot = await getDocs(q);
+  if (!querySnapshot.empty) {
+  const recrutierRef = doc(db, "Users", querySnapshot.docs[0].id);
+  await updateDoc(recrutierRef, {description:dataProfile.description,location:dataProfile.location,imageProfile:dataProfile.url});
+  } else {
+    return null
+  }
+  
+  return true;
+};
+
+
+
+
+
+
+
+
