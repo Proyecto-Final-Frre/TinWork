@@ -65,7 +65,6 @@ const ProfileReclutier = () => {
                         };
                         console.log("dataaaa profileee", dataProfile.url)
                         updateProfile(dataProfile, user.uid)
-                        //window.location.reload()
                     })
                     .catch((error) => {
                         console.log(error.message, "error getting the image url");
@@ -91,17 +90,17 @@ const ProfileReclutier = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const update = (e) => {
-        e.preventDefault()
-
+    const editProfile = () => {
         const dataProfile = {
             description,
             location,
             url
         };
-        updateProfile(dataProfile, user.uid).then(() => { window.location.reload() })
-    }
+        updateProfile(dataProfile, user.uid)
+        setBtnubi(false)
+        setBtndescrip(false)
 
+    }
     const noeditubi = async () => {
         let userDat = await findUserByUid(user.uid);
         setLocation(userDat?.location || "")
@@ -113,7 +112,7 @@ const ProfileReclutier = () => {
         setDescription(userDat?.description || "")
         setBtndescrip(false)
     }
-   
+
 
     const findAllProvinces = async () => {
         const prov = await todasProvincias();
@@ -159,12 +158,15 @@ const ProfileReclutier = () => {
                             <p className="card-text">{user?.email || ""}</p>
                         </div>
                     </div>
-                    <Form onSubmit={update} >
-                        <div className="pie-foto">
-                            <label htmlFor="name"><font color="gray">Ubicación</font> </label>
-                            <p className="card-text">{location || ""}</p>
 
-                            {btnubi &&
+
+                    <div className="pie-foto">
+                        <label htmlFor="name"><font color="gray">Ubicación</font> </label>
+                        <p className="card-text">{location || ""}</p>
+
+                        {btnubi &&
+                            <div className="input-group mb-3">
+
                                 <div>
                                     <select
                                         className="select-province"
@@ -178,101 +180,86 @@ const ProfileReclutier = () => {
                                             <option key={provincia.id}> {provincia.nombre}</option>
                                         ))}
                                     </select>
-                                    <br></br>
-                                    <div>
-                                        <Button variant="primary" type="submit"   > Editar  </Button>
-
-                                        <button className="btn btn-outline-secondary" type="button" onClick={noeditubi}  >  No editar   </button>
-
-                                    </div>
-
                                 </div>
+                                <Button variant="primary" onClick={editProfile}   > Editar  </Button>
+                                <Button variant="secondary" onClick={noeditubi}    > No editar  </Button>
+                            </div>
+                        }
+                        {!btnubi &&
+                            <button type="button" className="button" onClick={() => setBtnubi(true)}  >Editar</button>
 
-                            }
-                            {!btnubi &&
-                                <button type="button" className="button" onClick={() => setBtnubi(true)}  >Editar</button>
+                        }
+                        <br></br>
+                        <br></br>
+                        <label htmlFor="name">
+                            <font color="gray">Descripción</font>
+                        </label>
 
-                            }
-                            <br></br>
-                            <label htmlFor="name">
-                                <font color="gray">Descripción</font>
-                            </label>
+                        {!btndescri &&
+                            <div>
 
-                            {!btndescri &&
-                                <div>
-
-                                    <p className="card-text">{description || ""}</p>
+                                <p className="card-text">{description || ""}</p>
 
 
-                                    <button
-                                        type="button"
-                                        className='button'
-                                        onClick={() => setBtndescrip(true)}
-                                    >
+                                <button
+                                    type="button"
+                                    className='button'
+                                    onClick={() => setBtndescrip(true)}
+                                >
 
-                                        Editar
-                                    </button>
-                                </div>}
-                            {
-                                btndescri &&
+                                    Editar
+                                </button>
+                            </div>}
+                        {
+                            btndescri &&
 
-                                <div className="card-body">
-                                    <div className="row justify-content-center">
-                                        <div className="col-md-5">
-                                            <div className="input-group mb-3">
-                                                <Form.Group className="mb-2" controlId="position-description">
-                                                    <Form.Control
-                                                        as="textarea"
-                                                        rows={6}
-                                                        placeholder="Descripción de la posición"
-                                                        value={description}
-                                                        onChange={(e) => setDescription(e.target.value)}
-                                                        type="text"
-                                                        className="col-md-12"
-                                                        onInput={(e) => {
-                                                            e.target.value.length > 60
-                                                                ? setButtonDisable(false)
-                                                                : setButtonDisable(true);
-                                                        }}
-                                                        required
+                            <div className="card-body">
+                                <div className="row justify-content-center">
+                                    <div className="col-md-5">
+                                        <div className="input-group mb-3">
+                                            <Form.Group className="mb-2" controlId="position-description">
+                                                <Form.Control
+                                                    as="textarea"
+                                                    rows={6}
+                                                    placeholder="Descripción de la posición"
+                                                    value={description}
+                                                    onChange={(e) => setDescription(e.target.value)}
+                                                    type="text"
+                                                    className="col-md-12"
+                                                    onInput={(e) => {
+                                                        e.target.value.length > 60
+                                                            ? setButtonDisable(false)
+                                                            : setButtonDisable(true);
+                                                    }}
+                                                    required
 
-                                                    />
-                                                    <label
-                                                        style={{
-                                                            display: "flex",
-                                                            justifyContent: "flex-end",
-                                                            marginRight: 5,
-                                                        }}
-                                                    >
-
-                                                    </label>
-                                                    {description.length - 60}
-                                                </Form.Group>
-                                                <br></br>
-
-                                                <Button variant="primary" type="submit" disabled={buttonDisable} >
-                                                    Editar
-                                                </Button>
-
-                                                <button
-                                                    className="btn btn-outline-secondary"
-                                                    type="button"
-                                                    onClick={noeditdesc}
+                                                />
+                                                <label
+                                                    style={{
+                                                        display: "flex",
+                                                        justifyContent: "flex-end",
+                                                        marginRight: 5,
+                                                    }}
                                                 >
-                                                    No editar
-                                                </button>
 
+                                                </label>
+                                                {description.length - 60}
+                                            </Form.Group>
 
+                                            <Button variant="primary" onClick={editProfile} disabled={buttonDisable} >
+                                                Editar
+                                            </Button>
+                                            <Button variant="secondary" onClick={noeditdesc}  >
+                                                No editar
+                                            </Button>
 
-
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            }
-                        </div>
+                            </div>
+                        }
+                    </div>
 
-                    </Form>
                 </Card.Body>
 
             </div>
