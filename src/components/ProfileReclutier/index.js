@@ -4,7 +4,7 @@ import "./style.css";
 import { useAuth } from "../../context/AuthContext";
 import { storage } from "../../config/firebase";
 import Swal from "sweetalert2";
-import {  findUserByUid, updateProfile } from "../../services/UserService";
+import { findUserByUid, updateProfile } from "../../services/UserService";
 import { todasProvincias } from "../../services/ProvinceService";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
@@ -12,7 +12,7 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const ProfileReclutier = () => {
     const { user } = useAuth();
-    
+
     //Manejo de botones
     const [btndescri, setBtndescrip] = useState(false)
     const [btnphoto, setBtnphoto] = useState(false)
@@ -25,11 +25,11 @@ const ProfileReclutier = () => {
     //Photo 
     const [photo, setPhoto] = useState(null);
     const [url, setUrl] = useState(null);
-    
+
     //Location
     const [provincias, setProvincias] = useState([]);
-    const [location,setLocation]=useState("")
-   
+    const [location, setLocation] = useState("")
+
     const mostrarAlerta = () => {
         Swal.fire({
             position: "center",
@@ -47,73 +47,78 @@ const ProfileReclutier = () => {
         }
     }
 
-   
+
     const handleClick = () => {
         const imageRef = ref(storage, "image");
         uploadBytes(imageRef, photo)
-          .then(() => {
-            getDownloadURL(imageRef)
-              .then((url) => {
-                setUrl(url);
-                console.log("usrl",url)
-                mostrarAlerta()
-                setBtnphoto(false)
-                const dataProfile = {
-                    description,
-                    location,
-                    url
-                };
-                console.log("dataaaa profileee",dataProfile.url)
-                updateProfile(dataProfile, user.uid)
-                //window.location.reload()
-              })
-              .catch((error) => {
-                console.log(error.message, "error getting the image url");
-              });
-            setPhoto(null);
-          })
-          .catch((error) => {
-            console.log(error.message);
-          });
-       
-      };
-    
-       
+            .then(() => {
+                getDownloadURL(imageRef)
+                    .then((url) => {
+                        setUrl(url);
+                        console.log("usrl", url)
+                        mostrarAlerta()
+                        setBtnphoto(false)
+                        const dataProfile = {
+                            description,
+                            location,
+                            url
+                        };
+                        console.log("dataaaa profileee", dataProfile.url)
+                        updateProfile(dataProfile, user.uid)
+                        //window.location.reload()
+                    })
+                    .catch((error) => {
+                        console.log(error.message, "error getting the image url");
+                    });
+                setPhoto(null);
+            })
+            .catch((error) => {
+                console.log(error.message);
+            });
+
+    };
+
+
     useEffect(() => {
         const getDatByUidUser = async () => {
-        
-          let userDat = await findUserByUid(user.uid);
-          setDescription(userDat?.description || "")
-          setLocation(userDat?.location || "")
-          setUrl(userDat?.imageProfile  || "https://w7.pngwing.com/pngs/223/244/png-transparent-computer-icons-avatar-user-profile-avatar-heroes-rectangle-black.png" )
+
+            let userDat = await findUserByUid(user.uid);
+            setDescription(userDat?.description || "")
+            setLocation(userDat?.location || "")
+            setUrl(userDat?.imageProfile || "https://w7.pngwing.com/pngs/223/244/png-transparent-computer-icons-avatar-user-profile-avatar-heroes-rectangle-black.png")
         };
         getDatByUidUser();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-      }, []);
-    
-    const update=  (e)=>{
+    }, []);
+
+    const update = (e) => {
         e.preventDefault()
-       
-            const dataProfile = {
+
+        const dataProfile = {
             description,
             location,
             url
         };
         updateProfile(dataProfile, user.uid).then(() => { window.location.reload() })
     }
-   
+
+    const noedit = async () => {
+        let userDat = await findUserByUid(user.uid);
+        setLocation(userDat?.location || "")
+        setBtnubi(false)
+    }
 
     const findAllProvinces = async () => {
         const prov = await todasProvincias();
         setProvincias(prov);
-        
-      };
-    
-      useEffect(() => {
+
+    };
+
+    useEffect(() => {
         findAllProvinces();
-      }, []);
-    
-    
+    }, []);
+
+
 
 
     return (
@@ -129,7 +134,7 @@ const ProfileReclutier = () => {
                                 {btnphoto &&
                                     <div>
                                         <button onClick={() => setBtnphoto(false)}  >No editar</button>
-                                        <button disabled={ !photo} onClick={handleClick} >Subir</button>
+                                        <button disabled={!photo} onClick={handleClick} >Subir</button>
                                         <input type="file" onChange={handleChange} />
                                     </div>
                                 }
@@ -153,38 +158,32 @@ const ProfileReclutier = () => {
                             <p className="card-text">{location || ""}</p>
 
                             {btnubi &&
-                            <div> 
-                                <select
-                                className="select-province"
-                                aria-label=".form-select-sm example"
-                                onChange={(e) => setLocation(e.target.value+',Argentina')}
-                            >
-                                <option disabled selected value="seleccione"    >
-                                Seleccione la provincia
-                                </option>
-                                {provincias.map((provincia) => (
-                                    <option key={provincia.id}> {provincia.nombre}</option>
-                                ))}
-                            </select>
-                            <br></br>
-                            <div>
-                            <Button variant="primary" type="submit"> Editar  </Button>
+                                <div>
+                                    <select
+                                        className="select-province"
+                                        aria-label=".form-select-sm example"
+                                        onChange={(e) => setLocation(e.target.value + ',Argentina')}
+                                    >
+                                        <option disabled selected value="seleccione"    >
+                                            Seleccione la provincia
+                                        </option>
+                                        {provincias.map((provincia) => (
+                                            <option key={provincia.id}> {provincia.nombre}</option>
+                                        ))}
+                                    </select>
+                                    <br></br>
+                                    <div>
+                                        <Button variant="primary"  > Editar  </Button>
 
-                                                <button
-                                                    className="btn btn-outline-secondary"
-                                                    type="button"
-                                                    onClick={()=>setBtnubi(false)}
-                                                >
-                                                    No editar
-                                                </button>          
+                                        <button className="btn btn-outline-secondary" type="button" onClick={noedit}  >  No editar   </button>
 
-                            </div>
-                            
-                            </div>
-                            
+                                    </div>
+
+                                </div>
+
                             }
                             {!btnubi &&
-                            <button type="button" className="button" onClick={() => setBtnubi(true)}  >Editar</button>
+                                <button type="button" className="button" onClick={() => setBtnubi(true)}  >Editar</button>
 
                             }
                             <br></br>
@@ -198,11 +197,11 @@ const ProfileReclutier = () => {
                                     <p className="card-text">{description || ""}</p>
 
 
-                                    <button 
+                                    <button
                                         type="button"
                                         className='button'
                                         onClick={() => setBtndescrip(true)}
-                                                        >
+                                    >
 
                                         Editar
                                     </button>
@@ -225,11 +224,11 @@ const ProfileReclutier = () => {
                                                         className="col-md-12"
                                                         onInput={(e) => {
                                                             e.target.value.length > 60
-                                                              ? setButtonDisable(false)
-                                                              : setButtonDisable(true);
-                                                          }}
+                                                                ? setButtonDisable(false)
+                                                                : setButtonDisable(true);
+                                                        }}
                                                         required
-                                                       
+
                                                     />
                                                     <label
                                                         style={{
@@ -238,13 +237,13 @@ const ProfileReclutier = () => {
                                                             marginRight: 5,
                                                         }}
                                                     >
-                                                       
+
                                                     </label>
                                                     {description.length - 60}
                                                 </Form.Group>
                                                 <br></br>
-                                                 
-                                                 <Button variant="primary" type="submit" disabled={buttonDisable} >
+
+                                                <Button variant="primary" type="submit" disabled={buttonDisable} >
                                                     Editar
                                                 </Button>
 
@@ -255,10 +254,10 @@ const ProfileReclutier = () => {
                                                 >
                                                     No editar
                                                 </button>
-   
-                                                    
-                                                      
-                                                
+
+
+
+
                                             </div>
                                         </div>
                                     </div>
