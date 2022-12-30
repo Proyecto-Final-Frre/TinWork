@@ -102,11 +102,18 @@ const ProfileReclutier = () => {
         updateProfile(dataProfile, user.uid).then(() => { window.location.reload() })
     }
 
-    const noedit = async () => {
+    const noeditubi = async () => {
         let userDat = await findUserByUid(user.uid);
         setLocation(userDat?.location || "")
         setBtnubi(false)
     }
+
+    const noeditdesc = async () => {
+        let userDat = await findUserByUid(user.uid);
+        setDescription(userDat?.description || "")
+        setBtndescrip(false)
+    }
+   
 
     const findAllProvinces = async () => {
         const prov = await todasProvincias();
@@ -173,9 +180,9 @@ const ProfileReclutier = () => {
                                     </select>
                                     <br></br>
                                     <div>
-                                        <Button variant="primary"  > Editar  </Button>
+                                        <Button variant="primary" type="submit"   > Editar  </Button>
 
-                                        <button className="btn btn-outline-secondary" type="button" onClick={noedit}  >  No editar   </button>
+                                        <button className="btn btn-outline-secondary" type="button" onClick={noeditubi}  >  No editar   </button>
 
                                     </div>
 
@@ -250,7 +257,7 @@ const ProfileReclutier = () => {
                                                 <button
                                                     className="btn btn-outline-secondary"
                                                     type="button"
-                                                    onClick={() => setBtndescrip(false)}
+                                                    onClick={noeditdesc}
                                                 >
                                                     No editar
                                                 </button>
