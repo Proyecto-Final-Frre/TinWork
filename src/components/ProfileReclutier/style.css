@@ -1,13 +1,12 @@
-.principal {
-    width: 35%;
+.principal-profile {
     min-width: 480px;
     justify-content: center;
     margin: 5% 25%;
     align-items: center;
 }
 
-.profile {  
-    padding: 5%;  
+.profile {
+    padding: 5%;
     display: flex;
     border: 1px solid #b2d3f4;
     border-radius: 10px;
@@ -25,7 +24,7 @@
     --bs-btn-disabled-color: #6c757d;
     --bs-btn-disabled-border-color: transparent;
     --bs-btn-box-shadow: none;
-    --bs-btn-focus-shadow-rgb: 49,132,253;
+    --bs-btn-focus-shadow-rgb: 49, 132, 253;
     text-decoration: none;
 }
 
@@ -37,7 +36,7 @@
 
 .button {
     background-color: transparent;
-    border:transparent;
+    border: transparent;
     color: #2E81FB;
     text-align: center;
     text-decoration: none;
@@ -45,24 +44,27 @@
     font-size: 16px;
 }
 
-.image{
-    border-radius: 10px 10px 0px 0px;
+.image {
     width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid rgba(0, 0, 0, 0.5);
 }
 
-.boton{
+.boton {
     background-color: #939393;
-    border:none;
+    border: none;
     border-radius: 0px 0px 10px 10px;
     width: 200px;
 }
 
-.pie-foto{
+.pie-foto {
     clear: both;
     margin-top: 10px;
 }
 
-.select-province{
+.select-province {
     padding-top: 0.25rem;
     padding-bottom: 0.25rem;
     padding-left: 0.5rem;
@@ -71,6 +73,6 @@
     font-size: 100%;
     border: 1px solid #b2d3f4;
     border-radius: 10px;
-    
+
 
 }
