@@ -6,6 +6,8 @@ import {
   getDocs,
   query,
   where,
+  updateDoc,
+  doc,
   limit,
 } from "firebase/firestore";
 import { db } from "../config/firebase.js";
@@ -27,12 +29,17 @@ export const findUserByUid = async (uid) => {
 
   const querySnapshot = await getDocs(q);
   if (!querySnapshot.empty) {
-    const queryDocumentSnapshot = querySnapshot.docs[0].data();
-    return queryDocumentSnapshot;
+    return { ...querySnapshot.docs[0].data(), id: querySnapshot.docs[0].id };
   } else {
     console.log("No document corresponding to the query!");
     return null;
   }
+};
+
+export const updateUser = async (user) => {
+  const userRef = doc(db, "Users", user.id);
+  await updateDoc(userRef, user);
+  return true;
 };
 
 export const createUser = async (user) => {

@@ -10,7 +10,11 @@ import { TiDeleteOutline } from "react-icons/ti";
 import { BsPersonCircle } from "react-icons/bs";
 import DataTable from "react-data-table-component";
 import { Link, useLocation } from "react-router-dom";
-import { findUserByUid, pushNotification } from "../../services/UserService";
+import {
+  findUserByUid,
+  pushNotification,
+  updateUser,
+} from "../../services/UserService";
 import { updateOffer } from "../../services/OfferService";
 import Modal from "react-bootstrap/Modal";
 
@@ -41,6 +45,14 @@ const Candidates = () => {
     };
 
     await updateOffer(offerUpdate);
+
+    const userUpdate = {
+      id: user.id,
+      offersMatch: [...user.offersMatch, state],
+    };
+
+    await updateUser(userUpdate);
+
     setRefresh(!refresh);
   };
 
