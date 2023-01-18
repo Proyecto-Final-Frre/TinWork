@@ -1,7 +1,7 @@
 .principal-profile {
     min-width: 480px;
     justify-content: center;
-    margin: 5% 25%;
+    margin: 30px 25%;
     align-items: center;
 }
 
@@ -10,6 +10,7 @@
     display: flex;
     border: 1px solid #b2d3f4;
     border-radius: 10px;
+    width: 650px;
 }
 
 .agregar {
@@ -53,10 +54,45 @@
 }
 
 .boton {
-    background-color: #939393;
+    /*background-color: #939393;*/
+    background-color: #1065e6;
     border: none;
-    border-radius: 0px 0px 10px 10px;
+    border-radius: 5px;
+    text-align: center;
+    text-decoration: none;
+    color: white;
+    display: inline-block;
     width: 200px;
+    margin: 5px 0px 0px 0px;
+    padding: 5px 0px;
+}
+
+.boton:hover {
+    background-color: #0350c2;
+}
+
+.boton-aux {
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    width: 100px;
+    margin: 5px 0px 0px 0px;
+}
+
+.boton-aux:hover {
+    background-color: #949ba1;
+}
+
+.boton-aux2 {
+    border: none;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    width: 200px;
+    margin: 5px 0px 0px 0px;
+    font-size: 12px;
 }
 
 .pie-foto {
@@ -73,6 +109,8 @@
     font-size: 100%;
     border: 1px solid #b2d3f4;
     border-radius: 10px;
+}
 
-
+.botones {
+    float: left;
 }

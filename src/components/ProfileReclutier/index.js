@@ -134,13 +134,13 @@ const ProfileReclutier = () => {
                 </button>
                 {btnphoto && (
                   <div>
-                    <button onClick={() => setBtnphoto(false)}>
-                      No editar
-                    </button>
-                    <button disabled={!photo} onClick={handleClick}>
+                    <button disabled={!photo} onClick={handleClick} class="boton-aux">
                       Subir
                     </button>
-                    <input type="file" onChange={handleChange} />
+                    <button onClick={() => setBtnphoto(false)} class="boton-aux">
+                      Cancelar
+                    </button>
+                    <input type="file" class="boton-aux2" onChange={handleChange} />
                   </div>
                 )}
               </div>
@@ -160,6 +160,15 @@ const ProfileReclutier = () => {
           <div className="pie-foto">
             <label htmlFor="name">
               <font color="gray">Ubicación</font>{" "}
+              {!btnubi && (
+              <button
+                type="button"
+                className="button"
+                onClick={() => setBtnubi(true)}
+              >
+                Editar
+              </button>
+            )}
             </label>
             <p className="card-text">{location || ""}</p>
 
@@ -172,42 +181,25 @@ const ProfileReclutier = () => {
                     onChange={(e) => setLocation(e.target.value + ",Argentina")}
                   >
                     <option disabled selected value="seleccione">
-                      Seleccione la provincia
+                      Seleccionar provincia
                     </option>
                     {provincias.map((provincia) => (
                       <option key={provincia.id}> {provincia.nombre}</option>
                     ))}
                   </select>
                 </div>
-                <Button variant="primary" onClick={editProfile}>
-                  {" "}
-                  Editar{" "}
-                </Button>
-                <Button variant="secondary" onClick={noeditubi}>
-                  {" "}
-                  No editar{" "}
+                  <Button variant="primary" onClick={editProfile}>
+                    {" "} Guardar {" "}
+                  </Button>
+                  <Button variant="secondary" onClick={noeditubi}>
+                  {" "} Cancelar {" "}
                 </Button>
               </div>
-            )}
-            {!btnubi && (
-              <button
-                type="button"
-                className="button"
-                onClick={() => setBtnubi(true)}
-              >
-                Editar
-              </button>
-            )}
-            <br></br>
-            <br></br>
+            )}     
+            
             <label htmlFor="name">
               <font color="gray">Descripción</font>
-            </label>
-
-            {!btndescri && (
-              <div>
-                <p className="card-text">{description || ""}</p>
-
+              {!btndescri && (
                 <button
                   type="button"
                   className="button"
@@ -215,15 +207,13 @@ const ProfileReclutier = () => {
                 >
                   Editar
                 </button>
-              </div>
-            )}
+              )}
+            </label>
+            <p className="card-text">{description || ""}</p>
+
             {btndescri && (
               <div className="card-body">
-                <div className="row justify-content-center">
-                  <div className="col-md-5">
-                    <div className="input-group mb-3">
                       <Form.Group
-                        className="mb-2"
                         controlId="position-description"
                       >
                         <Form.Control
@@ -233,7 +223,7 @@ const ProfileReclutier = () => {
                           value={description}
                           onChange={(e) => setDescription(e.target.value)}
                           type="text"
-                          className="col-md-12"
+                          
                           onInput={(e) => {
                             e.target.value.length > 60
                               ? setButtonDisable(false)
@@ -241,29 +231,19 @@ const ProfileReclutier = () => {
                           }}
                           required
                         />
-                        <label
-                          style={{
-                            display: "flex",
-                            justifyContent: "flex-end",
-                            marginRight: 5,
-                          }}
-                        ></label>
+                        
                         {description.length - 60}
                       </Form.Group>
-
-                      <Button
-                        variant="primary"
-                        onClick={editProfile}
-                        disabled={buttonDisable}
-                      >
-                        Editar
-                      </Button>
-                      <Button variant="secondary" onClick={noeditdesc}>
-                        No editar
+                    <div className="botones">
+                      <Button variant="primary" onClick={editProfile} disabled={buttonDisable}>
+                        Guardar
                       </Button>
                     </div>
-                  </div>
-                </div>
+                    <div className="botones">
+                      <Button variant="secondary" onClick={noeditdesc}>
+                        Cancelar
+                      </Button>
+                    </div>
               </div>
             )}
           </div>
