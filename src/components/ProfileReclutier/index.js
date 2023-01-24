@@ -1,19 +1,20 @@
-import { useEffect, useState } from "react";
-import { Card, Form, Button } from "react-bootstrap";
-import "./style.css";
-import { useAuth } from "../../context/AuthContext";
+import React, { useState, useEffect } from 'react'
+import { Card, Form, Button, Modal } from "react-bootstrap";
 import { storage } from "../../config/firebase";
-import Swal from "sweetalert2";
-import { findUserByUid, updateProfile } from "../../services/UserService";
 import { todasProvincias } from "../../services/ProvinceService";
+import SelectAvatar from 'react-avatar-edit'
+import "./style.css";
+import { findUserByUid, updateProfile } from "../../services/UserService";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { useAuth } from "../../context/AuthContext";
 
-const ProfileReclutier = () => {
+
+function ProfileReclutier() {
+
   const { user } = useAuth();
 
   //Manejo de botones
   const [btndescri, setBtndescrip] = useState(false);
-  const [btnphoto, setBtnphoto] = useState(false);
   const [btnubi, setBtnubi] = useState(false);
 
   //Description
@@ -21,71 +22,69 @@ const ProfileReclutier = () => {
   const [buttonDisable, setButtonDisable] = useState(true);
 
   //Photo
-  const [photo, setPhoto] = useState(null);
   const [url, setUrl] = useState(null);
 
   //Location
   const [provincias, setProvincias] = useState([]);
   const [location, setLocation] = useState("");
 
-  const mostrarAlerta = () => {
-    Swal.fire({
-      position: "center",
-      icon: "success",
-      title: "Se ha cambiado su foto de perfil",
-      showConfirmButton: false,
-      timer: 3000,
-    });
-  };
+  //Modal
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
-  const handleChange = (e) => {
-    if (e.target.files[0]) {
-      setPhoto(e.target.files[0]);
-    }
-  };
+  //Seleccion de sección de foto 
+  const [pview, setpview] = useState(false)
 
-  const handleClick = () => {
+
+  const onClose = () => {
+    setpview(null)
+  }
+
+  //Seteo de sección de la foto en pview
+  const onCrop = (view) => {
+    setpview(view)
+  }
+
+  const saveCropImage = () => {
+
+    
     const imageRef = ref(storage, "image");
-    uploadBytes(imageRef, photo)
+    
+    //Pasar la imagen seleccionada de base 64 a file
+    let base64string = pview
+    const [type, data] = base64string.split(',');
+    const mimeType = type.split(':')[1].split(';')[0];
+    const text = atob(data);
+    const buffer = new ArrayBuffer(text.length);
+    const view = new Uint8Array(buffer);
+    for (let i = 0; i < text.length; i++) {
+      view[i] = text.charCodeAt(i);
+    }
+    const file = new File([view], 'filename', { type: mimeType });
+    //=========================================================//
+    uploadBytes(imageRef, file)
       .then(() => {
         getDownloadURL(imageRef)
           .then((url) => {
             setUrl(url);
-            console.log("usrl", url);
-            mostrarAlerta();
-            setBtnphoto(false);
             const dataProfile = {
               description,
               location,
               url,
             };
-            console.log("dataaaa profileee", dataProfile.url);
             updateProfile(dataProfile, user.uid);
           })
           .catch((error) => {
-            console.log(error.message, "error getting the image url");
+            console.log(error.message, "error al obtener la url de la imagen");
           });
-        setPhoto(null);
+
       })
       .catch((error) => {
         console.log(error.message);
       });
-  };
-
-  useEffect(() => {
-    const getDatByUidUser = async () => {
-      let userDat = await findUserByUid(user.uid);
-      setDescription(userDat?.description || "");
-      setLocation(userDat?.location || "");
-      setUrl(
-        userDat?.imageProfile ||
-          "https://w7.pngwing.com/pngs/223/244/png-transparent-computer-icons-avatar-user-profile-avatar-heroes-rectangle-black.png"
-      );
-    };
-    getDatByUidUser();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
+    setShow(false)
+  }
   const editProfile = () => {
     const dataProfile = {
       description,
@@ -116,7 +115,18 @@ const ProfileReclutier = () => {
   useEffect(() => {
     findAllProvinces();
   }, []);
-
+  useEffect(() => {
+    const getDatByUidUser = async () => {
+      let userDat = await findUserByUid(user.uid);
+      setDescription(userDat?.description || "");
+      setLocation(userDat?.location || "");
+      setUrl(userDat?.imageProfile ||
+        "https://w7.pngwing.com/pngs/223/244/png-transparent-computer-icons-avatar-user-profile-avatar-heroes-rectangle-black.png"
+      );
+    };
+    getDatByUidUser();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <div className="principal-profile">
       <div className="profile">
@@ -124,26 +134,16 @@ const ProfileReclutier = () => {
           <div className="grid">
             <div className="grid-1">
               <div className="image-container">
-                <img src={url} alt="logo" className="image" />
+                <img src={url} alt="logo" className="image" onClick={() => setShow(true)} />
                 <button
                   type="button"
-                  class="boton"
-                  onClick={() => setBtnphoto(true)}
+                  className="boton"
+                  onClick={handleShow}
                 >
                   Editar foto
                 </button>
-                {btnphoto && (
-                  <div>
-                    <button disabled={!photo} onClick={handleClick} class="boton-aux">
-                      Subir
-                    </button>
-                    <button onClick={() => setBtnphoto(false)} class="boton-aux">
-                      Cancelar
-                    </button>
-                    <input type="file" class="boton-aux2" onChange={handleChange} />
-                  </div>
-                )}
               </div>
+
             </div>
             <div className="grid-2">
               <label htmlFor="name">
@@ -156,19 +156,18 @@ const ProfileReclutier = () => {
               <p className="card-text">{user?.email || ""}</p>
             </div>
           </div>
-
           <div className="pie-foto">
             <label htmlFor="name">
               <font color="gray">Ubicación</font>{" "}
               {!btnubi && (
-              <button
-                type="button"
-                className="button"
-                onClick={() => setBtnubi(true)}
-              >
-                Editar
-              </button>
-            )}
+                <button
+                  type="button"
+                  className="button"
+                  onClick={() => setBtnubi(true)}
+                >
+                  Editar
+                </button>
+              )}
             </label>
             <p className="card-text">{location || ""}</p>
 
@@ -188,18 +187,22 @@ const ProfileReclutier = () => {
                     ))}
                   </select>
                 </div>
-                  <Button variant="primary" onClick={editProfile}>
-                    {" "} Guardar {" "}
-                  </Button>
-                  <Button variant="secondary" onClick={noeditubi}>
+                <Button variant="primary" onClick={editProfile}>
+                  {" "} Guardar {" "}
+                </Button>
+                <Button variant="secondary" onClick={noeditubi}>
                   {" "} Cancelar {" "}
                 </Button>
               </div>
-            )}     
-            
-            <label htmlFor="name">
-              <font color="gray">Descripción</font>
-              {!btndescri && (
+            )}
+
+
+            <font color="gray">Descripción </font>
+
+            {!btndescri && (
+
+              <div>
+                <p className="card-text">{description || ""}</p>
                 <button
                   type="button"
                   className="button"
@@ -207,50 +210,82 @@ const ProfileReclutier = () => {
                 >
                   Editar
                 </button>
-              )}
-            </label>
-            <p className="card-text">{description || ""}</p>
+             </div>
 
+            )}
             {btndescri && (
               <div className="card-body">
-                      <Form.Group
-                        controlId="position-description"
-                      >
-                        <Form.Control
-                          as="textarea"
-                          rows={6}
-                          placeholder="Descripción de la posición"
-                          value={description}
-                          onChange={(e) => setDescription(e.target.value)}
-                          type="text"
-                          
-                          onInput={(e) => {
-                            e.target.value.length > 60
-                              ? setButtonDisable(false)
-                              : setButtonDisable(true);
-                          }}
-                          required
-                        />
-                        
-                        {description.length - 60}
-                      </Form.Group>
-                    <div className="botones">
-                      <Button variant="primary" onClick={editProfile} disabled={buttonDisable}>
-                        Guardar
-                      </Button>
-                    </div>
-                    <div className="botones">
-                      <Button variant="secondary" onClick={noeditdesc}>
-                        Cancelar
-                      </Button>
-                    </div>
+                <Form.Group
+                  controlId="position-description"
+                >
+                  <Form.Control
+                    as="textarea"
+                    rows={6}
+                    placeholder="Descripción de la posición"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    type="text"
+
+                    onInput={(e) => {
+                      e.target.value.length > 60
+                        ? setButtonDisable(false)
+                        : setButtonDisable(true);
+                    }}
+                    required
+                  />
+                  <label
+                    style={{
+                      display: "flex",
+                      justifyContent: "flex-end",
+                      marginRight: 5,
+                    }}
+                  >
+                    {description.length - 60}
+
+                  </label>
+
+                </Form.Group>
+                <div className="botones">
+                  <Button variant="primary" onClick={editProfile} disabled={buttonDisable}>
+                    Guardar
+                  </Button>
+                </div>
+                <div className="botones">
+                  <Button variant="secondary" onClick={noeditdesc}>
+                    Cancelar
+                  </Button>
+                </div>
               </div>
             )}
           </div>
         </Card.Body>
+        <div >
+
+        </div>
+        <Modal show={show} onHide={handleClose} style={{ marginTop: '10%' }} backdrop={1}>
+          <Modal.Dialog >
+
+            <Modal.Title >Seleccione foto de perfil</Modal.Title>
+            <SelectAvatar
+              width={300}
+              height={300}
+              onCrop={onCrop}
+              onClose={onClose}
+              
+
+            />
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleClose}>Cancelar</Button>
+              <Button variant="primary" onClick={saveCropImage}>Subir</Button>
+            </Modal.Footer>
+          </Modal.Dialog>
+        </Modal>
+
       </div>
     </div>
-  );
-};
 
-export default ProfileReclutier;
+
+  )
+}
+
+export default ProfileReclutier
