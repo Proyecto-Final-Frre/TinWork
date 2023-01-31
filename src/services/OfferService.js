@@ -4,7 +4,7 @@ import {
   getDocs,
   query,
   where,
-  doc,
+  doc as docFirebase,
   updateDoc,
   onSnapshot,
 } from "firebase/firestore";
@@ -26,7 +26,7 @@ export const createOffer = async (offer) => {
 };
 
 export const updateOffer = async (offer) => {
-  const offerRef = doc(db, "Offers", offer.id);
+  const offerRef = docFirebase(db, "Offers", offer.id);
   await updateDoc(offerRef, offer);
   return true;
 };
