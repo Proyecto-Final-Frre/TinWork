@@ -1,0 +1,112 @@
+.principal-profile {
+    min-width: 480px;
+    justify-content: center;
+    margin: 30px 25%;
+    align-items: center;
+    display: flex;
+}
+
+.profile {
+    padding: 5%;
+    display: flex;
+    border: 1px solid #b2d3f4;
+    border-radius: 10px;
+}
+
+.agregar {
+    --bs-btn-font-weight: 400;
+    --bs-btn-color: var(--bs-link-color);
+    --bs-btn-bg: transparent;
+    --bs-btn-border-color: transparent;
+    --bs-btn-hover-color: var(--bs-link-hover-color);
+    --bs-btn-hover-border-color: transparent;
+    --bs-btn-active-color: var(--bs-link-hover-color);
+    --bs-btn-active-border-color: transparent;
+    --bs-btn-disabled-color: #6c757d;
+    --bs-btn-disabled-border-color: transparent;
+    --bs-btn-box-shadow: none;
+    --bs-btn-focus-shadow-rgb: 49, 132, 253;
+    text-decoration: none;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: 30px;
+}
+
+.button {
+    background-color: transparent;
+    border: transparent;
+    color: #2E81FB;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+
+.image {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid rgba(0, 0, 0, 0.5);
+}
+
+.boton {
+    /*background-color: #939393;*/
+    background-color: #1065e6;
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    text-decoration: none;
+    color: white;
+    display: inline-block;
+    width: 200px;
+    margin: 5px 0px 0px 0px;
+    padding: 5px 0px;
+}
+
+.boton:hover {
+    background-color: #0350c2;
+}
+
+.boton-aux {
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    width: 100px;
+    margin: 5px 0px 0px 0px;
+}
+
+.boton-aux:hover {
+    background-color: #949ba1;
+}
+
+.boton-aux2 {
+    border: none;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    width: 200px;
+    margin: 5px 0px 0px 0px;
+    font-size: 12px;
+}
+
+.pie-foto {
+    clear: both;
+    margin-top: 10px;
+}
+
+.select-province {
+    font-size: 100%;
+    border: 1px solid #b2d3f4;
+    border-radius: 10px 10px 10px 10px;
+    margin: 5px;
+}
+
+.botones {
+    float: left;
+}
