@@ -7,7 +7,7 @@ import {
   query,
   where,
   limit,
-  doc,
+  doc as docFirebase,
   updateDoc,
 } from "firebase/firestore";
 import { db } from "../config/firebase.js";
@@ -75,7 +75,7 @@ export const updateProfile = async (dataProfile, uid) => {
 
   const querySnapshot = await getDocs(q);
   if (!querySnapshot.empty) {
-    const recrutierRef = doc(db, "Users", querySnapshot.docs[0].id);
+    const recrutierRef = docFirebase(db, "Users", querySnapshot.docs[0].id);
     await updateDoc(recrutierRef, {
       description: dataProfile.description,
       location: dataProfile.location,
