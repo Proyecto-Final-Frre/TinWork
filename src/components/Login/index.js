@@ -91,9 +91,7 @@ function Login() {
             <Button variant="primary" type="submit">
               Login
             </Button>
-            <Button variant="secondary" onClick={handleGoogleSignin}>
-              Google login
-            </Button>
+           
             <p className="my-4 text-sm flex justify-between px-3">
               No tiene una cuenta?&nbsp;&nbsp;
               <Link
