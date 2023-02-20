@@ -6,10 +6,11 @@ import {
   getDocs,
   query,
   where,
-  limit,
+  updateDoc,
   doc,
-  updateDoc
- 
+  limit,
+  doc as docFirebase,
+  updateDoc as updateDocFirebase,
 } from "firebase/firestore";
 import { db } from "../config/firebase.js";
 const auth = getAuth();
@@ -30,12 +31,17 @@ export const findUserByUid = async (uid) => {
 
   const querySnapshot = await getDocs(q);
   if (!querySnapshot.empty) {
-    const queryDocumentSnapshot = querySnapshot.docs[0].data();
-    return queryDocumentSnapshot;
+    return { ...querySnapshot.docs[0].data(), id: querySnapshot.docs[0].id };
   } else {
     console.log("No document corresponding to the query!");
     return null;
   }
+};
+
+export const updateUser = async (user) => {
+  const userRef = doc(db, "Users", user.id);
+  await updateDoc(userRef, user);
+  return true;
 };
 
 export const createUser = async (user) => {
@@ -71,26 +77,20 @@ export const pushNotification = (token, offer) => {
     .catch((err) => console.log("error", err));
 };
 
- 
-
-export const updateProfile = async (dataProfile,uid) => {
+export const updateProfile = async (dataProfile, uid) => {
   const q = query(collection(db, "Users"), where("uid", "==", uid), limit(1));
 
   const querySnapshot = await getDocs(q);
   if (!querySnapshot.empty) {
-  const recrutierRef = doc(db, "Users", querySnapshot.docs[0].id);
-  await updateDoc(recrutierRef, {description:dataProfile.description,location:dataProfile.location,imageProfile:dataProfile.url});
+    const recrutierRef = docFirebase(db, "Users", querySnapshot.docs[0].id);
+    await updateDocFirebase(recrutierRef, {
+      description: dataProfile.description,
+      location: dataProfile.location,
+      imageProfile: dataProfile.url,
+    });
   } else {
-    return null
+    return null;
   }
-  
+
   return true;
 };
-
-
-
-
-
-
-
-
