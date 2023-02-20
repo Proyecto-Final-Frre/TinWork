@@ -196,20 +196,24 @@ function ProfileReclutier() {
               </div>
             )}
 
-
-            <font color="gray">Descripción </font>
+         
+            
 
             {!btndescri && (
-
               <div>
+              <label htmlFor="name">
+              <font color="gray">Descripción </font>              {!btnubi && (
+                              <button
+                                type="button"
+                                className="button"
+                                onClick={() => setBtndescrip(true)}                >
+                                Editar
+                              </button>
+                            )}
+                          </label>     
+              
                 <p className="card-text">{description || ""}</p>
-                <button
-                  type="button"
-                  className="button"
-                  onClick={() => setBtndescrip(true)}
-                >
-                  Editar
-                </button>
+                
              </div>
 
             )}
