@@ -7,8 +7,7 @@ import "./style.css";
 import { findUserByUid, updateProfile } from "../../services/UserService";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useAuth } from "../../context/AuthContext";
-
-
+import profile from "../../logos/profile.png"
 function ProfileReclutier() {
 
   const { user } = useAuth();
@@ -121,7 +120,7 @@ function ProfileReclutier() {
       setDescription(userDat?.description || "");
       setLocation(userDat?.location || "");
       setUrl(userDat?.imageProfile ||
-        "https://w7.pngwing.com/pngs/223/244/png-transparent-computer-icons-avatar-user-profile-avatar-heroes-rectangle-black.png"
+        profile 
       );
     };
     getDatByUidUser();
@@ -135,15 +134,15 @@ function ProfileReclutier() {
             <div className="grid-1">
               <div className="image-container">
                 <img src={url} alt="logo" className="image" onClick={() => setShow(true)} />
-                <button
+                
+              </div>
+              <button
                   type="button"
                   className="boton"
                   onClick={handleShow}
                 >
                   Editar foto
                 </button>
-              </div>
-
             </div>
             <div className="grid-2">
               <label htmlFor="name">
