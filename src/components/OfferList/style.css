@@ -1,36 +1,103 @@
 .offer-list-container {
-    width: 90%;
-    max-width: 1300x;
-    margin: auto;
-    padding: 40px 0;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
+  width: 100%;
+  max-width: 1300px; 
+  margin: auto;
+  padding: 40px 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.filters-container {
+  background-color: #fff;
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  max-width: 1300px; /* Coincide con el max-width de las ofertas */
+  width: 100%;
+  margin: auto; /* Centra el contenedor de filtros */
+  margin-top: 1%;
 }
 
-.filters {
-    /* display: flex; */
-    /* margin-bottom: 10px; */
-    display: flex;
-    justify-content: start; 
-    margin-top: 1%;
-    margin-left: 5%;
-  }
-  
-  .filters input {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    width: 100%;
-    max-width: 300px;
-    margin-left: 2%;
-  }
+.filters-title {
+  font-size: 1.5rem;
+  margin-bottom: 16px;
+  font-weight: 600;
+  color: #333;
+}
 
-  .filters select {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    width: 100%;
-    max-width: 300px;
-    margin-left: 2%;
-  }
+.filters-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  width: 100%;
+  align-items: center; /* Asegura alineación vertical */
+  justify-content: space-between; /* Alinea los filtros y el botón a extremos opuestos */
+}
+
+.filter-item {
+  display: flex;
+  flex-direction: column;
+  width: 22%;
+}
+
+.filter-button {
+  display: flex;
+  flex-direction: column;
+  width: 12%;
+}
+
+
+.filter-label {
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: #555;
+}
+
+.button-container {
+background-color: red;
+}
+
+.clear-button {
+  padding: 10px 16px; 
+  font-size: 0.9rem;
+  background-color: #0d6efd;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 25px;
+}
+
+.clear-button:hover {
+  background-color: #0056b3;
+}
+
+
+.filter-input,
+.filter-select {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  outline: none;
+  transition: border 0.3s;
+  width: 100%;
+}
+
+.filter-input:focus,
+.filter-select:focus {
+  border-color: #007bff;
+}
+
+
+.search-icon {
+  position: absolute;
+  right: 5px; /* Ajusta según lo necesites */
+  color: #666;
+  font-size: 1.2rem;
+  pointer-events: none; /* Para que no interfiera con el clic en el input */
+}
