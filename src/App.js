@@ -50,7 +50,8 @@ function App() {
           />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/" element={<OfferList />} />
+          <Route path="/" element={<Login />} />
+          <Route path="/offers" element={<OfferList />} />
           <Route path="/profile" element={
           <ProtectedRoute>
             <ProfileReclutier/>
