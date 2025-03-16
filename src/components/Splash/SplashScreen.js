@@ -8,7 +8,7 @@ const SplashContainer = styled(Box)`
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background: #ffffff;
+  background: linear-gradient(to bottom,rgba(245, 250, 255, 0.9), rgba(225, 240, 255, 0.9));
 `;
 
 const Logo = styled.div`
@@ -60,7 +60,7 @@ const SplashScreen = () => {
       <SpinnerContainer>
         <Spinner />
       </SpinnerContainer>
-      <Typography variant="h6" mt={2} style={{ color: "#1e3c72" }}>
+      <Typography variant="h6" mt={2} style={{ color: "#007bff" }}>
         Cargando, por favor espera...
       </Typography>
     </SplashContainer>
