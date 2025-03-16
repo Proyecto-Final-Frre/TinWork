@@ -5,6 +5,7 @@ import { Button, Card, Form } from "react-bootstrap";
 import "./style.css";
 import logoRecrutier from "../../logos/Reclutier.png";
 import { createUser } from "../../services/UserService";
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 
 function Register() {
   const { signup } = useAuth();
@@ -14,11 +15,14 @@ function Register() {
     password: "",
   });
   const [password2, setPassword2] = useState(""); //Para validar campo repetir contraseña
+  const [loadingButton, setLoadingButton] = useState(false);
 
   const expresionNombre = /^[a-zA-ZÀ-ÿ\s]{1,40}$/; // Para validar campo apynombre
   const [name, setName] = useState("");
 
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword ] = useState("");
+  const [showPassword2, setShowPassword2 ] = useState("");
 
   const navigate = useNavigate();
 
@@ -32,6 +36,7 @@ function Register() {
       if (user.password !== password2) {
         setError("Las contraseñas no coinciden, vuelva a intentar");
       } else {
+        setLoadingButton(true)
         try {
           const auth = await signup(name, user.email, user.password);
           const userSave = {
@@ -58,93 +63,155 @@ function Register() {
             setError("El email ingresado ya esta en uso");
           }
         }
+        finally {
+          setLoadingButton(false)
+        }
       }
     }
   };
 
   return (
-    <div className="principal">
+    <div className="principal-register">
       <div className="register">
-        <img src={logoRecrutier} alt="logo" />
+        <div className="illustration-container">
 
+          <img src={logoRecrutier} alt="logo" />
+          <div className="text-center mt-6 text-gray-700">
+
+            <p style={{ fontSize: "18px" }}>
+              Impulsa tu empresa y encuentra al talento ideal con{" "}
+              <span style={{ color: "#2E81FB" }}>TinWork</span> 🚀
+            </p>
+
+          </div>
+        </div>
         <Card.Body>
           {error && (
             <div id="error" className="alert alert-danger" role="alert">
               {error}
             </div>
           )}
-          <Card.Title className="mb-4">Registro reclutador</Card.Title>
+            <h2 style={{ color: "#2E81FB", fontWeight: "bold" }}>Bienvenido</h2>
+          <p style={{ fontSize: '20px', }}>
+            Registrate y accede a una red de talento calificado.
+          </p>
+
           <Form onSubmit={handleSubmit}>
-            <label
-              htmlFor="name"
-              className="block text-gray-700 text-sm font-bold mb-2"
-            >
-              Nombre y Apellido
-            </label>
-            <Form.Group className="mb-2" controlId="name">
-              <Form.Control
-                type="text"
-                placeholder="Ingresa tu nombre completo"
-                className="form-control"
-                onChange={(e) => setName(e.target.value)}
-                required
-              />
-            </Form.Group>
+            <div className="space-y-1">
+              <label
+                htmlFor="name"
+                className="block text-gray-700 text-sm font-bold mb-2"
+              >
+                Nombre y Apellido
+              </label>
+              <Form.Group className="mb-2" controlId="name">
+                <Form.Control
+                  type="text"
+                  placeholder="Ingresa tu nombre completo"
+                  className="form-control"
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                />
+              </Form.Group>
+            </div>
 
-            <label
-              htmlFor="email"
-              className="block text-gray-700 text-sm font-bold mb-2"
-            >
-              Email
-            </label>
+            <div className="space-y-1">
+              <label
+                htmlFor="email"
+                className="block text-gray-700 text-sm font-bold mb-2"
+              >
+                Email
+              </label>
 
-            <Form.Group className="mb-2" controlId="email">
-              <Form.Control
-                type="email"
-                placeholder="Ingresa tu correo"
-                autoComplete="email"
-                onChange={(e) => setUser({ ...user, email: e.target.value })}
-                className="form-control"
-                required
-              />
-            </Form.Group>
+              <Form.Group className="mb-2" controlId="email">
+                <Form.Control
+                  type="email"
+                  placeholder="Ingresa tu correo"
+                  autoComplete="email"
+                  onChange={(e) => setUser({ ...user, email: e.target.value })}
+                  className="form-control"
+                  required
+                />
+              </Form.Group>
+            </div>
 
-            <label
-              htmlFor="email"
-              className="block text-gray-700 text-sm font-bold mb-2"
-            >
-              Contraseña
-            </label>
-            <Form.Group className="mb-2" controlId="password">
-              <Form.Control
-                type="password"
-                placeholder="******"
-                autoComplete="current-password"
-                onChange={(e) => setPassword2(e.target.value)}
-                className="form-control"
-                required
-              />
-            </Form.Group>
-            <label
-              htmlFor="email"
-              className="block text-gray-700 text-sm font-bold mb-2"
-            >
-              Repetir contraseña
-            </label>
-            <Form.Group className="mb-2" controlId="password2">
-              <Form.Control
-                type="password"
-                placeholder="******"
-                autoComplete="current-password"
-                onChange={(e) => setUser({ ...user, password: e.target.value })}
-                className="form-control"
-                required
-              />
-            </Form.Group>
+            <div className="space-y-1">
 
-            <Button variant="primary" type="submit">
-              Registrar
+              <label
+                htmlFor="email"
+                className="block text-gray-700 text-sm font-bold mb-2"
+              >
+                Contraseña
+              </label>
+              <Form.Group className="mb-2 password-container">
+                <Form.Control
+                  type={showPassword ? "text" : "password"}
+                  placeholder="******"
+                  autoComplete="current-password"
+                  onChange={(e) =>
+                    setUser({ ...user, password: e.target.value })
+                  }
+                  className="password-input"
+                  required
+                />
+                <button
+                  type="button"
+                  className="toggle-password"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <FaRegEye /> : <FaRegEyeSlash />
+                  }
+                </button>
+              </Form.Group>
+            </div>
+
+            <div className="space-y-1">
+              <label
+                htmlFor="email"
+                className="block text-gray-700 text-sm font-bold mb-2"
+              >
+                Repetir contraseña
+              </label>
+              <Form.Group className="mb-2 password-container">
+                <Form.Control
+                  type={showPassword2 ? "text" : "password"}
+                  placeholder="******"
+                  autoComplete="current-password"
+                  onChange={(e) =>
+                    setUser({ ...user, password: e.target.value })
+                  }
+                  className="password-input"
+                  required
+                />
+                <button
+                  type="button"
+                  className="toggle-password"
+                  onClick={() => setShowPassword2(!showPassword2)}
+                >
+                  {showPassword2 ? <FaRegEye /> : <FaRegEyeSlash />
+                  }
+                </button>
+              </Form.Group>
+            
+            </div>
+
+
+
+            <Button variant="primary" type="submit" style={{ width: '100' }}>
+              {loadingButton ? (
+                <>
+                  <span
+                    className="spinner-border spinner-border-sm"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>{" "}
+                  Registrando...
+                </>
+              ) : (
+                "Registrar"
+              )}
             </Button>
+
 
             <p className="my-2 text-sm flex justify-between px-3">
               Ya tienes una cuenta?&nbsp;&nbsp;
@@ -154,6 +221,8 @@ function Register() {
             </p>
           </Form>
         </Card.Body>
+
+
       </div>
     </div>
   );

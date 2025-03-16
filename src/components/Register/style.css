@@ -1,15 +1,36 @@
-.principal {
+:root {
+    --primary: #2E81FB;
+    --primary-hover: #1b6ef5;
+    --accent-red: #FF4757;
+    --accent-green: #4CD964;
+    --background: linear-gradient(to bottom,rgba(245, 250, 255, 0.9), rgba(225, 240, 255, 0.9));
+    --text-primary: #2D3748;
+    --text-secondary: #718096;
+    --border-color: #E2E8F0;
+  }
+
+
+.principal-register {
+    background: linear-gradient(to bottom,rgba(245, 250, 255, 0.9), rgba(225, 240, 255, 0.9));
+    height: 100vh;
+    width: 100vw;
+    display: flex;
     justify-content: center;
-    margin-left: 25%;
-    margin-right: 20%;
-    align-items: center;
-    margin-top: 5%;
+    align-items: flex-start;
 }
 
 
 .register {
-    padding: 2%;
+    padding: 2%;  
     display: flex;
     border: 1px solid #b2d3f4;
     border-radius: 10px;
+    flex-direction: row; /* Aseguramos que la fila se mantenga en pantallas más grandes */
+    background-color:linear-gradient(to bottom,rgba(245, 250, 255, 0.9), rgba(225, 240, 255, 0.9));
+    width: 50%; /* Cambié el 25% para hacerlo más accesible, pero mantuve el centro */
+    justify-content: center;
+    margin-top: 5%;
+    align-items: center;
 }
+
+
