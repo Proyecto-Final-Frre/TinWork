@@ -1,4 +1,6 @@
 import { React, useState } from "react";
+import { Button, Dropdown, Image } from "react-bootstrap";
+
 import "./style.css";
 import { AiOutlineFileSearch } from "react-icons/ai";
 import { GrLocation } from "react-icons/gr";
@@ -13,9 +15,12 @@ const Offer = ({
   description,
   province,
   workDay,
+  workModality,
   country,
   dateOffer,
   interestedUsers,
+  companyName,
+  companyLogo
 }) => {
   const [isReadMoreShown, setReadMoreShown] = useState(false);
   const toggleBtn = () => {
@@ -37,25 +42,35 @@ const Offer = ({
 
   return (
     <div className="card-offer">
+        <div className="company-header">
+      <Image
+        src={companyLogo || "/placeholder.svg"}
+        alt={companyName ? `${companyName} logo` : "Company logo"}
+        width={50}
+        height={50}
+        className="logo-image"
+      />
+      <h4 className="company-name">{companyName || "Personal de Limpieza,"}</h4>
+    </div>
       <div className="offer-header">
-        <AiOutlineFileSearch className="search" type="button" />
-        <h5>{title}</h5>
+        <h5 className="offer-name" >{title}</h5>
       </div>
       <div className="card-location">
-        <h6>
-          <GrLocation />
+      <h6>       
+          <GrLocation   color={"black"} />
           {country}, {province}
         </h6>
-        <h6>
-          <div className="work">
-            <BiBriefcase /> {workDay}
-          </div>
+        <h6 className="work">          
+            <BiBriefcase color={"black"}/> {workDay}          
+        </h6>         
+        <h6 >          
+          <BsCalendarDate  color={"black"} /> {dataOffer}
         </h6>
-        <h6>
-          <BsCalendarDate /> {dataOffer}
-        </h6>
+        <h6 className="work">          
+            <BiBriefcase color={"black"} /> Modalidad, {workModality}    
+        </h6>   
       </div>
-
+      <div class="horizontal-line"></div>
       <p className="offer-description">
         {isReadMoreShown ? description : description.substr(0, 145)}
       </p>
