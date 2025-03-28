@@ -178,7 +178,7 @@ function Register() {
                   placeholder="******"
                   autoComplete="current-password"
                   onChange={(e) =>
-                    setUser({ ...user, password: e.target.value })
+                    setPassword2(e.target.value)
                   }
                   className="password-input"
                   required
