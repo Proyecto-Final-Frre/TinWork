@@ -8,7 +8,6 @@ import { findUserByUid, updateProfile } from "../../services/UserService";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useAuth } from "../../context/AuthContext";
 import SplashScreen from '../Splash/SplashScreen';
-import "./style.css";
 
 
 function ProfileReclutier() {
