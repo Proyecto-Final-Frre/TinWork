@@ -46,7 +46,7 @@ function Register() {
           };
           const userCreated = await createUser(userSave); // Espera el resultado de createUser
           if (userCreated) {
-            navigate("/offers"); // Navega solo si se creó el usuario
+            navigate("/profile"); // Navega solo si se creó el usuario
           } else {
             setError("El usuario ya existe, intente con otro correo.");
           }
