@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from "react";
-
 import "./style.css";
 import { Card } from "react-bootstrap";
 import { BsArrowLeftSquare } from "react-icons/bs";
 import { IoIosPeople, IoMdHeartEmpty, IoMdEye } from "react-icons/io";
-import { TbFileDescription } from "react-icons/tb";
-import { AiOutlineStar } from "react-icons/ai";
 import { IconContext } from "react-icons";
 import { TiDeleteOutline } from "react-icons/ti";
 import { BsPersonCircle } from "react-icons/bs";
@@ -21,10 +18,12 @@ import {
 import { updateOffer } from "../../services/OfferService";
 import Modal from "react-bootstrap/Modal";
 import { IoChatbubbleEllipsesOutline } from "react-icons/io5";
+import { GrDocumentPdf } from "react-icons/gr";
 
 const Candidates = () => {
   const { state } = useLocation();
   const currentLocation = useLocation();
+  const [processingCandidateId, setProcessingCandidateId] = useState(null);
 
   const [refresh, setRefresh] = useState(false);
   const [candidate, setCandidate] = useState(null);
@@ -32,6 +31,7 @@ const Candidates = () => {
   const [cvUrl, setCvUrl] = useState(candidate?.cv);
   const [certifications, setCertifications] = useState([])
   const [currentIndex, setCurrentIndex] = useState(0);
+
   const handlePrev = () => {
     setCurrentIndex((prevIndex) =>
       prevIndex === 0 ? certifications.length - 1 : prevIndex - 1
@@ -60,32 +60,39 @@ const Candidates = () => {
   }
 
   const handleMatch = async (element) => {
-    const user = await findUserByUid(element.uid);
-    console.log("userrr", user)
-    await pushNotification(user.token, state);
-    state.interestedUsers.forEach((interestedUser) => {
-      if (interestedUser.uid === element.uid) {
-        interestedUser.status = "match";
-      }
-    });
+    setProcessingCandidateId(element.uid); 
+    try {
+      const user = await findUserByUid(element.uid);
+      await pushNotification(user.token, state);
 
-    const offerUpdate = {
-      id: state.id,
-      interestedUsers: state.interestedUsers,
+      state.interestedUsers.forEach((interestedUser) => {
+        if (interestedUser.uid === element.uid) {
+          interestedUser.status = "match";
+        }
+      });
 
-    };
+      const offerUpdate = {
+        id: state.id,
+        interestedUsers: state.interestedUsers,
+      };
 
-    await updateOffer(offerUpdate);
+      await updateOffer(offerUpdate);
 
-    const userUpdate = {
-      id: user.id,
-      offersMatch: [...user.offersMatch, state],
-    };
+      const userUpdate = {
+        id: user.id,
+        offersMatch: [...user.offersMatch, state],
+      };
 
-    await updateUser(userUpdate);
-
-    setRefresh(!refresh);
+      await updateUser(userUpdate);
+      setRefresh(!refresh);
+    } catch (error) {
+      console.error("Error updating match:", error);
+    } finally {
+      setProcessingCandidateId(null); 
+    }
   };
+
+
 
   const handleNoMatch = async (element) => {
     state.interestedUsers.forEach((interestedUser) => {
@@ -101,6 +108,27 @@ const Candidates = () => {
 
     await updateOffer(offerUpdate);
     setRefresh(!refresh);
+  };
+  const customStyles = {
+    table: {
+      style: {
+        border: "none",
+        borderRadius: "0px",
+      },
+    },
+    headRow: {
+      style: {
+        background: "linear-gradient(to bottom, rgba(220, 235, 255, 0.9), rgba(100, 160, 255, 0.9))",      
+        borderBottom: "1px solid #E2E8F0", 
+        color: "#2D3748", 
+        fontSize: "0.969rem",
+        fontWeight: "600",
+        minHeight: "48px",
+      },
+    },
+  
+    
+  
   };
 
   const columnas = [
@@ -136,7 +164,7 @@ const Candidates = () => {
       name: "Apellidos y nombres",
       selector: (row) => row.name,
       sortable: true,
-      width: "25%",
+      width: "15%",
     },
     {
       name: "Aptitudes coincidentes",
@@ -148,6 +176,10 @@ const Candidates = () => {
     {
       name: "Estado",
       selector: (row) => {
+        console.log("roww, status", row.status)
+        if (processingCandidateId === row.uid) {
+          return "Haciendo match..."; // Mostrar mensaje de carga
+        }
         switch (row.status) {
           case "wait":
             return "En Espera";
@@ -162,6 +194,7 @@ const Candidates = () => {
       sortable: true,
       center: true,
       conditionalCellStyles: [
+
         {
           when: (row) => row.status === "match",
           style: {
@@ -249,10 +282,13 @@ const Candidates = () => {
     count = 0;
   });
 
+  const handleClose=()=>{
+    setShow(!show)
+  }
 
   return (
-    <div>
-      <nav className="navbar navbar-expand-lg bg-primary">
+    <div className="main-container-father">
+       <nav className="navbar navbar-expand-lg bg-primary navbar-small py-0">
         <div className="container-fluid">
           <Link to={"/Offers"}>
             <div className="element">
@@ -262,124 +298,180 @@ const Candidates = () => {
 
           <Card.Title>{state?.title}</Card.Title>
         </div>
-      </nav>
+      </nav> 
+       <div className="main-container">
+        <aside className="sidebar">
+          <ul className="nav  flex-column ">
+            <IconContext.Provider value={{ size: "1.5em" }}>
+              <li className={`nav-item ${currentLocation.pathname === '/candidates' ? 'active' : ''}`}>
+                <a
+                  href="/candidates"
+                  className="nav-link link-dark d-flex align-items-center flex-row"
+                  style={{ display: 'flex', alignItems: 'center', gap: '8px', flexDirection: 'row' }}
+                >
+                  <IoIosPeople />
+                  <span>Candidatos</span>
+                </a>
+              </li>
 
-      <aside className="sidebar">
-        <ul className="nav  flex-column ">
-          <IconContext.Provider value={{ size: "3em" }}>
-          <li className={`nav-item ${currentLocation.pathname === '/candidates' ? 'active' : ''}`}>
-          <a href="/candidates" className="nav-link link-dark"> 
-                <IoIosPeople />
-                Candidatos
-               </a> 
-            </li>
-            {/* <li>
-              <a href="#" className="nav-link link-dark">
-                <TbFileDescription />
-                Descripción
-              </a>
-            </li>
-            <li>
-              <a href="#" className="nav-link link-dark">
-                <AiOutlineStar />
-                Aptitudes requeridas
-              </a>
-            </li> */}
-            <li className={`nav-item ${currentLocation.pathname === '/chats' ? 'active' : ''}`}>
-            <Link
-                to="/chats"
-                state={state} 
-                className="nav-link link-dark"
-              >
-                <IoChatbubbleEllipsesOutline />
-                Chat
-              </Link>
-            </li>
-          </IconContext.Provider>
-        </ul>
-      </aside>
+              <li className={`nav-item ${currentLocation.pathname === '/chats' ? 'active' : ''}`}>
+                <Link
+                  to="/chats"
+                  state={state}
+                  className="nav-link link-dark d-flex align-items-center flex-row"
+                  style={{ display: 'flex', alignItems: 'center', gap: '8px', flexDirection: 'row' }}
+                >
+                  <IoChatbubbleEllipsesOutline />
+                  <span>Chat</span>
+                </Link>
+              </li>
+            </IconContext.Provider>
 
-      <section className="table-candidates">
-        <DataTable
-          columns={columnas}
-          data={state?.interestedUsers}
-          noDataComponent={"No hay candidatos interesados"}
-        />
-      </section>
 
-      <Modal
-        show={show}
-        size="lg"
-        centered={true}
-        onHide={() => setShow(false)}
-       
-        style={ {height:"95%"}}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>{candidate?.name}</Modal.Title>
+
+          </ul>
+        </aside>
+
+        <section className="table-candidates">
+          <DataTable
+            columns={columnas}
+            data={state?.interestedUsers}
+            noDataComponent={"No hay candidatos interesados"}
+            customStyles={customStyles}
+          
+          />
+        </section>
+      </div> 
+      <Modal show={show} onHide={handleClose} centered size="lg" dialogClassName="custom-modal">
+        <div className="position-absolute top-0 end-0 p-3">
+          <button type="button" className="btn-close" aria-label="Close" onClick={handleClose}></button>
+        </div>
+
+        <Modal.Header className="d-flex flex-column align-items-center border-bottom justify-content-center pt-4">
+          <img
+            src={
+              candidate?.imageProfile ||
+              "https://w7.pngwing.com/pngs/223/244/png-transparent-computer-icons-avatar-user-profile-avatar-heroes-rectangle-black.png"
+            }
+            alt="Foto de perfil"
+            className="rounded-circle border"
+            width="80"
+            height="80"
+          />
+          <span className="text-muted mt-2">Candidato</span>
+          <h5 className="fw-bold">{candidate?.name}</h5>
+          <h5 className="candidate-modal__field-value">{candidate?.email}</h5>
         </Modal.Header>
-        <Modal.Body className="modal-body">
-          <section className="section-figure">
-            <figure className="figure">
-              <img
-                width={210}
-                height={210}
-                src={candidate?.imageProfile}
-              />
-            </figure>
-            <div className="section-figure__detail">
-              <h6>Correo electrónico</h6>
-              <h5>{candidate?.email}</h5>
-              <h6>Ubicacion</h6>
-              <h5>{candidate?.location}</h5>
-              <h6>Habilidades</h6>
-              <section className="modal-body-abilities">
-                {candidate?.abilities?.map((ability) => (
-                  <div className="modal-ability">{ability}</div>
-                ))}
-              </section>
-            </div>
-          </section>
 
-          <h6>Descripción</h6>
-          <section className="modal-body-description">
-            <p>{candidate?.description}</p>
-          </section>
+        <Modal.Body style={{ padding: 5 }}>
+        <div 
+      className="d-flex align-items-center" 
+      style={{ gap: "8px", width: "100%", padding: "5px 10px", display: "flex" }}
+    >
+        <span className="section-icon" style={{ fontSize: "18px" }}>📍</span>
+        <div className="d-flex align-items-center" style={{ gap: "5px", flexWrap: "wrap" }}>
+          <div className="section-title" style={{ fontWeight: "bold" }}>Ubicación</div>
+          <h5 className="candidate-modal__field-value" style={{ margin: 0, fontWeight: "normal" }}>
+            {candidate?.location || "ubicación no registrada."}
+          </h5>
+        </div>
+      </div>
 
-          <section className="modal-body-description"
-              style={{ marginBottom: '10px' }} // Añadir espacio entre "Currículum Vitae" y "Certificaciones"
-
+      <div 
+      className="d-flex align-items-center" 
+      style={{ gap: "8px", width: "100%", padding: "5px 10px", display: "flex" }}
+    >
+        <span className="section-icon" style={{ fontSize: "18px" }}>🧠</span>
+        <div className="d-flex align-items-center" style={{ gap: "5px", flexWrap: "wrap" }}>
+          <div className="section-title" style={{ fontWeight: "bold" }}>Habilidades</div>
+          
+        </div>
+        
+      </div>
+      <div className="candidate-modal__abilities">
+            {candidate?.abilities?.map((ability, index) => (
+              <div key={index} className="candidate-modal__ability">
+                {ability}
+              </div>
+            ))}
+      </div>      
+          
+      <div className="d-flex align-items-start" style={{ gap: "10px", width: "100%", padding: "10px" }}>
+        <span className="section-icon" style={{ fontSize: "18px" }}>📝</span>
+        <div style={{ width: "100%" }}>
+          <div className="section-title" style={{ fontWeight: "bold", fontSize: "16px", marginBottom: "5px" }}>
+            Descripción:
+          </div>
+          <section 
+            className="modal-body-description"
+            style={{
+              background: "rgba(235, 245, 255, 0.6)",
+              padding: "10px",
+              borderRadius: "8px",
+              fontSize: "14px",
+              lineHeight: "1.5",
+              maxHeight: "150px",
+              overflowY: "auto",
+              whiteSpace: "pre-wrap",
+              border: "1px solid rgba(200, 220, 255, 0.8)",
+              boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.05)"
+            }}
           >
-
-            {cvUrl ? (
-              <a
-                href={cvUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  textDecoration: 'none',
-        color: '#007bff',
-        fontWeight: 'bold',
-        display: 'inline-block', // Mantener formato consistente
-        margin: '10px 0', // Ajuste del espacio superior e inferior
-        padding: '8px 16px', // Espaciado interno
-        border: '1px solid #007bff', // Borde azul
-        borderRadius: '5px', // Bordes redondeados
-        backgroundColor: '#f9f9f9', // Fondo claro
-        cursor: 'pointer',
-        transition: 'background-color 0.3s ease', // Efecto de hover
-                }}
-              >
-                Visualizar Currículum 
-              </a>
-            ) : 
-            
-            null }
+            <p style={{ margin: 0 }}>
+              {candidate?.description || "El candidato no cargó una descripción en su perfil."}
+            </p>
           </section>
+      </div>
+  
+      </div>
+      <div 
+      className="d-flex align-items-center" 
+      style={{  width: "100%", padding: "5px 10px", display: "flex" }}
+    >
 
+  {cvUrl ? (
+    <a
+      href={cvUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      style={{
+        textDecoration: 'none',
+        color: '#fff',
+        fontWeight: 'bold',
+        display: 'inline-block',
+        padding: '8px 16px',
+        borderRadius: '5px',
+        backgroundColor: '#007bff',
+        transition: 'background-color 0.3s ease',
+        textAlign: 'center'
+      }}
+      onMouseOver={(e) => e.target.style.backgroundColor = '#0056b3'}
+      onMouseOut={(e) => e.target.style.backgroundColor = '#007bff'}
+    >
+    
+    <span
+    className="section-icon"
+    style={{
+      fontSize: "18px",
+      marginRight: "8px", // Espacio entre el icono y el texto
+      color: "#D32F2F", // Rojo más suave (puedes ajustar el color)
+    }}
+  >
+    <GrDocumentPdf />
+  </span>
+       Visualizar Currículum
+    </a>
+  ) : (
+    <p style={{ margin: 0, color: '#6c757d', fontSize: '14px' }}>
+      El candidato no ha subido su currículum.
+    </p>
+  )}
+</div>
 
-          <h6>Certificaciones</h6>
-
+       
+          <div className="section-title" style={{ fontWeight: "bold", fontSize: "16px", marginBottom: "5px" }}>
+          <span className="section-icon" style={{ fontSize: "18px" }}>🎓</span>Certificaciones
+          </div>
           {certifications?.length > 0 ?
 
             <div className="carrusel-container">
@@ -401,11 +493,25 @@ const Candidates = () => {
             </section>
 
           }
+    
+        </Modal.Body>      
+ 
 
-
-        </Modal.Body>
+        {/* <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Cerrar
+          </Button>
+          <Button variant="primary" onClick={handleClose}>
+            Contactar
+          </Button>
+        </Modal.Footer> */}
       </Modal>
+      
+      
+
     </div>
+
+
   );
 };
 export default Candidates;
