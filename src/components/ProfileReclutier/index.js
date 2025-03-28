@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Card, Form, Button, Modal } from "react-bootstrap";
+import { Button, Modal } from "react-bootstrap";
 import { storage } from "../../config/firebase";
 import { todasProvincias } from "../../services/ProvinceService";
 import SelectAvatar from 'react-avatar-edit'
@@ -7,6 +7,8 @@ import "./style.css";
 import { findUserByUid, updateProfile } from "../../services/UserService";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useAuth } from "../../context/AuthContext";
+import SplashScreen from '../Splash/SplashScreen';
+import "./style.css";
 
 
 function ProfileReclutier() {
@@ -22,7 +24,7 @@ function ProfileReclutier() {
   const [buttonDisable, setButtonDisable] = useState(true);
 
   //Photo
-  const [url, setUrl] = useState(null);
+  const [photoUrl, setPhotoUrl] = useState(null);
 
   //Location
   const [provincias, setProvincias] = useState([]);
@@ -35,7 +37,8 @@ function ProfileReclutier() {
 
   //Seleccion de sección de foto 
   const [pview, setpview] = useState(false)
-
+  const [isLoading,setIsLoading]=useState(false)
+  const [loadingProfile, setLoadingProfile] = useState(false);
 
   const onClose = () => {
     setpview(null)
@@ -46,13 +49,15 @@ function ProfileReclutier() {
     setpview(view)
   }
 
-  const saveCropImage = () => {
+  
+  const saveCropImage = async () => {
+    setShow(false);
 
-    
+    setLoadingProfile(true);
     const imageRef = ref(storage, "image");
-    
-    //Pasar la imagen seleccionada de base 64 a file
-    let base64string = pview
+  
+    // Pasar la imagen seleccionada de base 64 a file
+    let base64string = pview;
     const [type, data] = base64string.split(',');
     const mimeType = type.split(':')[1].split(';')[0];
     const text = atob(data);
@@ -62,41 +67,41 @@ function ProfileReclutier() {
       view[i] = text.charCodeAt(i);
     }
     const file = new File([view], 'filename', { type: mimeType });
-    //=========================================================//
-    uploadBytes(imageRef, file)
-      .then(() => {
-        getDownloadURL(imageRef)
-          .then((url) => {
-            setUrl(url);
-            const dataProfile = {
-              description,
-              location,
-              url,
-            };
-            updateProfile(dataProfile, user.uid);
-            updateUserProfile({ photoURL: url }); 
-
-          })
-          .catch((error) => {
-            console.log(error.message, "error al obtener la url de la imagen");
-          });
-
-      })
-      .catch((error) => {
-        console.log(error.message);
-      });
-    setShow(false)
+  
+    try {
+      await uploadBytes(imageRef, file);
+      const url = await getDownloadURL(imageRef);
+      setPhotoUrl(url); // Actualiza el estado aquí
+  
+      const dataProfile = {
+        description,
+        location,
+        url,
+      };
+      await updateProfile(dataProfile, user.uid);
+      await updateUserProfile({ photoUrl: url });
+  
+    } catch (error) {
+    } finally {
+      setLoadingProfile(false);
+    }
   }
+  
+
+
   const editProfile = () => {
     const dataProfile = {
       description,
       location,
-      url,
+      url:photoUrl,
     };
+    console.log("🚀 ~ editProfile ~ dataProfile:", dataProfile)
     updateProfile(dataProfile, user.uid);
     setBtnubi(false);
     setBtndescrip(false);
   };
+
+  
   const noeditubi = async () => {
     let userDat = await findUserByUid(user.uid);
     setLocation(userDat?.location || "");
@@ -112,70 +117,93 @@ function ProfileReclutier() {
   const findAllProvinces = async () => {
     const prov = await todasProvincias();
     setProvincias(prov);
-  };
+  }; 
 
   useEffect(() => {
     findAllProvinces();
   }, []);
   useEffect(() => {
     const getDatByUidUser = async () => {
+      setIsLoading(true)
       let userDat = await findUserByUid(user.uid);
       setDescription(userDat?.description || "");
       setLocation(userDat?.location || "");
-      setUrl(userDat?.imageProfile ||
-        "https://w7.pngwing.com/pngs/223/244/png-transparent-computer-icons-avatar-user-profile-avatar-heroes-rectangle-black.png"
-      );
+      setPhotoUrl(userDat?.imageProfile);
+      setIsLoading(false); 
     };
     getDatByUidUser();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const calculateCompletion = () => {
+    let completed = 0;
+    if (photoUrl) completed++;
+    if (location) completed++;
+    if (description) completed++;
+    return Math.round((completed / 3) * 100);
+  };
   return (
-    <div className="principal-profile">
-      <div className="profile">
-        <Card.Body>
-          <div className="grid">
-            <div className="grid-1">
-             <div className="image-container">
-                <img src={url} alt="logo" className="image" onClick={() => setShow(true)} />
-                <button
-      type="button"
-      className="botonedpro"
-      onClick={handleShow}
-    >
-                  Editar foto
-                </button>
-             </div>
-            </div>
-            <div className="grid-2">
-              <label htmlFor="name">
-                <font color="gray">Nombre/s y apellido/s</font>
-              </label>
-              <p className="card-text">{user?.displayName || ""}</p>
-              <label htmlFor="name">
-                <font color="gray">Correo</font>
-              </label>
-              <p className="card-text">{user?.email || ""}</p>
-            </div>
+    <div className="container-card">
+    {isLoading ? (
+      <SplashScreen />
+    ) : (
+    <div className="card-principal">
+        
+
+        <div className="profile-container">
+      <div className="profile-card">
+        <div className="profile-header">
+          <div className="completion-badge">Perfil {calculateCompletion()}% completo</div>
+        </div>
+        <div className="profile-content">
+                <div className="avatar-container">    
+                {loadingProfile ? (
+          <div className="avatar-loading">
+            <div className="spinner"></div> {/* Animación de carga */}
           </div>
-          <div className="pie-foto">
-            <label htmlFor="name">
-              <font color="gray">Ubicación</font>{" "}
+        ) : (      
+                    <img
+                      src={photoUrl || "https://w7.pngwing.com/pngs/223/244/png-transparent-computer-icons-avatar-user-profile-avatar-heroes-rectangle-black.png"}
+                      alt="Foto de perfil"
+                      className="avatar"
+                      onClick={() => setShow(true)}
+                    />   )}
+
+          
+            <button className="edit-photo-button" onClick={() => setShow(true)}>
+              Editar foto
+            </button>
+          </div>          
+          <div className="profile-info">
+            <h2 className="user-name">{user?.displayName || ""}</h2>
+            <h2 className="user-email">{user?.email || ""}</h2>
+
+          </div>
+            
+          {/* Sección de Ubicación */}
+          <div className="profile-section">
+            <div className="section-header">
+              <div className="section-title">
+                <span className="section-icon">📍</span> Ubicación
+              </div>
               {!btnubi && (
-                <button
-                  type="button"
-                  className="button"
-                  onClick={() => setBtnubi(true)}
-                >
+                <button className="edit-button" onClick={() => setBtnubi(true)}>
                   Editar
                 </button>
               )}
-            </label>
-            <p className="card-text">{location || ""}</p>
+            </div>
 
-            {btnubi && (
-              <div className="input-group mb-3">
-                <div>
-                  <select
+            {!btnubi ? (
+              <p className="section-content">
+                {location || (
+                  <span className="placeholder-text">
+                    Agrega tu ubicación para que otros usuarios puedan encontrarte
+                  </span>
+                )}
+              </p>
+            ) : (
+              <div className="edit-container">
+                <select
                     className="select-province"
                     aria-label=".form-select-sm example"
                     onChange={(e) => setLocation(e.target.value + ",Argentina")}
@@ -187,109 +215,113 @@ function ProfileReclutier() {
                       <option key={provincia.id}> {provincia.nombre}</option>
                     ))}
                   </select>
-                </div>
-                <Button variant="primary" onClick={editProfile}>
-                  {" "} Guardar {" "}
-                </Button>
-                <Button variant="secondary" onClick={noeditubi}>
-                  {" "} Cancelar {" "}
-                </Button>
-              </div>
-            )}
-
-         
-            
-
-            {!btndescri && (
-              <div>
-              <label htmlFor="name">
-              <font color="gray">Descripción </font>              {!btnubi && (
-                              <button
-                                type="button"
-                                className="button"
-                                onClick={() => setBtndescrip(true)}                >
-                                Editar
-                              </button>
-                            )}
-                          </label>     
-              
-                <p className="card-text">{description || ""}</p>
-                
-             </div>
-
-            )}
-            {btndescri && (
-              <div className="card-body">
-                <Form.Group
-                  controlId="position-description"
-                >
-                  <Form.Control
-                    as="textarea"
-                    rows={6}
-                    placeholder="Descripción de la posición"
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    type="text"
-
-                    onInput={(e) => {
-                      e.target.value.length > 60
-                        ? setButtonDisable(false)
-                        : setButtonDisable(true);
-                    }}
-                    required
-                  />
-                  <label
-                    style={{
-                      display: "flex",
-                      justifyContent: "flex-end",
-                      marginRight: 5,
-                    }}
-                  >
-                    {description.length - 60}
-
-                  </label>
-
-                </Form.Group>
-                <div className="botones">
-                  <Button variant="primary" onClick={editProfile} disabled={buttonDisable}>
+                <div className="button-group">
+                  <button className="save-button" onClick={() => editProfile()}>
                     Guardar
-                  </Button>
-                </div>
-                <div className="botones">
-                  <Button variant="secondary" onClick={noeditdesc}>
+                  </button>
+                  <button className="cancel-button" onClick={() => noeditubi()}>
                     Cancelar
-                  </Button>
+                  </button>
                 </div>
               </div>
             )}
           </div>
-        </Card.Body>
-        <div >
+          {/* Sección de Descripción */}
+          <div className="profile-section">
+            <div className="section-header">
+              <div className="section-title">
+                <span className="section-icon">📝</span> Descripción
+              </div>
+              {!btndescri && (
+                <button className="edit-button" onClick={() => setBtndescrip(true)}>
+                  Editar
+                </button>
+              )}
+            </div>
 
+            {!btndescri ? (
+              <p className="section-content">
+                {description || (
+                  <span className="placeholder-text">
+                    Cuéntanos sobre ti, tus intereses y experiencia. Una buena descripción ayuda a crear conexiones
+                    profesionales.
+                  </span>
+                )}
+              </p>
+            ) : (
+              <div className="edit-container">
+                <textarea
+                  className="edit-textarea"
+                  value={description}
+                  onChange={(e) => {
+                    setDescription(e.target.value)
+                    setButtonDisable(e.target.value.length <= 60)
+                  }}
+                  placeholder="Describe tu experiencia, habilidades e intereses profesionales (mínimo 60 caracteres)"
+                  rows={4}
+                />
+                <div className="character-count">
+                  {description.length >= 60
+                    ? `+${description.length - 60}`
+                    : `Faltan ${60 - description.length} caracteres`}
+                </div>
+                <div className="button-group">
+                  <button className="save-button" onClick={() => editProfile()} disabled={buttonDisable}>
+                    Guardar
+                  </button>
+                  <button className="cancel-button" onClick={() => noeditdesc()}>
+                    Cancelar
+                  </button>
+                </div>
+              </div>
+
+              
+            )}
+          </div>
         </div>
-        <Modal show={show} onHide={handleClose} style={{ marginTop: '10%' }} backdrop={1}>
-          <Modal.Dialog >
+        <Modal show={show} onHide={handleClose} centered>
+          <Modal.Header closeButton>
+            <Modal.Title>Seleccione foto de perfil</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+          <div className="custom-avatar-uploader">
 
-            <Modal.Title >Seleccione foto de perfil</Modal.Title>
             <SelectAvatar
               width={300}
               height={300}
               onCrop={onCrop}
               onClose={onClose}
+              style={{ display: "none" }} // Oculta el input de carga de archivos
+
               
-
             />
-            <Modal.Footer>
-              <Button variant="secondary" onClick={handleClose}>Cancelar</Button>
-              <Button variant="primary" onClick={saveCropImage}>Subir</Button>
-            </Modal.Footer>
-          </Modal.Dialog>
-        </Modal>
+            </div>
 
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+              Cancelar
+            </Button>
+            <Button variant="primary" onClick={saveCropImage}>
+              Subir
+            </Button>
+          </Modal.Footer>
+        </Modal> 
       </div>
+
+      {/* Modal para cambiar foto */}
+   
+
+          
+    </div>
+   
+    
     </div>
 
 
+    )}
+       
+  </div>
   )
 }
 
