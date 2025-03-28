@@ -12,6 +12,7 @@ import { db } from "../config/firebase.js";
 
 export const createOffer = async (offer) => {
   return await addDoc(collection(db, "Offers"), {
+    companyName: offer.companyName,
     title: offer.title,
     description: offer.description,
     requiredAbilities: offer.requiredAbilities,
@@ -20,6 +21,8 @@ export const createOffer = async (offer) => {
     province: offer.province,
     country: offer.country,
     dateOffer: offer.dateOffer,
+    workModality:offer.workModality,
+    logoURL:offer.logoURL,
     uid: offer.uid,
     interestedUsers: [],
   });
