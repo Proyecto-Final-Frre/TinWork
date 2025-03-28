@@ -9,10 +9,7 @@ function ProtectedRoute({ children }) {
   if (loading) {
     return (
       <Suspense fallback={<div>Cargando...</div>}>
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
           <SplashScreen />
-          {/* <p>Cargando...</p> */}
-        </div>
       </Suspense>
     );
   }
