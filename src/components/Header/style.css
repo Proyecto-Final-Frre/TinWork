@@ -11,18 +11,13 @@
 }
 
 
-/* style={{ 
-  background: "linear-gradient(to bottom,rgba(245, 250, 255, 0.9), rgba(225, 240, 255, 0.9))",
-  
-}} */
-
-.navbar{
+.navbar {
   background: var(--secondary);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05)
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  
 }
-
-/* .dropdown-toggle
-.dropdown-menu {} */
 
 .dropdown-menu {
   background: var(--secondary); 

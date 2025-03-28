@@ -71,7 +71,7 @@ const Header = () => {
           <Dropdown className="dropdown-cuenta">
             <Dropdown.Toggle className="dropdown-toggle" variant="light" id="dropdown-basic">
               <Image
-                src={user.photoUrl ?? "https://w7.pngwing.com/pngs/223/244/png-transparent-computer-icons-avatar-user-profile-avatar-heroes-rectangle-black.png"} 
+                src={user.photoUrl ?? user.photoURL ?? "https://w7.pngwing.com/pngs/223/244/png-transparent-computer-icons-avatar-user-profile-avatar-heroes-rectangle-black.png"} 
                 roundedCircle
                 width="30" // Tamaño del avatar
                 height="30"
