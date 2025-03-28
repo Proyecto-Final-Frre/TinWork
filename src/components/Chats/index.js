@@ -26,11 +26,8 @@ import IconButton from '@mui/material/IconButton';
 
 
 const Chats = () => {
-  const location = useLocation();
-  const currentLocation = useLocation();
-
-  const state = location.state;
-  
+  const location = useLocation(); 
+  const state = location.state; 
   const [refresh, setRefresh] = useState(false);
   const [candidate, setCandidate] = useState(null);
   const [show, setShow] = useState(false);
@@ -46,8 +43,8 @@ const Chats = () => {
       setUser(user);
     };
     getUser();
-   
-    
+
+
   }, []);
 
   useEffect(() => {
@@ -68,55 +65,33 @@ const Chats = () => {
   };
 
 
-
-
-
-
   function handleShow(candidateSelected) {
     setShow(true);
     setCandidate(candidateSelected);
   }
 
-  const handleMatch = async (element) => {
-    const user = await findUserByUid(element.uid);
-    await pushNotification(user.token, state);
-    state.interestedUsers.forEach((interestedUser) => {
-      if (interestedUser.uid === element.uid) {
-        interestedUser.status = "match";
-      }
-    });
+  const customStyles = {
+    table: {
+      style: {
+        border: "none",
+        borderRadius: "0px",
+      },
+    },
+    headRow: {
+      style: {
+        background: "linear-gradient(to bottom, rgba(220, 235, 255, 0.9), rgba(100, 160, 255, 0.9))",     
+        color: "#2D3748",
 
-    const offerUpdate = {
-      id: state.id,
-      interestedUsers: state.interestedUsers,
-    };
+        borderBottom: "1px solid #E2E8F0", // Borde sutil para separar el header
+        color: "#2D3748", // Color de texto oscuro para mejor legibilidad
+        fontSize: "0.969rem",
+        fontWeight: "600",
+        minHeight: "48px",
+      },
+    },
 
-    await updateOffer(offerUpdate);
 
-    const userUpdate = {
-      id: user.id,
-      offersMatch: [...user.offersMatch, state],
-    };
 
-    await updateUser(userUpdate);
-
-    setRefresh(!refresh);
-  };
-
-  const handleNoMatch = async (element) => {
-    state.interestedUsers.forEach((interestedUser) => {
-      if (interestedUser.uid === element.uid) {
-        interestedUser.status = "no-match";
-      }
-    });
-
-    const offerUpdate = {
-      id: state.id,
-      interestedUsers: state.interestedUsers,
-    };
-
-    await updateOffer(offerUpdate);
-    setRefresh(!refresh);
   };
 
   const columnas = [
@@ -125,25 +100,25 @@ const Chats = () => {
       cell: (row) => (
         <div>
           <Tooltip title="Conversar" placement="left" arrow>
-          <IconButton>
-        {row.imageProfile ? (
-            <img
-                src={row.imageProfile}
-                alt="Profile"
-                style={{ width: "2em", height: "2em", borderRadius: "50%" }}
-                onClick={() => handleShow(row)}
-            />
-        ) : (
-            <BsPersonCircle
-                size="2em"
-                type="button"
-                onClick={() => handleShow(row)}
-            />
-        )}
-        </IconButton>
-        </Tooltip>
+            <IconButton>
+              {row.imageProfile ? (
+                <img
+                  src={row.imageProfile}
+                  alt="Profile"
+                  style={{ width: "2em", height: "2em", borderRadius: "50%" }}
+                  onClick={() => handleShow(row)}
+                />
+              ) : (
+                <BsPersonCircle
+                  size="2em"
+                  type="button"
+                  onClick={() => handleShow(row)}
+                />
+              )}
+            </IconButton>
+          </Tooltip>
 
-    </div>
+        </div>
       ),
     },
     {
@@ -200,24 +175,27 @@ const Chats = () => {
 
       cell: (row) => (
         <div>
-           <Tooltip title="Conversar" placement="top" arrow>
-           <IconButton>
-          <IoChatbubbleEllipsesOutline 
-             onClick={() =>handleShow(row)}
-             size="2em"
-             type="button"
-          
-          />
-          </IconButton>
+          <Tooltip title="Conversar" placement="top" arrow>
+            <IconButton>
+              <IoChatbubbleEllipsesOutline
+                onClick={() => handleShow(row)}
+                size="2em"
+                type="button"
+
+              />
+            </IconButton>
           </Tooltip>
         </div>
       ),
     },
   ];
+  const handleClose=()=>{
+    setShow(!show)
+  }
 
   return (
-    <div>
-      <nav className="navbar navbar-expand-lg bg-primary">
+    <div className="main-container-father" >
+      <nav className="navbar navbar-expand-lg bg-primary navbar-small py-0">
         <div className="container-fluid">
           <Link to={"/Offers"}>
             <div className="element">
@@ -225,98 +203,105 @@ const Chats = () => {
             </div>
           </Link>
 
-          <Card.Title>Chats</Card.Title> 
+          <Card.Title>Chats</Card.Title>
         </div>
       </nav>
+      <div className="main-container">
 
-      <aside className="sidebar">
-        <ul className="nav  flex-column ">
-          <IconContext.Provider value={{ size: "3em" }}>
-          <Link
-                to="/candidates"
-                state={state} // Pasar el estado aquí
-                className="nav-link link-dark"
-              >
-            <IoIosPeople />
-                Candidatos
-           
-            </Link>
-            {/* <li>
-              <a href="#" className="nav-link link-dark">
-                <TbFileDescription />
-                Descripción
-              </a>
-            </li>
-            <li>
-              <a href="#" className="nav-link link-dark">
-                <AiOutlineStar />
-                Aptitudes requeridas
-              </a>
-            </li> */}
-            <li className={`nav-item ${currentLocation.pathname === '/chats' ? 'active' : ''}`}>
-            <Link
-                to="/chats"
-                state={state} 
-                className="nav-link link-dark"
-              >
-                <IoChatbubbleEllipsesOutline />
-                Chat
-              </Link>
-            </li>
-          </IconContext.Provider>
-        </ul>
-      </aside>
+        <aside className="sidebar">
+          <ul className="nav  flex-column ">
+            <IconContext.Provider value={{ size: "1.5em" }}>
+              <li className={`nav-item ${location.pathname === '/candidates' ? 'active' : ''}`}>
+                <Link
+                  to="/candidates"
+                  state={state} // Pasar el estado aquí
+                  className="nav-link link-dark d-flex align-items-center flex-row"
+                  style={{ display: 'flex', alignItems: 'center', gap: '8px', flexDirection: 'row' }}
 
-      <section className="table-candidates">
-        <DataTable
-          columns={columnas}
+                >
+                  <IoIosPeople />
+                  <span>Candidatos</span>
+
+                </Link>
+              </li>
+
+
+              <li className={`nav-item ${location.pathname === '/chats' ? 'active' : ''}`}>
+                <Link
+                  to="/chats"
+                  state={state}
+                  className="nav-link link-dark d-flex align-items-center flex-row"
+                  style={{ display: 'flex', alignItems: 'center', gap: '8px', flexDirection: 'row' }}
+                >
+                  <IoChatbubbleEllipsesOutline />
+                  <span>Chat</span>
+                </Link>
+              </li>
+            </IconContext.Provider>
+          </ul>
+        </aside>
+
+        <section className="table-candidates">
+          <DataTable
+            columns={columnas}
           data={state?.interestedUsers}
-          noDataComponent={"No hay candidatos interesados"}
-        />
-      </section>
+            noDataComponent={"No hay candidatos interesados"}
+            customStyles={customStyles}
 
-    <Modal
-      show={show}
-      size="lg"
-      centered={true}
-      onHide={() => setShow(false)}
-    >
-      <Modal.Header closeButton>
-        <Modal.Title>Candidato: {candidate?.name}</Modal.Title>
-      </Modal.Header>
-      <Modal.Body className="modal-body">
-        {/* Zona de mensajes */}
-        <div className="chat-messages" style={{ height: '300px', overflowY: 'scroll', padding: '10px', border: '1px solid #ccc' }}>
-          {messages.map((msg, index) => (
-            
-              <div
-          key={index}
-          className={`chat-message ${msg.senderUid === user.uid ? 'sent' : 'received'}`}
-          style={{ marginBottom: '10px', padding: '5px', backgroundColor: msg.senderUid === user.uid ? '#e0f7fa' : '#f0f0f0' }}
-        >
-          <strong>{msg.senderName}</strong> {/* Muestra el nombre del remitente */}
-
-              {msg.content}
-            </div>
-          ))}
-        </div>
-
-        {/* Input para escribir el mensaje */}
-        <div className="chat-input-container" style={{ display: 'flex', marginTop: '10px' }}>
-          <input
-            type="text"
-            placeholder="Escribe un mensaje..."
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-            style={{ flex: 1, padding: '10px', borderRadius: '4px', border: '1px solid #ccc' }}
           />
-          <button onClick={handleSendMessage} style={{ marginLeft: '10px', padding: '10px 20px', backgroundColor: '#007bff', color: 'white', border: 'none', borderRadius: '4px' }}>
-            <IoSend size={20} />
-          </button>
+        </section>
+      </div>
+
+      <Modal show={show} onHide={handleClose} centered size="lg" dialogClassName="custom-modal">
+        <div className="position-absolute top-0 end-0 p-3">
+          <button type="button" className="btn-close" aria-label="Close" onClick={handleClose}></button>
         </div>
-      </Modal.Body>
-    </Modal>
+
+        <Modal.Header  className="d-flex flex-column align-items-center border-bottom">
+          <img
+            src={candidate?.imageProfile || "https://w7.pngwing.com/pngs/223/244/png-transparent-computer-icons-avatar-user-profile-avatar-heroes-rectangle-black.png"}
+            alt="Foto de perfil"
+            className="rounded-circle border"
+            width="50"
+            height="50"
+          />
+          <span className="text-muted mt-2">Candidato</span>
+          <h5 className="fw-bold">{candidate?.name}</h5>
+        </Modal.Header>
+
+        <Modal.Body className="modal-body">
+          {/* Zona de mensajes */}
+          <div className="chat-messages" style={{ width: '100%', height: '300px', overflowY: 'scroll', padding: '10px', border: '1px solid #ccc' }}>
+            {messages.map((msg, index) => (
+
+              <div
+                key={index}
+                className={`chat-message ${msg.senderUid === user.uid ? 'sent' : 'received'}`}
+                style={{ marginBottom: '10px', padding: '5px', backgroundColor: msg.senderUid === user.uid ? '#e0f7fa' : '#f0f0f0' }}
+              >
+                <strong>{msg.senderName}</strong> {/* Muestra el nombre del remitente */}
+
+                {msg.content}
+              </div>
+            ))}
+          </div>
+
+          {/* Input para escribir el mensaje */}
+          <div className="chat-input-container" style={{ display: 'flex', width: '100%', marginTop: '10px' }}>
+            <input
+              type="text"
+              placeholder="Escribe un mensaje..."
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+              style={{ flex: 1, padding: '10px', borderRadius: '4px', border: '1px solid #ccc' }}
+            />
+            <button onClick={() => handleSendMessage()} style={{ marginLeft: '10px', padding: '10px 20px', backgroundColor: '#007bff', color: 'white', border: 'none', borderRadius: '4px' }}>
+              <IoSend size={20} />
+            </button>
+          </div>
+        </Modal.Body>
+      </Modal>
     </div>
   );
 
