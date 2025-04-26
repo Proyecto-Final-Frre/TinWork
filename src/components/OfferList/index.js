@@ -84,8 +84,8 @@ const OfferList = () => {
                   placeholder="Ej: Desarrollador Frontend"
                   value={searchTitle}
                   onChange={(e) => setSearchTitle(e.target.value)}
-                />
-                {/* <FaSistrix className="search-icon" /> */}
+                />           
+                
               </div>
 
               <div className="filter-item">
