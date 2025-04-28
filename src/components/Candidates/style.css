@@ -15,10 +15,11 @@ html, body {
   padding: 0;
   overflow: hidden;
 }
-/* Reset de estilos problemáticos */
+
 .main-container-father {
   width: 100%;
-  min-height: 100vh;
+  height: calc(100vh - 65px);
+  overflow-y: auto; /* Activa el scroll vertical si el contenido es grande */
   display: flex;
   flex-direction: column;
 
@@ -157,17 +158,15 @@ html, body {
   min-height: 0;
   overflow-y: auto;
   background: var(--secondary);
-  border-radius: 0px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+ 
 }
 
-/* DataTable responsive */
 .rdt_Table {
   width: 100%;
   height: auto !important;
   border-collapse: separate;
   border-spacing: 0 8px;
-  background: linear-gradient(to bottom, rgba(245, 250, 255, 0.9), rgba(235, 245, 255, 0.9)); /* Gradiente claro */
+  background: linear-gradient(to bottom, rgba(245, 250, 255, 0.9), rgba(235, 245, 255, 0.9)); 
 }
 
 
@@ -175,14 +174,14 @@ html, body {
 .rdt_TableRow {
   min-height: 48px;
   margin-top: 8px;
-  background-color: rgba(255, 255, 255, 0.95); /* Blanco con transparencia */
+  background-color: #F0F7FF;
   transition: all 0.3s ease;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(46, 129, 251, 0.05);
 }
 
 .rdt_TableRow:hover {
-  background-color: #E6EEFF; 
+  background-color: #D0E7FF; 
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(46, 129, 251, 0.15);
 }
@@ -194,26 +193,7 @@ html, body {
   color: #2D3748; /* Color de texto principal */
 }
 
-/* Estados de candidatos */
-.estado-descartado,
-.estado-matcheado {
-  padding: 0.25rem 0.75rem;
-  border-radius: 20px;
-  font-size: 0.875rem;
-  white-space: nowrap;
-  display: inline-block;
-}
 
-/* Media queries mejorados */
-@media (max-width: 768px) {
-  .table-candidates {
-    padding: 0.5rem;
-  }
-  
-  .rdt_TableCell {
-    padding: 0.25rem 0.5rem !important;
-  }
-}
 
 /* Asegurar que el contenido de las celdas no cause scroll horizontal */
 .rdt_TableCell > div {
@@ -398,22 +378,3 @@ html, body {
   border-color: #0066cc;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .candidate-modal__abilities {
-    justify-content: center;
-  }
-
-  .candidate-modal__carousel {
-    flex-direction: column;
-  }
-
-  .candidate-modal__carousel-slide {
-    width: 100%;
-    margin: 0.5rem 0;
-  }
-
-  .candidate-modal__carousel-button {
-    transform: rotate(90deg);
-  }
-}

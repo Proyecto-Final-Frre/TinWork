@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import "./style.css";
 import { Card } from "react-bootstrap";
 import { BsArrowLeftSquare } from "react-icons/bs";
-import { IoIosPeople, IoMdHeartEmpty, IoMdEye } from "react-icons/io";
+import { IoIosPeople, IoMdEye } from "react-icons/io";
+import { FaHeart } from "react-icons/fa";
+
 import { IconContext } from "react-icons";
 import { TiDeleteOutline } from "react-icons/ti";
 import { BsPersonCircle } from "react-icons/bs";
@@ -60,7 +62,7 @@ const Candidates = () => {
   }
 
   const handleMatch = async (element) => {
-    setProcessingCandidateId(element.uid); 
+    setProcessingCandidateId(element.uid);
     try {
       const user = await findUserByUid(element.uid);
       await pushNotification(user.token, state);
@@ -88,7 +90,7 @@ const Candidates = () => {
     } catch (error) {
       console.error("Error updating match:", error);
     } finally {
-      setProcessingCandidateId(null); 
+      setProcessingCandidateId(null);
     }
   };
 
@@ -118,18 +120,24 @@ const Candidates = () => {
     },
     headRow: {
       style: {
-        background: "linear-gradient(to bottom, rgba(220, 235, 255, 0.9), rgba(100, 160, 255, 0.9))",      
-        borderBottom: "1px solid #E2E8F0", 
-        color: "#2D3748", 
+        background: "linear-gradient(to bottom, rgba(220, 235, 255, 0.9), rgba(100, 160, 255, 0.9))",
+        borderBottom: "1px solid #E2E8F0",
+        color: "#2D3748",
         fontSize: "0.969rem",
         fontWeight: "600",
         minHeight: "48px",
       },
     },
-  
-    
-  
+    rows: {
+      style: {
+        backgroundColor: '#F0F7FF', 
+      },
+
+    },
+
+
   };
+
 
   const columnas = [
     {
@@ -140,20 +148,13 @@ const Candidates = () => {
             <IconButton>
               {row.imageProfile ? (
                 <img
-                  src={row.imageProfile}
+                  src={row.imageProfile || "/placeholder.svg"}
                   alt="Profile"
                   style={{ width: "2em", height: "2em", borderRadius: "50%" }}
                   onClick={() => handleShow(row)}
                 />
               ) : (
-
-                <BsPersonCircle
-                  size="2em"
-                  type="button"
-                  onClick={() => handleShow(row)}
-                />
-
-
+                <BsPersonCircle size="1.8em" type="button" onClick={() => handleShow(row)} />
               )}
             </IconButton>
           </Tooltip>
@@ -175,94 +176,159 @@ const Candidates = () => {
     },
     {
       name: "Estado",
-      selector: (row) => {
-        console.log("roww, status", row.status)
+      cell: (row) => {
         if (processingCandidateId === row.uid) {
-          return "Haciendo match..."; // Mostrar mensaje de carga
+          return (
+            <div
+              style={{
+                backgroundColor: "rgba(52, 152, 219, 0.2)",
+                color: "#2980b9",
+                borderRadius: "16px",
+                padding: "8px 24px",
+                fontWeight: "500",
+                display: "inline-block",
+                width: "auto",
+                // maxWidth: "120px",
+                textAlign: "center",
+                fontSize: "0.85rem",
+                margin: "0 auto",
+              }}
+            >
+              Haciendo match...
+            </div>
+          )
         }
+
         switch (row.status) {
           case "wait":
-            return "En Espera";
+            return (
+              <div
+                style={{
+                  backgroundColor: "#D9D9D9",
+                  color: "white",
+                  borderRadius: "16px",
+                  padding: "8px 24px",
+                  fontWeight: "500",
+                  display: "inline-block",
+                  width: "auto",
+                  maxWidth: "120px",
+                  textAlign: "center",
+                  fontSize: "0.85rem",
+                  margin: "0 auto",
+                }}
+              >
+                En Espera
+              </div>
+            )
           case "match":
-            return "Matcheado";
+            return (
+              <div
+                style={{
+                  backgroundColor: "rgba(63, 195, 128, 0.9)",
+                  color: "white",
+                  borderRadius: "16px",
+                  padding: "8px 24px",
+                  fontWeight: "500",
+                  display: "inline-block",
+                  width: "auto",
+                  maxWidth: "120px",
+                  textAlign: "center",
+                  fontSize: "0.85rem",
+                  margin: "0 auto",
+                }}
+              >
+                Matcheado
+              </div>
+            )
           case "no-match":
-            return "Descartado";
+            return (
+              <div
+                style={{
+                  backgroundColor: "rgba(242, 38, 19, 0.9)",
+                  color: "white",
+                  borderRadius: "16px",
+                  padding: "8px 24px",
+                  fontWeight: "500",
+                  display: "inline-block",
+                  width: "auto",
+                  maxWidth: "120px",
+                  textAlign: "center",
+                  fontSize: "0.85rem",
+                  margin: "0 auto",
+                }}
+              >
+                Descartado
+              </div>
+            )
           default:
-            return "none";
+            return "none"
         }
       },
       sortable: true,
       center: true,
-      conditionalCellStyles: [
-
-        {
-          when: (row) => row.status === "match",
-          style: {
-            backgroundColor: "rgba(63, 195, 128, 0.9)",
-            color: "white",
-          },
-        },
-        {
-          when: (row) => row.status === "wait",
-
-          style: {
-            backgroundColor: "#D9D9D9",
-            color: "white",
-          },
-        },
-        {
-          when: (row) => row.status === "no-match",
-          style: {
-            backgroundColor: "rgba(242, 38, 19, 0.9)",
-            color: "white",
-          },
-        },
-      ],
+      conditionalCellStyles: [],
     },
     {
       name: "Acciones",
       grow: 1,
       center: true,
-
       cell: (row) => (
-        <div>
+        <div className="flex items-center justify-center gap-2">
           <Tooltip title="Descartar" placement="top" arrow>
-            <IconButton>
+            <IconButton
+              className="transition-transform hover:scale-110 hover:bg-red-100 rounded-full p-1"
+              disabled={row.status === "no-match" || processingCandidateId === row.uid}
+            >
               <TiDeleteOutline
                 size="1.8em"
                 type="button"
                 onClick={() => handleNoMatch(row)}
-                style={{ cursor: 'pointer' }}
+                style={{
+                  cursor: row.status === "no-match" ? "default" : "pointer",
+                  color: row.status === "no-match" ? "#f22613" : "#666",
+                  opacity: row.status === "no-match" ? 1 : 0.8,
+                }}
               />
             </IconButton>
-
           </Tooltip>
 
-          <Tooltip title="Matchear" placement="top" arrow>
-            <IconButton>
-              <IoMdHeartEmpty
-                onClick={() => handleMatch(row)}
+          <Tooltip title={row.status === "match" ? "Ya matcheado" : "Matchear"} placement="top" arrow>
+            <IconButton
+              className="transition-transform hover:scale-110 hover:bg-green-100 rounded-full p-1"
+              disabled={row.status === "match" || processingCandidateId === row.uid}
+            >
+              <FaHeart
+                onClick={() => row.status !== "match" && handleMatch(row)}
                 size="1.8em"
                 type="button"
+                style={{
+                  cursor: row.status === "match" ? "default" : "pointer",
+                  color: row.status === "match" ? "#3fc380" : "#666",
+                  opacity: row.status === "match" ? 1 : 0.8,
+                  transition: "color 0.3s ease, transform 0.2s ease",
+                }}
               />
             </IconButton>
           </Tooltip>
 
           <Tooltip title="Ver perfil" placement="top" arrow>
-            <IconButton>
-              < IoMdEye
+            <IconButton className="transition-transform hover:scale-110 hover:bg-blue-100 rounded-full p-1">
+              <IoMdEye
                 onClick={() => handleShow(row)}
                 size="2em"
                 type="button"
+                style={{
+                  color: "#2980b9",
+                  transition: "transform 0.2s ease",
+                }}
               />
             </IconButton>
           </Tooltip>
         </div>
       ),
     },
-  ];
+  ]
 
-  //Para sacar la cantidad de aptitudes coincidentes
   let count = 0;
   const abilitiesOffer = state?.requiredAbilities;
   state?.interestedUsers.map((e) => {
@@ -270,9 +336,7 @@ const Candidates = () => {
     abilitiesUser.forEach((ability) => {
       if (abilitiesOffer.includes(ability)) {
         count++;
-        return true;
       }
-      return false;
     });
     const apt = {
       aptcoincidentes: count,
@@ -280,15 +344,16 @@ const Candidates = () => {
 
     Object.assign(e, apt);
     count = 0;
+    return true
   });
 
-  const handleClose=()=>{
+  const handleClose = () => {
     setShow(!show)
   }
 
   return (
     <div className="main-container-father">
-       <nav className="navbar navbar-expand-lg bg-primary navbar-small py-0">
+      <nav className="navbar navbar-expand-lg bg-primary navbar-small py-0">
         <div className="container-fluid">
           <Link to={"/Offers"}>
             <div className="element">
@@ -298,8 +363,8 @@ const Candidates = () => {
 
           <Card.Title>{state?.title}</Card.Title>
         </div>
-      </nav> 
-       <div className="main-container">
+      </nav>
+      <div className="main-container">
         <aside className="sidebar">
           <ul className="nav  flex-column ">
             <IconContext.Provider value={{ size: "1.5em" }}>
@@ -338,10 +403,10 @@ const Candidates = () => {
             data={state?.interestedUsers}
             noDataComponent={"No hay candidatos interesados"}
             customStyles={customStyles}
-          
+          // pagination 
           />
         </section>
-      </div> 
+      </div>
       <Modal show={show} onHide={handleClose} centered size="lg" dialogClassName="custom-modal">
         <div className="position-absolute top-0 end-0 p-3">
           <button type="button" className="btn-close" aria-label="Close" onClick={handleClose}></button>
@@ -364,113 +429,113 @@ const Candidates = () => {
         </Modal.Header>
 
         <Modal.Body style={{ padding: 5 }}>
-        <div 
-      className="d-flex align-items-center" 
-      style={{ gap: "8px", width: "100%", padding: "5px 10px", display: "flex" }}
-    >
-        <span className="section-icon" style={{ fontSize: "18px" }}>📍</span>
-        <div className="d-flex align-items-center" style={{ gap: "5px", flexWrap: "wrap" }}>
-          <div className="section-title" style={{ fontWeight: "bold" }}>Ubicación</div>
-          <h5 className="candidate-modal__field-value" style={{ margin: 0, fontWeight: "normal" }}>
-            {candidate?.location || "ubicación no registrada."}
-          </h5>
-        </div>
-      </div>
+          <div
+            className="d-flex align-items-center"
+            style={{ gap: "8px", width: "100%", padding: "5px 10px", display: "flex" }}
+          >
+            <span className="section-icon" style={{ fontSize: "18px" }}>📍</span>
+            <div className="d-flex align-items-center" style={{ gap: "5px", flexWrap: "wrap" }}>
+              <div className="section-title" style={{ fontWeight: "bold" }}>Ubicación</div>
+              <h5 className="candidate-modal__field-value" style={{ margin: 0, fontWeight: "normal" }}>
+                {candidate?.location || "ubicación no registrada."}
+              </h5>
+            </div>
+          </div>
 
-      <div 
-      className="d-flex align-items-center" 
-      style={{ gap: "8px", width: "100%", padding: "5px 10px", display: "flex" }}
-    >
-        <span className="section-icon" style={{ fontSize: "18px" }}>🧠</span>
-        <div className="d-flex align-items-center" style={{ gap: "5px", flexWrap: "wrap" }}>
-          <div className="section-title" style={{ fontWeight: "bold" }}>Habilidades</div>
-          
-        </div>
-        
-      </div>
-      <div className="candidate-modal__abilities">
+          <div
+            className="d-flex align-items-center"
+            style={{ gap: "8px", width: "100%", padding: "5px 10px", display: "flex" }}
+          >
+            <span className="section-icon" style={{ fontSize: "18px" }}>🧠</span>
+            <div className="d-flex align-items-center" style={{ gap: "5px", flexWrap: "wrap" }}>
+              <div className="section-title" style={{ fontWeight: "bold" }}>Habilidades</div>
+
+            </div>
+
+          </div>
+          <div className="candidate-modal__abilities">
             {candidate?.abilities?.map((ability, index) => (
               <div key={index} className="candidate-modal__ability">
                 {ability}
               </div>
             ))}
-      </div>      
-          
-      <div className="d-flex align-items-start" style={{ gap: "10px", width: "100%", padding: "10px" }}>
-        <span className="section-icon" style={{ fontSize: "18px" }}>📝</span>
-        <div style={{ width: "100%" }}>
-          <div className="section-title" style={{ fontWeight: "bold", fontSize: "16px", marginBottom: "5px" }}>
-            Descripción:
           </div>
-          <section 
-            className="modal-body-description"
-            style={{
-              background: "rgba(235, 245, 255, 0.6)",
-              padding: "10px",
-              borderRadius: "8px",
-              fontSize: "14px",
-              lineHeight: "1.5",
-              maxHeight: "150px",
-              overflowY: "auto",
-              whiteSpace: "pre-wrap",
-              border: "1px solid rgba(200, 220, 255, 0.8)",
-              boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.05)"
-            }}
+
+          <div className="d-flex align-items-start" style={{ gap: "10px", width: "100%", padding: "10px" }}>
+            <span className="section-icon" style={{ fontSize: "18px" }}>📝</span>
+            <div style={{ width: "100%" }}>
+              <div className="section-title" style={{ fontWeight: "bold", fontSize: "16px", marginBottom: "5px" }}>
+                Descripción:
+              </div>
+              <section
+                className="modal-body-description"
+                style={{
+                  background: "rgba(235, 245, 255, 0.6)",
+                  padding: "10px",
+                  borderRadius: "8px",
+                  fontSize: "14px",
+                  lineHeight: "1.5",
+                  maxHeight: "150px",
+                  overflowY: "auto",
+                  whiteSpace: "pre-wrap",
+                  border: "1px solid rgba(200, 220, 255, 0.8)",
+                  boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.05)"
+                }}
+              >
+                <p style={{ margin: 0 }}>
+                  {candidate?.description || "El candidato no cargó una descripción en su perfil."}
+                </p>
+              </section>
+            </div>
+
+          </div>
+          <div
+            className="d-flex align-items-center"
+            style={{ width: "100%", padding: "5px 10px", display: "flex" }}
           >
-            <p style={{ margin: 0 }}>
-              {candidate?.description || "El candidato no cargó una descripción en su perfil."}
-            </p>
-          </section>
-      </div>
-  
-      </div>
-      <div 
-      className="d-flex align-items-center" 
-      style={{  width: "100%", padding: "5px 10px", display: "flex" }}
-    >
 
-  {cvUrl ? (
-    <a
-      href={cvUrl}
-      target="_blank"
-      rel="noopener noreferrer"
-      style={{
-        textDecoration: 'none',
-        color: '#fff',
-        fontWeight: 'bold',
-        display: 'inline-block',
-        padding: '8px 16px',
-        borderRadius: '5px',
-        backgroundColor: '#007bff',
-        transition: 'background-color 0.3s ease',
-        textAlign: 'center'
-      }}
-      onMouseOver={(e) => e.target.style.backgroundColor = '#0056b3'}
-      onMouseOut={(e) => e.target.style.backgroundColor = '#007bff'}
-    >
-    
-    <span
-    className="section-icon"
-    style={{
-      fontSize: "18px",
-      marginRight: "8px", // Espacio entre el icono y el texto
-      color: "#D32F2F", // Rojo más suave (puedes ajustar el color)
-    }}
-  >
-    <GrDocumentPdf />
-  </span>
-       Visualizar Currículum
-    </a>
-  ) : (
-    <p style={{ margin: 0, color: '#6c757d', fontSize: '14px' }}>
-      El candidato no ha subido su currículum.
-    </p>
-  )}
-</div>
+            {cvUrl ? (
+              <a
+                href={cvUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  textDecoration: 'none',
+                  color: '#fff',
+                  fontWeight: 'bold',
+                  display: 'inline-block',
+                  padding: '8px 16px',
+                  borderRadius: '5px',
+                  backgroundColor: '#007bff',
+                  transition: 'background-color 0.3s ease',
+                  textAlign: 'center'
+                }}
+                onMouseOver={(e) => e.target.style.backgroundColor = '#0056b3'}
+                onMouseOut={(e) => e.target.style.backgroundColor = '#007bff'}
+              >
 
-       
+                <span
+                  className="section-icon"
+                  style={{
+                    fontSize: "18px",
+                    marginRight: "8px", // Espacio entre el icono y el texto
+                    color: "#D32F2F", // Rojo más suave (puedes ajustar el color)
+                  }}
+                >
+                  <GrDocumentPdf />
+                </span>
+                Visualizar Currículum
+              </a>
+            ) : (
+              <p style={{ margin: 0, color: '#6c757d', fontSize: '14px' }}>
+                El candidato no ha subido su currículum.
+              </p>
+            )}
+          </div>
+
+
           <div className="section-title" style={{ fontWeight: "bold", fontSize: "16px", marginBottom: "5px" }}>
-          <span className="section-icon" style={{ fontSize: "18px" }}>🎓</span>Certificaciones
+            <span className="section-icon" style={{ fontSize: "18px" }}>🎓</span>Certificaciones
           </div>
           {certifications?.length > 0 ?
 
@@ -481,6 +546,7 @@ const Candidates = () => {
               <div className="carrusel-slide">
                 <img
                   src={certifications[currentIndex]}
+                  alt="Certificados del usuario" 
                 />
               </div>
               <button className="carrusel-button" onClick={handleNext}>
@@ -493,9 +559,9 @@ const Candidates = () => {
             </section>
 
           }
-    
-        </Modal.Body>      
- 
+
+        </Modal.Body>
+
 
         {/* <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
@@ -506,8 +572,8 @@ const Candidates = () => {
           </Button>
         </Modal.Footer> */}
       </Modal>
-      
-      
+
+
 
     </div>
 
