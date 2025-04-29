@@ -1,11 +1,9 @@
 import { React, useState } from "react";
-import { Button, Dropdown, Image } from "react-bootstrap";
+import { Image } from "react-bootstrap";
 
 import "./style.css";
-import { AiOutlineFileSearch } from "react-icons/ai";
 import { GrLocation } from "react-icons/gr";
-import { BiBriefcase } from "react-icons/bi";
-import { BsCalendarDate, BsPeople } from "react-icons/bs";
+import { BsPeople } from "react-icons/bs";
 import { intlFormatDistance } from "date-fns";
 import { useNavigate } from "react-router-dom";
 
@@ -42,40 +40,39 @@ const Offer = ({
 
   return (
     <div className="card-offer">
-        <div className="company-header">
-      <Image
-        src={companyLogo || "/placeholder.svg"}
-        alt={companyName ? `${companyName} logo` : "Company logo"}
-        width={50}
-        height={50}
-        className="logo-image"
-      />
-      <h4 className="company-name">{companyName || "Personal de Limpieza,"}</h4>
-    </div>
+      <div className="company-header">
+        <Image
+          src={companyLogo || "/placeholder.svg"}
+          alt={companyName ? `${companyName} logo` : "Company logo"}
+          width={50}
+          height={50}
+          className="logo-image"
+        />
+      <h4 className="company-name">{companyName}</h4>
+      </div>
       <div className="offer-header">
         <h5 className="offer-name" >{title}</h5>
       </div>
       <div className="card-location">
-      <h6>       
-          <GrLocation   color={"black"} />
+        <h6 >       
+          <GrLocation style={{ marginRight: '2px' }}  color={"red"} size={17} />
           {country}, {province}
         </h6>
         <h6 className="work">          
-            <BiBriefcase color={"black"}/> {workDay}          
+          💼 {workDay}          
         </h6>         
         <h6 >          
-          <BsCalendarDate  color={"black"} /> {dataOffer}
+        📅 {dataOffer}
         </h6>
         <h6 className="work">          
-            <BiBriefcase color={"black"} /> Modalidad, {workModality}    
+        💼 Modalidad, {workModality}    
         </h6>   
       </div>
-      <div class="horizontal-line"></div>
-      <p className="offer-description">
-        {isReadMoreShown ? description : description.substr(0, 145)}
+      <p className={`offer-description ${isReadMoreShown ? "expanded" : ""}`}>
+        {isReadMoreShown ? description : description.substr(0, 270)}
       </p>
 
-      {description?.length > 300 && (
+      {description?.length > 269 && (
         <button className="btn btn-ver" onClick={toggleBtn}>
           {isReadMoreShown ? "Ver menos" : "Ver más"}{" "}
         </button>

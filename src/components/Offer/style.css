@@ -70,20 +70,27 @@
     justify-items: flex-start;    
 }
 
-/* .horizontal-line {
-    border: none;
-    border-top:  1px solid #b2d3f4;
-  } */
 
 .offer-description {
     min-height: 70px;
-    padding: 0% 2%;
+    padding: 0% 3%; 
     text-align: justify;
-    white-space: pre-line; /* Cambia pre-wrap por pre-line */
-    word-break: break-word; /* Rompe palabras largas si es necesario */
-    overflow-wrap: break-word; /* Asegura que el texto largo no desborde */
+    white-space: pre-line; /* Respeta los saltos de línea */
+    word-break: break-word;
+    overflow-wrap: break-word;
+    display: -webkit-box;
+    -webkit-line-clamp: 4; /* Mostramos hasta 4 líneas */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 
-}
+.offer-description.expanded {
+    display: block;
+    -webkit-line-clamp: unset;
+    overflow: visible;
+    text-overflow: unset;
+  }
 
 .people {
     font-size: 25px;
