@@ -281,7 +281,7 @@ textarea.form-control {
   border: none;
   border-radius: 6px;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
   transition: background-color 0.2s;
   margin-top: 16px;
@@ -292,7 +292,8 @@ textarea.form-control {
 }
 
 .submit-button:disabled {
-  background-color: #ccc;
+  background-color: #d0e3f5;
+  color: #7ca5c2;
   cursor: not-allowed;
 }
 

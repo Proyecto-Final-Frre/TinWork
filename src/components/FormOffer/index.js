@@ -1,4 +1,3 @@
-import { Button, Card, Form } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createOffer } from "../../services/OfferService";
@@ -12,7 +11,8 @@ import { MdOutlineFileUpload } from "react-icons/md";
 import { MdWork } from "react-icons/md";
 import { storage } from "../../config/firebase"; 
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-
+import { GrLocation } from "react-icons/gr";
+import maletinOffer from "../../logos/maletinOffer.gif"
 const FormOffer = () => {
   const { user } = useAuth();
 
@@ -21,11 +21,11 @@ const FormOffer = () => {
   const [selectableAbilities, setSelectableAbilities] = useState([]);
   const [requiredAbilities, setRequiredAbilities] = useState([]);
   const [desiredAbilities, setDesiredAbilities] = useState([]);
-  const [workDay, setWorkDay] = useState("");
+  const [workDay, setWorkDay] = useState("Jornada Completa");
   const [provincias, setProvincias] = useState([]);
-  const [province, setProvince] = useState("");
+  const [province, setProvince] = useState("Buenos Aires");
   const [buttonDisable, setButtonDisable] = useState(true);
-  const [companyName,setCompanyName] =useState(null)
+  const [companyName,setCompanyName] =useState("")
   const [country, setCountry] = useState("Argentina")
   const [logoPreview, setLogoPreview] = useState(null)
   const [logo, setLogo] = useState(null)
@@ -64,6 +64,19 @@ const FormOffer = () => {
   const store = async (e) => {
     e.preventDefault();
     setLoading(true);
+    Swal.fire({
+      title: 'Publicando oferta...',
+      text: 'Estamos guardando los datos. Por favor, espere.',
+      imageUrl: maletinOffer, // Ícono personalizado o animación de TinWork
+      imageWidth: 100,
+      imageHeight: 100,
+      allowOutsideClick: false,
+      showConfirmButton: false,
+      willOpen: () => {
+        Swal.showLoading();
+      },
+      background: "#e3f2fd",
+    });
     let requiredAbilitiesStr = requiredAbilities.map(
       (ability) => ability.title
     );
@@ -86,7 +99,6 @@ const FormOffer = () => {
       workModality,
       uid: user.uid,
     };
-    console.log("offer",offer)
     createOffer(offer).then(() => {
       mostrarAlerta();
       //navigate("/offers", { state: user.uid });
@@ -109,6 +121,7 @@ const FormOffer = () => {
       title: "Se ha registrado correctamente su oferta laboral",
       showConfirmButton: false,
       timer: 2500,
+      background: "#e3f2fd",
     }).then(() => {
       navigate("/offers", { state: user.uid });
     });
@@ -136,13 +149,13 @@ const FormOffer = () => {
       <div className="card-body">
       <div className="title-container">
       <MdWork size={20} style={{ color: "#2E81FB" }} />
-      <h2 style={{ color: "#2E81FB" }} >Nueva oferta</h2>
+      <h2 style={{ color: "#2E81FB" }} >Nueva oferta laboral</h2>
     </div>
 
         <form onSubmit={store}>
         <div className="form-row">
               <div className="form-group">
-                <label htmlFor="company-name">Nombre de la empresa</label>
+                <label htmlFor="company-name">🏢 Nombre de la empresa</label>
                 <input
                   type="text"
                   id="company-name"
@@ -188,11 +201,11 @@ const FormOffer = () => {
                   )}
                 </div>
               </div> 
-            </div>
+        </div>
 
             <div className="form-row">
               <div className="form-group">
-                <label htmlFor="offer-title">Título de la oferta</label>
+                <label htmlFor="offer-title"> Título de la oferta laboral</label>
                 <input
                   type="text"
                   id="offer-title"
@@ -214,7 +227,7 @@ const FormOffer = () => {
                       checked={workModality === "Presencial"}
                       onChange={(e) => setWorkModality(e.target.value)}
                     />
-                    <span className="radio-text">Presencial</span>
+                    <span className="radio-text">🏢 Presencial</span>
                   </label>
 
                   <label className="radio-label">
@@ -225,7 +238,7 @@ const FormOffer = () => {
                       checked={workModality === "Híbrido"}
                       onChange={(e) => setWorkModality(e.target.value)}
                     />
-                    <span className="radio-text">Híbrido</span>
+                    <span className="radio-text">🔀 Híbrido</span>
                   </label>
 
                   <label className="radio-label">
@@ -236,7 +249,7 @@ const FormOffer = () => {
                       checked={workModality === "Remoto"}
                       onChange={(e) => setWorkModality(e.target.value)}
                     />
-                    <span className="radio-text">Remoto</span>
+                    <span className="radio-text">🏠 Remoto</span>
                   </label>
                 </div>
               </div>
@@ -244,7 +257,7 @@ const FormOffer = () => {
 
             <div className="form-row three-columns">
               <div className="form-group">
-                <label htmlFor="workday-type">Tipo de Jornada</label>
+                <label htmlFor="workday-type">⏰ Tipo de Jornada</label>
                 <select
                   id="workday-type"
                   className="form-select bg-light"
@@ -256,12 +269,17 @@ const FormOffer = () => {
                     Seleccione tipo de jornada
                   </option>
                   <option value="Jornada Completa">Jornada Completa</option>
-                  <option value="Media Jornada">Media Jornada</option>
+                  <option value="Jornada Media">Media Jornada</option>
+                  <option value="Por Proyecto">Por Proyecto</option>
+                  <option value="Pasantía">Pasantía</option>
+                  <option value="Freelance">Freelance</option>
+                  <option value="Temporario">Temporario</option>
+                  <option value="Práctica Profesional">Práctica Profesional</option>
                 </select>
               </div>
               
               <div className="form-group">
-                <label htmlFor="country">País</label>
+                <label htmlFor="country">🌎 País</label>
                 <select
                   id="country"
                   className="form-select bg-light"
@@ -274,7 +292,8 @@ const FormOffer = () => {
               </div>    
 
               <div className="form-group">
-                <label htmlFor="province">Provincia</label>
+                 
+                <label htmlFor="province"><GrLocation style={{ marginRight: '2px' }}  color={"red"} size={17} />Provincia</label>
                 <select
                   id="province"
                   className="form-select bg-light"
@@ -317,7 +336,7 @@ const FormOffer = () => {
               abilities={requiredAbilities}
               selectableAbilities={selectableAbilities}
               setSelectableAbilities={setSelectableAbilities}
-              label={"Habilidades Requeridas"}
+              label={"🛠️ Habilidades Requeridas"}
               placeholder={requiredAbilities.length === 0 && "Cargar Habilidades Requeridas" }
               required={requiredAbilities.length === 0}
             />
@@ -326,11 +345,11 @@ const FormOffer = () => {
               abilities={desiredAbilities}
               selectableAbilities={selectableAbilities}
               setSelectableAbilities={setSelectableAbilities}
-              label={"Habilidades Deseadas"}
+              label={"🛠️ Habilidades Deseadas"}
               placeholder={ desiredAbilities.length === 0 && "Cargar Habilidades Deseadas"}
             />
             
-            <button type="submit" className="submit-button" disabled={/*buttonDisable*/ !companyName && !workModality || loading}>
+            <button type="submit" className="submit-button" disabled={ buttonDisable || !companyName || !workModality || !title || !logo || (requiredAbilities.length === 0) ||loading}>
             {loading ? "Cargando..." : "Cargar oferta"}
             </button>
             </div>
