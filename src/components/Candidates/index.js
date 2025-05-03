@@ -21,12 +21,12 @@ import { updateOffer } from "../../services/OfferService";
 import Modal from "react-bootstrap/Modal";
 import { IoChatbubbleEllipsesOutline } from "react-icons/io5";
 import { GrDocumentPdf } from "react-icons/gr";
-
+import Swal from "sweetalert2";
+import matchBadoo from "../../logos/match-badoo.gif"
+import noLike from "../../logos/noLike.gif"
 const Candidates = () => {
   const { state } = useLocation();
   const currentLocation = useLocation();
-  const [processingCandidateId, setProcessingCandidateId] = useState(null);
-
   const [refresh, setRefresh] = useState(false);
   const [candidate, setCandidate] = useState(null);
   const [show, setShow] = useState(false);
@@ -56,13 +56,19 @@ const Candidates = () => {
     setShow(true);
     setCertifications(user.certifications);
     setCandidate(candidateSelected);
-
-    setRefresh(!refresh);
-
   }
 
   const handleMatch = async (element) => {
-    setProcessingCandidateId(element.uid);
+    Swal.fire({
+      title: 'Realizando match...',
+      text:`Estamos conectando a ${element.name} con la oferta.`,
+      imageUrl: matchBadoo, 
+      imageWidth: 150,
+      imageHeight: 150,
+      showConfirmButton: false,
+      allowOutsideClick: false,
+      background: "#e3f2fd",
+    });
     try {
       const user = await findUserByUid(element.uid);
       await pushNotification(user.token, state);
@@ -86,31 +92,95 @@ const Candidates = () => {
       };
 
       await updateUser(userUpdate);
+      Swal.fire({
+        title: "¡Match realizado!",
+        text: `Se conectó exitosamente a ${user.name} con la oferta.`,
+        icon: "success",
+        confirmButtonText: "Aceptar",
+        background: "#e3f2fd",
+        confirmButtonColor: "#1976d2",
+        customClass: {
+          popup: 'winork-popup',
+          confirmButton: 'winork-button'
+        }
+      });
       setRefresh(!refresh);
     } catch (error) {
       console.error("Error updating match:", error);
-    } finally {
-      setProcessingCandidateId(null);
-    }
+    } 
   };
-
+ 
 
 
   const handleNoMatch = async (element) => {
-    state.interestedUsers.forEach((interestedUser) => {
-      if (interestedUser.uid === element.uid) {
-        interestedUser.status = "no-match";
+    const result = await Swal.fire({
+      title: `¿Estás seguro que querés descartar a ${element.name}?`,
+      icon: "warning",
+      showCancelButton: true,
+      background: "#e3f2fd", 
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Sí, descartar",
+      cancelButtonText: "Cancelar"
+    });
+  
+    if (!result.isConfirmed) return;
+  
+    Swal.fire({
+      title: "Descartando...",
+      text: "Por favor, espere",
+      imageUrl: noLike, 
+      imageWidth: 150,
+      imageHeight: 150,
+      background: "#e3f2fd", 
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
       }
     });
-
-    const offerUpdate = {
-      id: state.id,
-      interestedUsers: state.interestedUsers,
-    };
-
-    await updateOffer(offerUpdate);
-    setRefresh(!refresh);
+  
+    try {
+      const user = await findUserByUid(element.uid);
+  
+      // Cambiar el estado del interesado a "no-match"
+      state.interestedUsers.forEach((interestedUser) => {
+        if (interestedUser.uid === element.uid) {
+          interestedUser.status = "no-match";
+        }
+      });
+  
+      // Actualizar la oferta con el nuevo estado
+      await updateOffer({
+        id: state.id,
+        interestedUsers: state.interestedUsers,
+      });
+  
+      // Remover la oferta del array offersMatch del usuario
+      const updatedOffersMatch = user.offersMatch.filter(
+        (offer) => offer.id !== state.id
+      );
+  
+      await updateUser({
+        id: user.id,
+        offersMatch: updatedOffersMatch,
+      });
+      Swal.fire({
+        title: "Descartado",
+        text: `Se descartó correctamente a ${element.name} de la oferta.`,
+        icon: "success",
+        confirmButtonText: "Aceptar", 
+        background: "#e3f2fd",       
+        confirmButtonColor: "#1976d2" 
+      });
+  
+      setRefresh(!refresh);
+    } catch (error) {
+      console.error("Error al descartar candidato:", error);
+    }
   };
+
+ 
+
   const customStyles = {
     table: {
       style: {
@@ -150,7 +220,7 @@ const Candidates = () => {
                 <img
                   src={row.imageProfile || "/placeholder.svg"}
                   alt="Profile"
-                  style={{ width: "2em", height: "2em", borderRadius: "50%" }}
+                  style={{ width: "2.0em", height: "2.0em", borderRadius: "50%" }}
                   onClick={() => handleShow(row)}
                 />
               ) : (
@@ -176,36 +246,14 @@ const Candidates = () => {
     },
     {
       name: "Estado",
-      cell: (row) => {
-        if (processingCandidateId === row.uid) {
-          return (
-            <div
-              style={{
-                backgroundColor: "rgba(52, 152, 219, 0.2)",
-                color: "#2980b9",
-                borderRadius: "16px",
-                padding: "8px 24px",
-                fontWeight: "500",
-                display: "inline-block",
-                width: "auto",
-                // maxWidth: "120px",
-                textAlign: "center",
-                fontSize: "0.85rem",
-                margin: "0 auto",
-              }}
-            >
-              Haciendo match...
-            </div>
-          )
-        }
-
+      cell: (row) => {  
         switch (row.status) {
           case "wait":
             return (
               <div
                 style={{
-                  backgroundColor: "#D9D9D9",
-                  color: "white",
+                  backgroundColor: "#cce0f4",
+                  color:"#1a3e5f",
                   borderRadius: "16px",
                   padding: "8px 24px",
                   fontWeight: "500",
@@ -277,7 +325,7 @@ const Candidates = () => {
           <Tooltip title="Descartar" placement="top" arrow>
             <IconButton
               className="transition-transform hover:scale-110 hover:bg-red-100 rounded-full p-1"
-              disabled={row.status === "no-match" || processingCandidateId === row.uid}
+              disabled={row.status === "no-match" /*|| processingCandidateId === row.uid*/}
             >
               <TiDeleteOutline
                 size="1.8em"
@@ -295,7 +343,7 @@ const Candidates = () => {
           <Tooltip title={row.status === "match" ? "Ya matcheado" : "Matchear"} placement="top" arrow>
             <IconButton
               className="transition-transform hover:scale-110 hover:bg-green-100 rounded-full p-1"
-              disabled={row.status === "match" || processingCandidateId === row.uid}
+              disabled={row.status === "match" }
             >
               <FaHeart
                 onClick={() => row.status !== "match" && handleMatch(row)}
@@ -396,14 +444,13 @@ const Candidates = () => {
 
           </ul>
         </aside>
-
         <section className="table-candidates">
           <DataTable
             columns={columnas}
             data={state?.interestedUsers}
             noDataComponent={"No hay candidatos interesados"}
             customStyles={customStyles}
-          // pagination 
+            //pagination 
           />
         </section>
       </div>
@@ -429,18 +476,15 @@ const Candidates = () => {
         </Modal.Header>
 
         <Modal.Body style={{ padding: 5 }}>
-          <div
-            className="d-flex align-items-center"
-            style={{ gap: "8px", width: "100%", padding: "5px 10px", display: "flex" }}
-          >
-            <span className="section-icon" style={{ fontSize: "18px" }}>📍</span>
+           <div className="d-flex align-items-center" style={{ gap: "8px", width: "100%", padding: "5px 10px", display: "flex" }}>
+             <span className="section-icon" style={{ fontSize: "18px" }}>📍</span> 
             <div className="d-flex align-items-center" style={{ gap: "5px", flexWrap: "wrap" }}>
               <div className="section-title" style={{ fontWeight: "bold" }}>Ubicación</div>
               <h5 className="candidate-modal__field-value" style={{ margin: 0, fontWeight: "normal" }}>
-                {candidate?.location || "ubicación no registrada."}
+                {candidate?.location?.name|| "ubicación no registrada."}
               </h5>
-            </div>
-          </div>
+            </div>  
+          </div> 
 
           <div
             className="d-flex align-items-center"
@@ -454,6 +498,7 @@ const Candidates = () => {
 
           </div>
           <div className="candidate-modal__abilities">
+            {console.log("abilitesss",candidate?.abilities)}
             {candidate?.abilities?.map((ability, index) => (
               <div key={index} className="candidate-modal__ability">
                 {ability}
@@ -461,7 +506,7 @@ const Candidates = () => {
             ))}
           </div>
 
-          <div className="d-flex align-items-start" style={{ gap: "10px", width: "100%", padding: "10px" }}>
+           <div className="d-flex align-items-start" style={{ gap: "10px", width: "100%", padding: "10px" }}>
             <span className="section-icon" style={{ fontSize: "18px" }}>📝</span>
             <div style={{ width: "100%" }}>
               <div className="section-title" style={{ fontWeight: "bold", fontSize: "16px", marginBottom: "5px" }}>
@@ -558,19 +603,9 @@ const Candidates = () => {
               <p>El candidato/a no cargo certificaciones en su perfil.</p>
             </section>
 
-          }
+          } 
 
-        </Modal.Body>
-
-
-        {/* <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Cerrar
-          </Button>
-          <Button variant="primary" onClick={handleClose}>
-            Contactar
-          </Button>
-        </Modal.Footer> */}
+        </Modal.Body>   
       </Modal>
 
 
