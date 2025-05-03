@@ -29,11 +29,10 @@ const OfferList = () => {
 
   useEffect(() => {
     const filtered = offers.filter((offer) => {
-      console.log("offer", offer)
       const title = offer.title?.toLowerCase() || "";
       const province = offer.province?.toLowerCase() || "";
       const workDay = offer.workDay?.toLowerCase() || "";
-      const workModality = offer.workModality?.toLowerCase() || "";
+      // const workModality = offer.workModality?.toLowerCase() || "";
       const matchesTitle = title.includes(searchTitle.toLowerCase());
       const matchesProvince =
         searchLocation === "seleccione" || province.includes(searchLocation.toLowerCase());
@@ -50,7 +49,6 @@ const OfferList = () => {
     const prov = await todasProvincias();
     setProvincias(prov);
   };
-  const dateOffer = new Date();
 
   useEffect(() => {
     findAllProvinces();
@@ -66,11 +64,11 @@ const OfferList = () => {
   return (
     <div >
       {loading ? (
-        
+
         <div className="skeleton-container">
           <SkeletonOfferScreen />
         </div>
-      
+
       ) : (
       <div className="container-offers">
             <div className="filters-container">
@@ -84,8 +82,8 @@ const OfferList = () => {
                   placeholder="Ej: Desarrollador Frontend"
                   value={searchTitle}
                   onChange={(e) => setSearchTitle(e.target.value)}
-                />           
-                
+                />
+
               </div>
 
               <div className="filter-item">
@@ -125,12 +123,12 @@ const OfferList = () => {
           </div>
 
           <div className="offer-list-container">
-            {offers.length == 0 ? (
+            {offers.length === 0 ? (
               <p>Usted aún no creo ninguna oferta laboral.</p>
             ) : filteredOffers.length > 0 ? (
               filteredOffers.map((offer) => (
                 <Offer
-                  key={offer.title}
+                  key={offer.id}
                   companyName={offer.companyName}
                   title={offer.title}
                   description={offer.description}
@@ -148,8 +146,8 @@ const OfferList = () => {
               <p>No se encontraron resultados de su búsqueda.</p>
             )}
           </div>
-      </div>      
-    
+      </div>
+
     )}
     </div>
 
