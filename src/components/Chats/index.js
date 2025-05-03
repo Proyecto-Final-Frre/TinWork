@@ -2,24 +2,18 @@ import React, { useEffect, useState } from "react";
 import "./style.css";
 import { BsArrowLeftSquare } from "react-icons/bs";
 import { IoIosPeople } from "react-icons/io";
-import { TbFileDescription } from "react-icons/tb";
-import { AiOutlineStar } from "react-icons/ai";
 import { IconContext } from "react-icons";
 import { BsPersonCircle } from "react-icons/bs";
 import DataTable from "react-data-table-component";
 import { Link, useLocation } from "react-router-dom";
 import {
   findUserByUid,
-  getUserAuthenticated,
-  pushNotification,
-  updateUser,
+  getUserAuthenticated
 } from "../../services/UserService";
-import { updateOffer } from "../../services/OfferService";
 import Modal from "react-bootstrap/Modal";
 import { IoChatbubbleEllipsesOutline } from "react-icons/io5";
 import { IoSend } from 'react-icons/io5';
 import { createMessage, listenForMessages } from "../../services/ChatService.js";
-import { useAuth } from "../../context/AuthContext.js";
 import { Card } from "react-bootstrap";
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
@@ -28,7 +22,6 @@ import IconButton from '@mui/material/IconButton';
 const Chats = () => {
   const location = useLocation(); 
   const state = location.state; 
-  const [refresh, setRefresh] = useState(false);
   const [candidate, setCandidate] = useState(null);
   const [show, setShow] = useState(false);
   const [message, setMessage] = useState('');
@@ -80,8 +73,6 @@ const Chats = () => {
     headRow: {
       style: {
         background: "linear-gradient(to bottom, rgba(220, 235, 255, 0.9), rgba(100, 160, 255, 0.9))",     
-        color: "#2D3748",
-
         borderBottom: "1px solid #E2E8F0", // Borde sutil para separar el header
         color: "#2D3748", // Color de texto oscuro para mejor legibilidad
         fontSize: "0.969rem",
@@ -89,83 +80,143 @@ const Chats = () => {
         minHeight: "48px",
       },
     },
+    rows: {
+      style: {
+        backgroundColor: '#F0F7FF', 
+      },
+
+    },
 
 
 
   };
 
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
+
+  const renderMessageWithLinks = (text) => {
+    const parts = text.split(urlRegex);
+
+    return parts.map((part, index) => {
+      if (urlRegex.test(part)) {
+        return (
+          <a
+            key={index}
+            href={part}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: 'blue', textDecoration: 'underline' }}
+          >
+            {part}
+          </a>
+        );
+      } else {
+        return <span key={index}>{part}</span>;
+      }
+    });
+  };
+
   const columnas = [
     {
-      center: true,
-      cell: (row) => (
-        <div>
-          <Tooltip title="Conversar" placement="left" arrow>
-            <IconButton>
-              {row.imageProfile ? (
-                <img
-                  src={row.imageProfile}
-                  alt="Profile"
-                  style={{ width: "2em", height: "2em", borderRadius: "50%" }}
-                  onClick={() => handleShow(row)}
-                />
-              ) : (
-                <BsPersonCircle
-                  size="2em"
-                  type="button"
-                  onClick={() => handleShow(row)}
-                />
-              )}
-            </IconButton>
-          </Tooltip>
-
-        </div>
-      ),
-    },
-    {
-      name: "Apellidos y nombres",
-      selector: (row) => row.name,
-      sortable: true,
-      width: "25%",
-    },
+      
+           center: true,
+           cell: (row) => (
+             <div>
+               <Tooltip title="Conversar" placement="left" arrow>
+                 <IconButton>
+                   {row.imageProfile ? (
+                     <img
+                       src={row.imageProfile || "/placeholder.svg"}
+                       alt="Profile"
+                       style={{ width: "2em", height: "2em", borderRadius: "50%" }}
+                       onClick={() => handleShow(row)}
+                     />
+                   ) : (
+                     <BsPersonCircle size="1.8em" type="button" onClick={() => handleShow(row)} />
+                   )}
+                 </IconButton>
+               </Tooltip>
+             </div>
+           ),
+         },
+         {
+           name: "Apellidos y nombres",
+           selector: (row) => row.name,
+           sortable: true,
+           width: "15%",
+         },
     {
       name: "Estado",
-      selector: (row) => {
+      cell: (row) => {       
         switch (row.status) {
           case "wait":
-            return "En Espera";
+            return (
+              <div
+                style={{
+                  backgroundColor: "#cce0f4",
+                  color:"#1a3e5f",
+                  borderRadius: "16px",
+                  padding: "8px 24px",
+                  fontWeight: "500",
+                  display: "inline-block",
+                  width: "auto",
+                  maxWidth: "120px",
+                  textAlign: "center",
+                  fontSize: "0.85rem",
+                  margin: "0 auto",
+                }}
+              >
+                En Espera 
+              </div>
+            )
           case "match":
-            return "Matcheado";
+            return (
+              <div
+                style={{
+                  backgroundColor: "rgba(63, 195, 128, 0.9)",
+                  color: "white",
+                  borderRadius: "16px",
+                  padding: "8px 24px",
+                  fontWeight: "500",
+                  display: "inline-block",
+                  width: "auto",
+                  maxWidth: "120px",
+                  textAlign: "center",
+                  fontSize: "0.85rem",
+                  margin: "0 auto",
+                }}
+              >
+                Matcheado
+              </div>
+            )
           case "no-match":
-            return "Descartado";
+            return (
+              <div
+                style={{
+                  backgroundColor: "rgba(242, 38, 19, 0.9)",
+                  color: "white",
+                  borderRadius: "16px",
+                  padding: "8px 24px",
+                  fontWeight: "500",
+                  display: "inline-block",
+                  width: "auto",
+                  maxWidth: "120px",
+                  textAlign: "center",
+                  fontSize: "0.85rem",
+                  margin: "0 auto",
+                }}
+              >
+                Descartado
+              </div>
+            )
           default:
-            return "none";
+            return "none"
         }
-      },
+      }
+      ,
       sortable: true,
       center: true,
       conditionalCellStyles: [
-        {
-          when: (row) => row.status === "match",
-          style: {
-            backgroundColor: "rgba(63, 195, 128, 0.9)",
-            color: "white",
-          },
-        },
-        {
-          when: (row) => row.status === "wait",
-
-          style: {
-            backgroundColor: "#D9D9D9",
-            color: "white",
-          },
-        },
-        {
-          when: (row) => row.status === "no-match",
-          style: {
-            backgroundColor: "rgba(242, 38, 19, 0.9)",
-            color: "white",
-          },
-        },
+       
       ],
     },
     {
@@ -181,7 +232,7 @@ const Chats = () => {
                 onClick={() => handleShow(row)}
                 size="2em"
                 type="button"
-
+                color="#2980b9"
               />
             </IconButton>
           </Tooltip>
@@ -265,8 +316,10 @@ const Chats = () => {
             width="50"
             height="50"
           />
-          <span className="text-muted mt-2">Candidato</span>
+          <span className="text-muted mt-2">Candidato a oferta laboral 💼</span>
           <h5 className="fw-bold">{candidate?.name}</h5>
+          <h5 className="candidate-modal__field-value">{candidate?.email}</h5>
+
         </Modal.Header>
 
         <Modal.Body className="modal-body">
@@ -281,7 +334,7 @@ const Chats = () => {
               >
                 <strong>{msg.senderName}</strong> {/* Muestra el nombre del remitente */}
 
-                {msg.content}
+             {renderMessageWithLinks(msg.content)}
               </div>
             ))}
           </div>

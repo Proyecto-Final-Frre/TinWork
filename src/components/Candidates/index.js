@@ -470,7 +470,7 @@ const Candidates = () => {
             width="80"
             height="80"
           />
-          <span className="text-muted mt-2">Candidato</span>
+          <span className="text-muted mt-2">Candidato a oferta laboral 💼</span>
           <h5 className="fw-bold">{candidate?.name}</h5>
           <h5 className="candidate-modal__field-value">{candidate?.email}</h5>
         </Modal.Header>
