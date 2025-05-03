@@ -53,7 +53,6 @@ export function AuthProvider({ children }) {
       if (currentUser) {      
         // Llama a la función findUserByUid
         const userData = await findUserByUid(currentUser.uid);
-        console.log("userDataaa",userData)
         if (userData) {
           const imageUrl = userData.imageProfile; // Accede a la URL de la imagen
           // Combina la información del usuario
