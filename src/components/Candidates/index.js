@@ -24,6 +24,7 @@ import { GrDocumentPdf } from "react-icons/gr";
 import Swal from "sweetalert2";
 import matchBadoo from "../../logos/match-badoo.gif"
 import noLike from "../../logos/noLike.gif"
+import searchCandidate from "../../logos/search_candidate.gif"
 const Candidates = () => {
   const { state } = useLocation();
   const currentLocation = useLocation();
@@ -190,7 +191,7 @@ const Candidates = () => {
     },
     headRow: {
       style: {
-        background: "linear-gradient(to bottom, rgba(220, 235, 255, 0.9), rgba(100, 160, 255, 0.9))",
+        background: "linear-gradient(to bottom, #F0F7FF, #C2DEFF)",
         borderBottom: "1px solid #E2E8F0",
         color: "#2D3748",
         fontSize: "0.969rem",
@@ -399,6 +400,19 @@ const Candidates = () => {
     setShow(!show)
   }
 
+  const NoDataComponent = () => (
+    <div style={{ textAlign: 'center', padding: '80px',width:"100%",}}>
+      <img
+        src={searchCandidate}
+        alt="No hay candidatos"
+        style={{ width: '150px', opacity: 0.6 }}
+      />
+      <p style={{ marginTop: '20px', fontSize: '20px', color: '#555' }}>
+        No hay candidatos interesados en esta oferta aún.
+      </p>
+    </div>
+  );
+
   return (
     <div className="main-container-father">
       <nav className="navbar navbar-expand-lg bg-primary navbar-small py-0">
@@ -445,13 +459,18 @@ const Candidates = () => {
           </ul>
         </aside>
         <section className="table-candidates">
+        {state?.interestedUsers?.length === 0 ? (
+          
+            <NoDataComponent />
+          
+        ) : (
           <DataTable
             columns={columnas}
             data={state?.interestedUsers}
-            noDataComponent={"No hay candidatos interesados"}
             customStyles={customStyles}
-            //pagination 
+            
           />
+        )}
         </section>
       </div>
       <Modal show={show} onHide={handleClose} centered size="lg" dialogClassName="custom-modal">
@@ -563,8 +582,8 @@ const Candidates = () => {
                   className="section-icon"
                   style={{
                     fontSize: "18px",
-                    marginRight: "8px", // Espacio entre el icono y el texto
-                    color: "#D32F2F", // Rojo más suave (puedes ajustar el color)
+                    marginRight: "8px", 
+                    color: "#D32F2F", 
                   }}
                 >
                   <GrDocumentPdf />
