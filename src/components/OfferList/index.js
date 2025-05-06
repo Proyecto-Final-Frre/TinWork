@@ -5,6 +5,7 @@ import { findOfferByUserUid } from "../../services/OfferService";
 import { useAuth } from "../../context/AuthContext";
 import { todasProvincias } from "../../services/ProvinceService";
 import SkeletonOfferScreen from "../SkeletonOffer/SkeletonOfferScreen"
+import maletinOffer from "../../logos/maletinTransparent.gif"
 const OfferList = () => {
   const { user } = useAuth();
 
@@ -60,7 +61,22 @@ const OfferList = () => {
     setSearchWorkDay('');
   };
 
-
+  const NoOffersComponent = () => (
+    <div style={{ textAlign: 'center',padding: '60px 20px', color: '#444' }}>
+      <img
+        src={maletinOffer}
+        alt="Sin ofertas laborales"
+        style={{ width: '180px', opacity: 0.7, marginBottom: '20px' }}
+      />
+      <h2 style={{ fontSize: '20px', fontWeight: 600 }}>
+        Usted aún no creó ninguna oferta laboral
+      </h2>
+      <p style={{ marginTop: '10px', fontSize: '16px', color: '#666' }}>
+        Comience a publicar ofertas para atraer candidatos interesados.
+      </p>
+    </div>
+  );
+  
   return (
     <div >
       {loading ? (
@@ -122,9 +138,9 @@ const OfferList = () => {
             </div>
           </div>
 
-          <div className="offer-list-container">
+          <div className={`${offers.length === 0 ? 'no-offers-center' : 'offer-list-container '}`}>
             {offers.length === 0 ? (
-              <p>Usted aún no creo ninguna oferta laboral.</p>
+              <NoOffersComponent />
             ) : filteredOffers.length > 0 ? (
               filteredOffers.map((offer) => (
                 <Offer
