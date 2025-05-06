@@ -17,6 +17,7 @@ import { createMessage, listenForMessages } from "../../services/ChatService.js"
 import { Card } from "react-bootstrap";
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
+import searchCandidate from "../../logos/search_candidate.gif"
 
 
 const Chats = () => {
@@ -41,10 +42,10 @@ const Chats = () => {
   }, []);
 
   useEffect(() => {
-    if (candidate?.uid) { // Asegúrate de que el candidato está seleccionado
-      const unsubscribe = listenForMessages(candidate.uid, setMessages); // Escuchar mensajes del chat de este candidato  
+    if (candidate?.uid) { 
+      const unsubscribe = listenForMessages(candidate.uid, setMessages);  
       return () => {
-        unsubscribe(); // Limpia la suscripción cuando se cierra la modal o cambia de candidato
+        unsubscribe(); 
       };
     }
   }, [candidate]);
@@ -73,8 +74,8 @@ const Chats = () => {
     headRow: {
       style: {
         background: "linear-gradient(to bottom, rgba(220, 235, 255, 0.9), rgba(100, 160, 255, 0.9))",     
-        borderBottom: "1px solid #E2E8F0", // Borde sutil para separar el header
-        color: "#2D3748", // Color de texto oscuro para mejor legibilidad
+        borderBottom: "1px solid #E2E8F0", 
+        color: "#2D3748", 
         fontSize: "0.969rem",
         fontWeight: "600",
         minHeight: "48px",
@@ -243,7 +244,18 @@ const Chats = () => {
   const handleClose=()=>{
     setShow(!show)
   }
-
+  const NoDataComponent = () => (
+      <div style={{ textAlign: 'center', padding: '80px',width:"100%",}}>
+        <img
+          src={searchCandidate}
+          alt="No hay candidatos"
+          style={{ width: '150px', opacity: 0.6 }}
+        />
+        <p style={{ marginTop: '20px', fontSize: '20px', color: '#555' }}>
+          No hay candidatos interesados en esta oferta aún.
+        </p>
+      </div>
+    );
   return (
     <div className="main-container-father" >
       <nav className="navbar navbar-expand-lg bg-primary navbar-small py-0">
@@ -265,7 +277,7 @@ const Chats = () => {
               <li className={`nav-item ${location.pathname === '/candidates' ? 'active' : ''}`}>
                 <Link
                   to="/candidates"
-                  state={state} // Pasar el estado aquí
+                  state={state} 
                   className="nav-link link-dark d-flex align-items-center flex-row"
                   style={{ display: 'flex', alignItems: 'center', gap: '8px', flexDirection: 'row' }}
 
@@ -293,13 +305,17 @@ const Chats = () => {
         </aside>
 
         <section className="table-candidates">
-          <DataTable
-            columns={columnas}
+        {state?.interestedUsers?.length === 0 ? (
+          
+          <NoDataComponent />
+        
+      ) : (
+        <DataTable
+          columns={columnas}
           data={state?.interestedUsers}
-            noDataComponent={"No hay candidatos interesados"}
-            customStyles={customStyles}
-
-          />
+          customStyles={customStyles}
+        />
+      )}
         </section>
       </div>
 
