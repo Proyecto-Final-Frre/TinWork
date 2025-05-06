@@ -1,8 +1,7 @@
 
-/* Header con banner azul */
 .profile-header {
   height: 120px;
-  background-color: #2E81FB;
+  background:linear-gradient(to bottom, #F0F7FF, #C2DEFF);
   position: relative;
 }
 
@@ -280,28 +279,15 @@
   border-color: #ccc;
 }
 
-/* Modal para cambiar foto */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
 
 .modal-content {
-  background-color: white;
+  background: var(--secondary);
   border-radius: 12px;
   padding: 24px;
   width: 90%;
   max-width: 400px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-}
+} 
 
 .modal-title {
   margin-top: 0;
@@ -309,7 +295,7 @@
   font-size: 20px;
   color: #333;
   text-align: center;
-}
+} 
 
 .modal-body {
   display: flex;

@@ -31,11 +31,14 @@ function ProfileReclutier() {
 
   //Modal
   const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleClose = () => {
+    setpview(null)
+    setShow(false);
+  }
+
 
   //Seleccion de sección de foto 
-  const [pview, setpview] = useState(false)
+  const [pview, setpview] = useState(null)
   const [isLoading,setIsLoading]=useState(false)
   const [loadingProfile, setLoadingProfile] = useState(false);
 
@@ -70,7 +73,7 @@ function ProfileReclutier() {
     try {
       await uploadBytes(imageRef, file);
       const url = await getDownloadURL(imageRef);
-      setPhotoUrl(url); // Actualiza el estado aquí
+      setPhotoUrl(url); 
   
       const dataProfile = {
         description,
@@ -131,7 +134,6 @@ function ProfileReclutier() {
       setIsLoading(false); 
     };
     getDatByUidUser();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const calculateCompletion = () => {
@@ -280,7 +282,7 @@ function ProfileReclutier() {
         </div>
         <Modal show={show} onHide={handleClose} centered>
           <Modal.Header closeButton>
-            <Modal.Title>Seleccione foto de perfil</Modal.Title>
+            {/* <Modal.Title>Seleccione foto de perfil</Modal.Title> */}
           </Modal.Header>
           <Modal.Body>
           <div className="custom-avatar-uploader">
@@ -290,8 +292,8 @@ function ProfileReclutier() {
               height={300}
               onCrop={onCrop}
               onClose={onClose}
-              style={{ display: "none" }} // Oculta el input de carga de archivos
-
+              style={{ display: "none" }} 
+              label={"Seleccione su foto de perfil"}
               
             />
             </div>
@@ -301,7 +303,7 @@ function ProfileReclutier() {
             <Button variant="secondary" onClick={handleClose}>
               Cancelar
             </Button>
-            <Button variant="primary" onClick={saveCropImage}>
+            <Button variant="primary" onClick={saveCropImage} disabled={!pview} >
               Subir
             </Button>
           </Modal.Footer>
