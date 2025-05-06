@@ -57,7 +57,7 @@ const FormOffer = () => {
     if (!file) return null;
     const storageRef = ref(storage, `logos/${file.name}`);
     const snapshot = await uploadBytes(storageRef, file);
-    return await getDownloadURL(snapshot.ref); // Devuelve la URL de descarga
+    return await getDownloadURL(snapshot.ref); 
   };
 
 
@@ -67,7 +67,7 @@ const FormOffer = () => {
     Swal.fire({
       title: 'Publicando oferta...',
       text: 'Estamos guardando los datos. Por favor, espere.',
-      imageUrl: maletinOffer, // Ícono personalizado o animación de TinWork
+      imageUrl: maletinOffer, 
       imageWidth: 100,
       imageHeight: 100,
       allowOutsideClick: false,

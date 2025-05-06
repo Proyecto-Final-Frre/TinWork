@@ -1,23 +1,10 @@
-
-.card-body {
-  padding: 24px;
-
-}
-
 .title-container {
   display: flex;
   align-items: center; /* Alinea verticalmente */
   justify-content: center; /* Centra el contenido */
   gap: 8px; /* Espaciado entre icono y texto */
 }
-.card-title {
-  font-size: 24px;
-  font-weight: 600;
-  margin-bottom: 24px;
-  color: #333;
-}
 
-/* Form styles */
 form {
   display: flex;
   flex-direction: column;
@@ -40,17 +27,7 @@ form {
   }
 }
 
-.three-columns {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 16px;
-}
 
-@media (min-width: 768px) {
-  .three-columns {
-    grid-template-columns: 1fr 1fr 1fr;
-  }
-}
 
 .form-group {
   display: flex;
@@ -92,25 +69,6 @@ textarea.form-control {
   margin-top: 4px;
 }
 
-/* Select styles */
-.form-select {
-  padding: 10px 12px;
-  border: 1px solid #e0e0e0;
-  border-radius: 6px;
-  background-color: #f8f9fa;
-  font-size: 14px;
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23555' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 12px center;
-  background-size: 16px;
-}
-
-.form-select:focus {
-  border-color: #4a90e2;
-  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.1);
-  outline: none;
-}
 
 /* Radio button styles */
 .radio-group {
