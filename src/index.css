@@ -1,4 +1,4 @@
-/* :root {
+:root {
   --primary: #2E81FB;
   --primary-hover: #1b6ef5;
   --secondary: linear-gradient(to bottom,rgba(245, 250, 255, 0.9), rgba(225, 240, 255, 0.9));
@@ -7,8 +7,8 @@
   --background: #FAFBFF;
   --text-primary: #2D3748;
   --text-secondary: #718096;
-  --border-color: #E2E8F0;
-} */
+  --border-color: #2E81FB;
+}
 
 .container-card {
   display: flex;
@@ -17,8 +17,8 @@
   width: 100%;
   padding: 20px;
   background: var(--secondary);
-  height: calc(100vh - 65px);
-  overflow-y: auto; /* Activa el scroll vertical si el contenido es grande */
+  height: calc(100vh - 60px);
+  overflow-y: auto; 
 }
 
 

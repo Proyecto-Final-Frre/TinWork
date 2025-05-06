@@ -36,24 +36,12 @@ const Header = () => {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
               <NavDropdown title="Ofertas" id="basic-nav-dropdown">
-                <NavDropdown.Item>
-                  <VscWand />{" "}
-                  <Link
-                    to={"/create-offer"}
-                    style={{ textDecoration: "none", color: "black" }}
-                  >
-                    Crear oferta
-                  </Link>
-                </NavDropdown.Item>
-                <NavDropdown.Item>
-                  <RiNewspaperLine />{" "}
-                  <Link
-                    to={"/offers"}
-                    style={{ textDecoration: "none", color: "black" }}
-                  >
-                    Ver ofertas activas
-                  </Link>
-                </NavDropdown.Item>
+              <NavDropdown.Item as={Link} to="/create-offer">
+                <VscWand /> Crear oferta
+              </NavDropdown.Item>
+              <NavDropdown.Item as={Link} to="/offers">
+                <RiNewspaperLine /> Ver ofertas activas
+              </NavDropdown.Item>
                 {/* <NavDropdown.Item>
                   <RiNewspaperFill />{" "}
                   <Link
@@ -73,10 +61,10 @@ const Header = () => {
               <Image
                 src={user.photoUrl ?? user.photoURL ?? "https://w7.pngwing.com/pngs/223/244/png-transparent-computer-icons-avatar-user-profile-avatar-heroes-rectangle-black.png"} 
                 roundedCircle
-                width="30" // Tamaño del avatar
+                width="30" 
                 height="30"
                 alt="User Avatar"
-                className="me-2" // Espaciado entre la imagen y el nombre
+                className="me-2" 
               />
               {user.displayName}
             </Dropdown.Toggle>
@@ -87,16 +75,7 @@ const Header = () => {
           </Dropdown>
         )}
         {!user ?
-          //  (
-          //   <Button
-          //     onClick={async () => {
-          //       navigate("/login");
-          //     }}
-          //     variant="primary"
-          //   >
-          //     Iniciar sesión
-          //   </Button>
-          // )
+       
           null
           : (
             <Button
