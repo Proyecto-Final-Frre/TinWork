@@ -25,7 +25,6 @@ const Offer = ({
     setReadMoreShown((prevState) => !prevState);
   };
 
-  //Obtener hace cuanto se publico la oferta, resta fecha de creación - fecha actual
   const dataOffer = intlFormatDistance(
     dateOffer.toDate(),
     new Date(),
@@ -78,12 +77,12 @@ const Offer = ({
         </button>
       )}
 
-      <div className="footer">
-        <BsPeople className="people" type="button" />
-        <button type="button" className="btn btn-link" onClick={obtnInteresed}>
-          <span>{interestedUsers?.length}</span> interesados
-        </button>
-      </div>
+        <div className="footer">
+          <button type="button" className="btn-link" onClick={obtnInteresed}>
+            <BsPeople className="people" />
+            <span>{interestedUsers?.length} interesados</span>
+          </button>
+        </div>
     </div>
   );
 };

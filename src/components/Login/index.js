@@ -55,7 +55,7 @@ function Login() {
       setError(error.message);
     }
   };
-  if (loading) return <SplashScreen />; // Opcional: muestra un loader mientras carga el estado de autenticación
+  if (loading) return <SplashScreen />; 
 
   return (
     <div className="principal-login">
