@@ -43,8 +43,12 @@ const Chats = () => {
 
   useEffect(() => {
     if (candidate?.uid) { 
-      const unsubscribe = listenForMessages(candidate.uid, setMessages);  
-      return () => {
+        const chatId = 
+        candidate.uid < user.uid
+        ? `${candidate.uid}_${user.uid}`
+        : `${user.uid}_${candidate.uid}`;
+      const unsubscribe = listenForMessages(chatId, setMessages);  
+            return () => {
         unsubscribe(); 
       };
     }
@@ -53,7 +57,11 @@ const Chats = () => {
 
   const handleSendMessage = async () => {
     if (message && user.name) {
-      await createMessage(message, candidate.uid, user.uid, user.name); // Se usa el UID del candidato  como "chatId"
+         const chatId = 
+        candidate.uid < user.uid
+        ? `${candidate.uid}_${user.uid}`
+        : `${user.uid}_${candidate.uid}`;
+      await createMessage(message, chatId, user.uid, user.name); // Se usa el UID del candidato  como "chatId"
       setMessage(''); // Limpiar el input del mensaje
     }
   };

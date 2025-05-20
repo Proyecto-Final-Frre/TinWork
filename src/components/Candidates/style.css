@@ -46,7 +46,7 @@
 .sidebar {
   width: 200px;
   background-color: white;
-  border-right: 2px solid "#E2E8F0";
+  border-right: 2px solid #E2E8F0;
   padding-top: 2rem;
   overflow-y: auto;
   flex-shrink: 0; 
