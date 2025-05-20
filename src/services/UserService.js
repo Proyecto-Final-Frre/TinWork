@@ -65,7 +65,8 @@ export const pushNotification = (token, offer) => {
   };
   return axios
     .post(
-      "https://tinwork-back.onrender.com",
+      //"http://localhost:5000",
+       "https://tinwork-back-fzsq.onrender.com",
       {
         token: token,
         title: "Un reclutador se intereso en ti.",
