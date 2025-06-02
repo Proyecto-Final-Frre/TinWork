@@ -6,6 +6,7 @@ import { useAuth } from "../../context/AuthContext";
 import { todasProvincias } from "../../services/ProvinceService";
 import SkeletonOfferScreen from "../SkeletonOffer/SkeletonOfferScreen"
 import maletinOffer from "../../logos/maletinTransparent.gif"
+import lupaOffer from "../../logos/lupaOffer.gif"
 const OfferList = () => {
   const { user } = useAuth();
 
@@ -76,6 +77,25 @@ const OfferList = () => {
       </p>
     </div>
   );
+
+    const NoOffersFound = () => (
+    <div style={{ textAlign: 'center',padding: '60px 20px', color: '#444' }}>
+      <img
+        src={lupaOffer}
+        alt="Sin ofertas laborales"
+        style={{ width: '180px', opacity: 0.7, marginBottom: '20px' }}
+      />
+      <h2 style={{ fontSize: '20px', fontWeight: 600 }}>
+        No se encontraron resultados que coincidan con tu búsqueda.
+      </h2>
+      <p style={{ marginTop: '10px', fontSize: '16px', color: '#666' }}>
+        Probá cambiando los criterios de búsqueda.
+      </p>
+    </div>
+  );
+
+
+   
   
   return (
     <div >
@@ -130,6 +150,10 @@ const OfferList = () => {
                   <option value="">Todas las jornadas</option>
                   <option value="jornada completa">Jornada Completa</option>
                   <option value="media jornada">Media Jornada</option>
+                   <option value="Pasantía">Pasantía</option>
+                  <option value="Freelance">Freelance</option>
+                  <option value="Temporario">Temporario</option>
+                  <option value="Práctica Profesional">Práctica Profesional</option>
                 </select>
               </div>
               <div className="filter-button">
@@ -138,7 +162,7 @@ const OfferList = () => {
             </div>
           </div>
 
-          <div className={`${offers.length === 0 ? 'no-offers-center' : 'offer-list-container '}`}>
+          <div className={`${offers.length === 0 ||  !filteredOffers.length > 0   ? 'no-offers-center' : 'offer-list-container '}`}>
             {offers.length === 0 ? (
               <NoOffersComponent />
             ) : filteredOffers.length > 0 ? (
@@ -159,7 +183,8 @@ const OfferList = () => {
                 />
               ))
             ) : (
-              <p>No se encontraron resultados de su búsqueda.</p>
+              // <p>No se encontraron resultados de su búsqueda.</p>
+              <NoOffersFound />
             )}
           </div>
       </div>

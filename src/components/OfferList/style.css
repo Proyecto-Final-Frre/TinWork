@@ -8,7 +8,7 @@
   padding: 20px;
   padding-top: 120px; /* Space at the top for filters */
   background:linear-gradient(to bottom, rgba(245, 250, 255, 0.9), rgba(225, 240, 255, 0.9));
-  height: calc(100vh - 60px);
+  height: calc(100vh - 58px);
   overflow-y: auto; /* Activa el scroll vertical si el contenido es grande */
 
 }
@@ -33,11 +33,13 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  background: linear-gradient(to bottom,rgba(245, 250, 255, 0.9), rgba(225, 240, 255, 0.9));
+  background: linear-gradient(to bottom,rgba(245, 250, 255, 0.9), rgba(225, 240, 255, 0.9)); 
   max-width: 1300px; /* Coincide con el max-width de las ofertas */
   width: 90%; /* Ajusta el ancho para que no se desborde */
   z-index: 10; /* Asegura que el filtro esté por encima de otros elementos */
 }
+
+
 
 .filters-title {
   font-size: 1.5rem;
@@ -75,12 +77,27 @@
 }
 
 .offer-list-container {
-  width: 100%;
-  max-width: 1300px; /* Coincide con el max-width de las ofertas */
-  margin: 8px auto 0; 
+  margin: 2% auto 0;
+  width: 95%;
+  max-width: 1300px;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 5px; 
+  grid-template-columns: repeat(3, minmax(0, 1fr)); /* siempre 3 columnas */
+  gap: 16px;
+  box-sizing: border-box;
+}
+
+/* Responsivo: si no entran 3, bajar a 2 columnas */
+@media (max-width: 900px) {
+  .offer-list-container {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Responsivo: si no entran 2, bajar a 1 columna */
+@media (max-width: 600px) {
+  .offer-list-container {
+    grid-template-columns: 1fr;
+  }
 }
 
 .no-offers-center {
