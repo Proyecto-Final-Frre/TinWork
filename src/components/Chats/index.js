@@ -52,7 +52,7 @@ const Chats = () => {
         unsubscribe(); 
       };
     }
-  }, [candidate]);
+  }, [candidate,user.uid]);
 
 
   const handleSendMessage = async () => {
@@ -349,13 +349,23 @@ const Chats = () => {
         <Modal.Body className="modal-body">
           {/* Zona de mensajes */}
           <div className="chat-messages" style={{ width: '100%', height: '300px', overflowY: 'scroll', padding: '10px', border: '1px solid #ccc' }}>
-            {messages.map((msg, index) => (
-
+            {
+            
+            messages.map((msg, index) => (
               <div
-                key={index}
-                className={`chat-message ${msg.senderUid === user.uid ? 'sent' : 'received'}`}
-                style={{ marginBottom: '10px', padding: '5px', backgroundColor: msg.senderUid === user.uid ? '#e0f7fa' : '#f0f0f0' }}
+              key={index}              
+              style={{ marginBottom: '10px', padding: '5px', backgroundColor: msg.senderId === user.uid ? 'rgba(225, 240, 255, 0.9)' : '#f0f0f0' }}
               >
+                  <img
+            src={msg.senderId === user.uid ? user?.imageProfile : candidate?.imageProfile  }
+            alt="avatar"
+            style={{
+              width: '35px',
+              height: '35px',
+              borderRadius: '50%',
+              marginRight: '8px'
+            }}
+          />
                 <strong>{msg.senderName}</strong> {/* Muestra el nombre del remitente */}
 
              {renderMessageWithLinks(msg.content)}
