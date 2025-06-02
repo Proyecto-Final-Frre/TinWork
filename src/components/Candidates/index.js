@@ -107,7 +107,13 @@ const Candidates = () => {
       });
       setRefresh(!refresh);
     } catch (error) {
-      console.error("Error updating match:", error);
+        Swal.fire({
+        title: "Error al hacer match",
+        text: "Ocurrió un problema al conectar con el candidato. Intenta nuevamente.",
+        icon: "error",
+        // background: "#fce4ec",
+        confirmButtonColor: "#d32f2f",
+      });
     } 
   };
  
