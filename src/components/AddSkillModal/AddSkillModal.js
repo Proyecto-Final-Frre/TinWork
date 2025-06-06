@@ -34,6 +34,7 @@ const AddSkillModal = ({
     setSkillName(initialSkillName);
   }, [initialSkillName]);
 
+
   useEffect(() => {
     const loadCategories = async () => {
       try {
@@ -45,7 +46,7 @@ const AddSkillModal = ({
     };
 
     loadCategories();
-  }, []);
+  }, [categories]);
 
   const handleSubmit = async () => {
     if (!skillName.trim()) return;
@@ -134,6 +135,7 @@ const AddSkillModal = ({
               fullWidth
               placeholder="Ej: React, Python, Gestión de proyectos..."
               required
+              autoFocus
             />
 
             <Box>
@@ -175,7 +177,7 @@ const AddSkillModal = ({
                   renderOption={(props, option) => {
                     const { key, ...rest } = props;
                     return (
-                      <Box component="li" key={key} {...rest}>
+                      <Box component="li" key={key} {...rest}>                  
                         {option.isNew ? (
                           <Box display="flex" alignItems="center" gap={1} sx={{ color: "primary.main", fontWeight: 500 }}>
                             <AddIcon fontSize="small" />

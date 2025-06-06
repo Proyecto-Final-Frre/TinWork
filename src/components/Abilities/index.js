@@ -16,12 +16,10 @@ const Abilities = ({
   selectableAbilities,
   setSelectableAbilities,
   label,
-  placeholder,
   required = false,
   categories,
   onAddCategory,
   excludedAbilities = [],
-  excludedLabel = "otra sección", // Label para mostrar en la alerta
 
 }) => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -136,11 +134,12 @@ isOptionEqualToValue={(option, value) =>
 }}
         onInputChange={(e, value) => setInputValue(value)}
         options={getFilteredOptions()}
-        getOptionLabel={(option) => option.title}
+        getOptionLabel={(option) => option.title} 
         renderTags={(tagValue, getTagProps) =>
-          tagValue.map((option, index) => (
-            <Chip key={option.title} label={option.title} {...getTagProps({ index })} />
-          ))
+          tagValue.map((option, index) => {
+            const { key, ...tagProps } = getTagProps({ index }); // Extrae `key`
+            return <Chip key={option.title} label={option.title} {...tagProps} />;
+          })
         }
         className="autocomplete"
         renderInput={(params) => (
@@ -148,9 +147,13 @@ isOptionEqualToValue={(option, value) =>
             {...params}
             required={required}
             label={label}
-            placeholder={placeholder}
+            placeholder={
+          "Selecciona o crea una habilidad"
+              }
           />
         )}
+
+        
         renderOption={(props, option) => {
           const { key, ...rest } = props;
           return (
@@ -176,7 +179,7 @@ isOptionEqualToValue={(option, value) =>
           setNewSkillName("");
         }}
         onAddSkill={handleAddSkill}
-        categories={categories}
+        // categories={categories}
         onAddCategory={handleAddCategory}
         initialSkillName={newSkillName}
       />
