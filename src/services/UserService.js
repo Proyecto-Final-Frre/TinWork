@@ -33,7 +33,7 @@ export const findUserByUid = async (uid) => {
   if (!querySnapshot.empty) {
     return { ...querySnapshot.docs[0].data(), id: querySnapshot.docs[0].id };
   } else {
-    console.log("No document corresponding to the query!");
+    // console.log("No document corresponding to the query!");
     return null;
   }
 };
@@ -49,11 +49,11 @@ export const createUser = async (user) => {
   if (!userSaved) {
     return addDoc(collection(db, "Users"), user)
       .then(() => {
-        console.log("Successfully created user!");
+        // console.log("Successfully created user!");
         return true;
       })
       .catch(() => {
-        console.log("Unsuccessfully created user!");
+        // console.log("Unsuccessfully created user!");
         throw new Error("Unsuccessfully created user!");
       });
   }

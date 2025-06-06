@@ -71,7 +71,7 @@ export function authentication() {
         .catch((error) => {
           // Handle Errors here.
           const errorCode = error.code;
-          console.log(errorCode);
+          // console.log(errorCode);
           const errorMessage = error.message;
           // The email of the user's account used.
           const email = error.customData.email;
@@ -102,7 +102,6 @@ export function logOut() {
 // Get a list of cities from your database
 export async function getUsersDB(db) {
   const usersCol = collection(db, "Users");
-  console.log(usersCol);
   const userSnapshot = await getDocs(usersCol);
   const userList = userSnapshot.docs.map((doc) => doc.data());
   return userList;

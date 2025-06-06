@@ -42,7 +42,6 @@ export const addSkill = async (skill) => {
 
 // Agrega una categoría nueva
 export const addCategory = async (categoryName) => {
-  console.log("🚀 ~ addCategory ~ categoryName:", categoryName)
   try {
     const docRef = await addDoc(collection(db, "Categories"), {
       name: categoryName,

@@ -29,10 +29,10 @@ export function AuthProvider({ children }) {
       displayName: name,
     })
       .then(() => {
-        console.log("profile updated successfully");
+        // console.log("profile updated successfully");
       })
       .catch((err) => {
-        console.log("error updating profile", err);
+        // console.log("error updating profile", err);
       });
     return auth;
   };

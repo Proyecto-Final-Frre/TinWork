@@ -51,7 +51,7 @@ function Login() {
       await loginWithGoogle();
       navigate("/offers");
     } catch (error) {
-      console.log("Error", error.message);
+      // console.log("Error", error.message);
       setError(error.message);
     }
   };

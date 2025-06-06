@@ -97,7 +97,7 @@ function ProfileReclutier() {
       location,
       url:photoUrl,
     };
-    console.log("🚀 ~ editProfile ~ dataProfile:", dataProfile)
+    // console.log("🚀 ~ editProfile ~ dataProfile:", dataProfile)
     updateProfile(dataProfile, user.uid);
     setBtnubi(false);
     setBtndescrip(false);
