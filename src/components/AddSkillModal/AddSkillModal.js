@@ -53,11 +53,11 @@ const AddSkillModal = ({
 
     try {
 
-      console.log("🚀 ~ handleSubmit ~ newCategoryName.trim():", newCategoryName.trim())
       if (newCategoryName.trim()) {
-        console.log("🚀 ~ handleSubmit ~ newCategoryName.trim():", newCategoryName.trim())
-        await addCategory(/*newCategoryName.trim()*/);
+        await addCategory(newCategoryName.trim());
+        onAddCategory(newCategoryName.trim())
         const nuevaCategoria = { name: newCategoryName.trim() };
+
         setCategories((prev) => [...prev, nuevaCategoria]);
 
       }
@@ -68,11 +68,11 @@ const AddSkillModal = ({
         category: selectedCategory.name || newCategoryName.trim(),
       };
 
-      await addSkill(/*newSkill*/);
+      await addSkill(newSkill);
       onAddSkill({ ...newSkill, isNew: false }); // Aseguramos el formato esperado
       handleClose();
     } catch (error) {
-      // console.error("Error en handleSubmit:", error);
+      console.error("Error en handleSubmit:", error);
       onClose()
       Swal.fire({
         title: "Error al agregar nueva habilidad",

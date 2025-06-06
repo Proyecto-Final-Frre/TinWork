@@ -9,7 +9,7 @@ import Swal from "sweetalert2";
 import { useAuth } from "../../context/AuthContext";
 import { MdOutlineFileUpload } from "react-icons/md";
 import { MdWork } from "react-icons/md";
-import { storage } from "../../config/firebase"; 
+import { storage } from "../../config/firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { GrLocation } from "react-icons/gr";
 import maletinOffer from "../../logos/maletinOffer.gif"
@@ -25,12 +25,12 @@ const FormOffer = () => {
   const [provincias, setProvincias] = useState([]);
   const [province, setProvince] = useState("Buenos Aires");
   const [buttonDisable, setButtonDisable] = useState(true);
-  const [companyName,setCompanyName] =useState("")
+  const [companyName, setCompanyName] = useState("")
   const [country, setCountry] = useState("Argentina")
   const [logoPreview, setLogoPreview] = useState(null)
   const [logo, setLogo] = useState(null)
   const [workModality, setWorkModality] = useState(null)
-  const [loading, setLoading]=useState(false)
+  const [loading, setLoading] = useState(false)
 
   const findAllProvinces = async () => {
     const prov = await todasProvincias();
@@ -57,7 +57,7 @@ const FormOffer = () => {
     if (!file) return null;
     const storageRef = ref(storage, `logos/${file.name}`);
     const snapshot = await uploadBytes(storageRef, file);
-    return await getDownloadURL(snapshot.ref); 
+    return await getDownloadURL(snapshot.ref);
   };
 
 
@@ -67,7 +67,7 @@ const FormOffer = () => {
     Swal.fire({
       title: 'Publicando oferta...',
       text: 'Estamos guardando los datos. Por favor, espere.',
-      imageUrl: maletinOffer, 
+      imageUrl: maletinOffer,
       imageWidth: 100,
       imageHeight: 100,
       allowOutsideClick: false,
@@ -83,7 +83,7 @@ const FormOffer = () => {
     let desiredAbilitiesStr = desiredAbilities.map((ability) => ability.title);
     let logoURL = null;
     if (logo) {
-      logoURL = await uploadLogo(logo); 
+      logoURL = await uploadLogo(logo);
     }
     const offer = {
       companyName,
@@ -127,7 +127,7 @@ const FormOffer = () => {
     });
   };
 
-  
+
 
 
   const handleLogoChange = (e) => {
@@ -142,18 +142,18 @@ const FormOffer = () => {
     }
   }
 
- 
+
   return (
     <div className="container-card">
-    <div className="card-principal">
-      <div className="card-body">
-      <div className="title-container">
-      <MdWork size={20} style={{ color: "#2E81FB" }} />
-      <h2 style={{ color: "#2E81FB" }} >Nueva oferta laboral</h2>
-    </div>
+      <div className="card-principal">
+        <div className="card-body">
+          <div className="title-container">
+            <MdWork size={20} style={{ color: "#2E81FB" }} />
+            <h2 style={{ color: "#2E81FB" }} >Nueva oferta laboral</h2>
+          </div>
 
-        <form onSubmit={store}>
-        <div className="form-row">
+          <form onSubmit={store}>
+            <div className="form-row">
               <div className="form-group">
                 <label htmlFor="company-name">🏢 Nombre de la empresa</label>
                 <input
@@ -166,7 +166,7 @@ const FormOffer = () => {
                   required
                 />
               </div>
-        <div className="form-group">
+              <div className="form-group">
                 <label htmlFor="company-logo">Logo de la empresa</label>
                 <div className="logo-upload-container">
                   {logoPreview ? (
@@ -186,7 +186,7 @@ const FormOffer = () => {
                   ) : (
                     <div className="logo-upload">
                       <label htmlFor="logo-input" className="logo-upload-label">
-                        <MdOutlineFileUpload  size={20}/>
+                        <MdOutlineFileUpload size={20} />
 
                         <span>Subir logo</span>
                       </label>
@@ -200,8 +200,8 @@ const FormOffer = () => {
                     </div>
                   )}
                 </div>
-              </div> 
-        </div>
+              </div>
+            </div>
 
             <div className="form-row">
               <div className="form-group">
@@ -277,7 +277,7 @@ const FormOffer = () => {
                   <option value="Práctica Profesional">Práctica Profesional</option>
                 </select>
               </div>
-              
+
               <div className="form-group">
                 <label htmlFor="country">🌎 País</label>
                 <select
@@ -289,11 +289,11 @@ const FormOffer = () => {
                 >
                   <option value="Argentina">Argentina</option>
                 </select>
-              </div>    
+              </div>
 
               <div className="form-group">
-                 
-                <label htmlFor="province"><GrLocation style={{ marginRight: '2px' }}  color={"red"} size={17} />Provincia</label>
+
+                <label htmlFor="province"><GrLocation style={{ marginRight: '2px' }} color={"red"} size={17} />Provincia</label>
                 <select
                   id="province"
                   className="form-select bg-light"
@@ -310,14 +310,14 @@ const FormOffer = () => {
                     </option>
                   ))}
                 </select>
-              </div>      
+              </div>
             </div>
-             
+
             <div className="form-group">
-            <div className="section-title">
+              <div className="section-title">
                 <span className="section-icon">📝</span> Descripción de la oferta
               </div>
-           
+
               <textarea
                 id="description"
                 rows={6}
@@ -332,35 +332,47 @@ const FormOffer = () => {
               />
               <div className="character-count">{description.length - 130}</div>
               <Abilities
-              addAbilities={addRequiredAbilities}
-              abilities={requiredAbilities}
-              selectableAbilities={selectableAbilities}
-              setSelectableAbilities={setSelectableAbilities}
-              label={"🛠️ Habilidades Requeridas"}
-              placeholder={requiredAbilities.length === 0 && "Cargar Habilidades Requeridas" }
-              required={requiredAbilities.length === 0}
-            />
-            <Abilities
-              addAbilities={addDesiredAbilities}
-              abilities={desiredAbilities}
-              selectableAbilities={selectableAbilities}
-              setSelectableAbilities={setSelectableAbilities}
-              label={"🛠️ Habilidades Deseadas"}
-              placeholder={ desiredAbilities.length === 0 && "Cargar Habilidades Deseadas"}
-            />
-            
-            <button type="submit" className="submit-button" disabled={ buttonDisable || !companyName || !workModality || !title || !logo || (requiredAbilities.length === 0) ||loading}>
-            {loading ? "Cargando..." : "Cargar oferta"}
-            </button>
-            </div>
-         
+                addAbilities={addRequiredAbilities}
+                abilities={requiredAbilities}
+                selectableAbilities={selectableAbilities.filter(
+                  (ability) => !desiredAbilities.some((req) =>
+                    req.title.toLowerCase() === ability.title.toLowerCase()
+                  )
+                )}
+                setSelectableAbilities={setSelectableAbilities}
+                label={"🛠️ Habilidades Requeridas"}
+                placeholder={requiredAbilities.length === 0 && "Cargar Habilidades Requeridas"}
+                required={requiredAbilities.length === 0}
+                excludedAbilities={desiredAbilities} // Pasar las DESEADAS como excluidas
 
-           
+              />
+              <Abilities
+                addAbilities={addDesiredAbilities}
+                abilities={desiredAbilities}
+                selectableAbilities={selectableAbilities.filter(
+                  (ability) => !requiredAbilities.some((req) =>
+                    req.title.toLowerCase() === ability.title.toLowerCase()
+                  )
+                )}
+                setSelectableAbilities={setSelectableAbilities}
+                label={"🛠️ Habilidades Deseadas"}
+                placeholder={desiredAbilities.length === 0 && "Cargar Habilidades Deseadas"}
+                excludedAbilities={requiredAbilities} // Pasar las requeridas como excluidas
+
+              />
+
+              <button type="submit" className="submit-button" disabled={buttonDisable || !companyName || !workModality || !title || !logo || (requiredAbilities.length === 0) || loading}>
+                {loading ? "Cargando..." : "Cargar oferta"}
+              </button>
+            </div>
+
+
+
           </form>
 
 
+        </div>
       </div>
-    </div>
     </div>
   );
 };

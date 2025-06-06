@@ -5,7 +5,7 @@ import {
   TextField,
   Autocomplete,
   Box,
-  Typography
+  Typography,
 } from "@mui/material";
 import { Add as AddIcon } from "@mui/icons-material";
 import AddSkillModal from "../AddSkillModal/AddSkillModal"; // Asegurate de importar correctamente
@@ -20,26 +20,49 @@ const Abilities = ({
   required = false,
   categories,
   onAddCategory,
+  excludedAbilities = [],
+  excludedLabel = "otra sección", // Label para mostrar en la alerta
+
 }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [newSkillName, setNewSkillName] = useState("");
-
-  const getFilteredOptions = () => {
+  
+ const getFilteredOptions = () => {
     const inputTrimmed = inputValue.trim().toLowerCase();
-    const exists = selectableAbilities.some(
+    
+    // Filtrar opciones que ya están seleccionadas en el componente actual
+    const availableOptions = selectableAbilities.filter(
+      (option) => !abilities.some((selected) => 
+        selected.title.toLowerCase() === option.title.toLowerCase()
+      )
+    );
+    
+    const exists = availableOptions.some(
       (opt) => opt.title.toLowerCase() === inputTrimmed
     );
 
-    let filtered = [...selectableAbilities];
+    let filtered = [...availableOptions];
 
+    // Solo agregar la opción "nueva" si no existe y hay texto
     if (inputTrimmed !== "" && !exists) {
-      filtered.push({ title: inputValue, isNew: true });
+      // Verificar que no esté ya seleccionada en este componente
+      const alreadySelectedHere = abilities.some(
+        (selected) => selected.title.toLowerCase() === inputTrimmed
+      );
+      
+      // Verificar que no esté en las habilidades excluidas (ej: requeridas cuando estamos en deseadas)
+      const isExcluded = excludedAbilities.some(
+        (excluded) => excluded.title.toLowerCase() === inputTrimmed
+      );
+      
+      if (!alreadySelectedHere && !isExcluded) {
+        filtered.push({ title: inputValue, isNew: true });
+      }
     }
 
     return filtered;
   };
-
  const handleAddSkill = (newSkill) => {
   const updatedSelectables = [...selectableAbilities];
 
@@ -60,7 +83,17 @@ const Abilities = ({
 
   setModalOpen(false);
   setNewSkillName("");
+  setInputValue(""); // Limpiar el input
+
 };
+
+const handleAddCategory = (newCategory) => {
+    // Asegurar que la nueva categoría se propague correctamente
+    if (onAddCategory) {
+      onAddCategory(newCategory);
+    }
+  };
+
 
   return (
     <Box>
@@ -68,16 +101,39 @@ const Abilities = ({
       freeSolo
         multiple
         value={abilities}
-        isOptionEqualToValue={(option, value) => option.title === value.title}
-        onChange={(_, newAbilities) => {
-              const last = newAbilities[newAbilities.length - 1];
-              if (last?.isNew) {
-                setNewSkillName(last.title);
-                setModalOpen(true);
-              } else {
-                addAbilities(newAbilities);
-              }
-  }}
+isOptionEqualToValue={(option, value) =>
+  option?.title?.toLowerCase?.() === value?.title?.toLowerCase?.()
+}      onChange={(_, newAbilities) => {
+  const last = newAbilities[newAbilities.length - 1];
+    if (newAbilities.length < abilities.length) {
+    addAbilities(newAbilities);
+    return;
+  }
+  // Solo permitir objetos con propiedad 'title'
+  if (!last || typeof last === "string" || !last.title) return;
+
+  const isExcluded = excludedAbilities.some(
+    (excluded) =>
+      excluded?.title?.toLowerCase?.() === last.title.toLowerCase()
+  );
+
+  if (isExcluded) return; // No dejar que se agregue si está en las excluidas
+
+  if (last?.isNew) {
+    setNewSkillName(last.title);
+    setModalOpen(true);
+  } else {
+    const uniqueAbilities = newAbilities.filter(
+      (ability, index, self) =>
+        index ===
+        self.findIndex(
+          (a) =>
+            a?.title?.toLowerCase?.() === ability.title.toLowerCase()
+        )
+    );
+    addAbilities(uniqueAbilities);
+  }
+}}
         onInputChange={(e, value) => setInputValue(value)}
         options={getFilteredOptions()}
         getOptionLabel={(option) => option.title}
@@ -121,7 +177,7 @@ const Abilities = ({
         }}
         onAddSkill={handleAddSkill}
         categories={categories}
-        onAddCategory={onAddCategory}
+        onAddCategory={handleAddCategory}
         initialSkillName={newSkillName}
       />
     </Box>
