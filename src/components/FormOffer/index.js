@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { createOffer } from "../../services/OfferService";
 import Abilities from "../Abilities";
 import "./style.css";
-import { findAll } from "../../services/AbilityService";
+import { findAll, findAllCategories } from "../../services/AbilityService";
 import { todasProvincias } from "../../services/ProvinceService";
 import Swal from "sweetalert2";
 import { useAuth } from "../../context/AuthContext";
@@ -18,6 +18,7 @@ const FormOffer = () => {
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [categories, setCategories] = useState([]);  
   const [selectableAbilities, setSelectableAbilities] = useState([]);
   const [requiredAbilities, setRequiredAbilities] = useState([]);
   const [desiredAbilities, setDesiredAbilities] = useState([]);
@@ -52,6 +53,29 @@ const FormOffer = () => {
     const result = await findAll();
     setSelectableAbilities(result);
   };
+
+    useEffect(() => {
+      const loadCategories = async () => {
+        try {
+          const fetchedCategories = await findAllCategories();
+          setCategories(fetchedCategories);
+        } catch (err) {
+          console.error("Error al cargar categorías:", err);
+        }
+      };
+  
+      loadCategories();
+    }, []);
+  
+  const handleAddCategory = (newCategoryName) => {
+  const exists = categories.some(
+    (cat) => cat.name.toLowerCase() === newCategoryName.toLowerCase()
+  );
+  if (!exists) {
+    const newCategory = { name: newCategoryName };
+    setCategories((prev) => [...prev, newCategory]);
+  }
+};
 
   const uploadLogo = async (file) => {
     if (!file) return null;
@@ -344,6 +368,8 @@ const FormOffer = () => {
                 placeholder={requiredAbilities.length === 0 && "Cargar Habilidades Requeridas"}
                 required={requiredAbilities.length === 0}
                 excludedAbilities={desiredAbilities} // Pasar las DESEADAS como excluidas
+                categories={categories}  
+                  onAddCategory={handleAddCategory}
 
               />
               <Abilities
@@ -358,6 +384,8 @@ const FormOffer = () => {
                 label={"🛠️ Habilidades Deseadas"}
                 placeholder={desiredAbilities.length === 0 && "Cargar Habilidades Deseadas"}
                 excludedAbilities={requiredAbilities} // Pasar las requeridas como excluidas
+                categories={categories}
+                onAddCategory={handleAddCategory}
 
               />
 

@@ -13,7 +13,7 @@ import {
   CircularProgress
 } from "@mui/material";
 import { Add as AddIcon } from "@mui/icons-material";
-import { findAllCategories, addSkill, addCategory } from "../../services/AbilityService"
+import { addSkill, addCategory } from "../../services/AbilityService"
 import Swal from "sweetalert2";
 
 const AddSkillModal = ({
@@ -21,12 +21,12 @@ const AddSkillModal = ({
   onAddSkill,
   onClose,
   onAddCategory,
+  categories,
   initialSkillName = "",
 }) => {
   const [skillName, setSkillName] = useState(initialSkillName);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [newCategoryName, setNewCategoryName] = useState("");
-  const [categories, setCategories] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -34,34 +34,17 @@ const AddSkillModal = ({
     setSkillName(initialSkillName);
   }, [initialSkillName]);
 
-
-  useEffect(() => {
-    const loadCategories = async () => {
-      try {
-        const fetchedCategories = await findAllCategories();
-        setCategories(fetchedCategories);
-      } catch (err) {
-        console.error("Error al cargar categorías:", err);
-      }
-    };
-
-    loadCategories();
-  }, [categories]);
-
+ 
   const handleSubmit = async () => {
     if (!skillName.trim()) return;
     setLoading(true);
 
     try {
 
-      if (newCategoryName.trim()) {
-        await addCategory(newCategoryName.trim());
-        onAddCategory(newCategoryName.trim())
-        const nuevaCategoria = { name: newCategoryName.trim() };
-
-        setCategories((prev) => [...prev, nuevaCategoria]);
-
-      }
+        if (newCategoryName.trim()) {
+    await addCategory(newCategoryName.trim()); 
+    onAddCategory(newCategoryName.trim());     
+  }
 
 
       const newSkill = {
