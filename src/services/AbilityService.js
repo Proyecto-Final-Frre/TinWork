@@ -9,25 +9,14 @@ export const findAll = async () => {
   return results;
 };
 
-
 export const findAllCategories = async () => {
-  try {
-    const querySnapshot = await getDocs(collection(db, "Categories"));
-    const results = [];
+  const querySnapshot = await getDocs(collection(db, "Categories"));
+  const results = [];
 
-    querySnapshot.forEach((doc) => {
-      results.push({
-        id: doc.id,     // Incluye el ID del documento si lo necesitás
-        ...doc.data(),
-      });
-    });
-
-    return results;
-  } catch (error) {
-    console.error("Error al traer las categorías:", error);
-    throw error;
-  }
+  querySnapshot.forEach((doc) => results.push(doc.data()));
+  return results;
 };
+
 
 export const addSkill = async (skill) => {
   try {
