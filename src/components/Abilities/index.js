@@ -62,29 +62,34 @@ const Abilities = ({
 
     return filtered;
   };
+
   const handleAddSkill = (newSkill) => {
-    const updatedSelectables = [...selectableAbilities];
+  const normalizedTitle = newSkill.title.toLowerCase();
 
-    const exists = updatedSelectables.some(
-      (skill) => skill.title.toLowerCase() === newSkill.title.toLowerCase()
-    );
+  // Asegurar que no esté en las opciones seleccionables
+  const existsInSelectables = selectableAbilities.some(
+    (skill) => skill.title.toLowerCase() === normalizedTitle
+  );
 
-    if (!exists) {
-      updatedSelectables.push(newSkill);
-      setSelectableAbilities(updatedSelectables);
-    }
+  // Si no existe, agregarla y avisar al padre
+  if (!existsInSelectables) {
+    const finalSkill = { ...newSkill }; 
+    setSelectableAbilities((prev) => [...prev, finalSkill]);
+  }
 
-    // Evitar duplicados en abilities
-    const updatedAbilities = [...abilities];
-    if (!updatedAbilities.some((s) => s.title.toLowerCase() === newSkill.title.toLowerCase())) {
-      addAbilities([...updatedAbilities, newSkill]);
-    }
+  // Asegurar que no esté duplicada en abilities
+  const existsInAbilities = abilities.some(
+    (s) => s.title.toLowerCase() === normalizedTitle
+  );
 
-    setModalOpen(false);
-    setNewSkillName("");
-    setInputValue(""); // Limpiar el input
+  if (!existsInAbilities) {
+    addAbilities((prev) => [...prev, newSkill]);
+  }
 
-  };
+  setModalOpen(false);
+  setNewSkillName("");
+  setInputValue("");
+};
 
   return (
     <Box>
@@ -94,7 +99,8 @@ const Abilities = ({
         value={abilities}
         isOptionEqualToValue={(option, value) =>
           option?.title?.toLowerCase?.() === value?.title?.toLowerCase?.()
-        } onChange={(_, newAbilities) => {
+        } 
+        onChange={(_, newAbilities) => {
           const last = newAbilities[newAbilities.length - 1];
           if (newAbilities.length < abilities.length) {
             addAbilities(newAbilities);
