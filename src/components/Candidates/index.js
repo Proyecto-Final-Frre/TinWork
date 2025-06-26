@@ -25,8 +25,10 @@ import Swal from "sweetalert2";
 import matchBadoo from "../../logos/match-badoo.gif"
 import noLike from "../../logos/noLike.gif"
 import searchCandidate from "../../logos/search_candidate.gif"
+import SplashScreen from "../Splash/SplashScreen";
 const Candidates = () => {
   const { state } = useLocation();
+  const [rows, setRows] = useState([])
   const currentLocation = useLocation();
   const [refresh, setRefresh] = useState(false);
   const [candidate, setCandidate] = useState(null);
@@ -34,6 +36,51 @@ const Candidates = () => {
   const [cvUrl, setCvUrl] = useState(candidate?.cv);
   const [certifications, setCertifications] = useState([])
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [loading, setLoading] = useState(false);
+
+  
+
+
+   useEffect(() => {
+    const loadCandidatesWithProfiles = async () => {
+    setLoading(true);
+        try {
+        const candidatesWithProfile = await Promise.all(
+          state.interestedUsers.map(async (candidate) => {
+            const user = await findUserByUid(candidate.uid);
+            return {
+              ...candidate,
+              imageProfile: user?.imageProfile || null,
+            };
+          })
+        );
+        setRows(candidatesWithProfile);
+      } catch (error) {
+        console.error("Error al cargar candidatos:", error);
+      } finally {
+       setLoading(false);
+      }
+    };
+
+    loadCandidatesWithProfiles();
+  }, []);
+
+
+  const loadCandidates = async () => {
+        try {
+        const candidatesWithProfile = await Promise.all(
+          state.interestedUsers.map(async (candidate) => {
+            const user = await findUserByUid(candidate.uid);
+            return {
+              ...candidate,
+              imageProfile: user?.imageProfile || null,
+            };
+          })
+        );
+        setRows(candidatesWithProfile);
+      } catch (error) {
+        console.error("Error al cargar candidatos:", error);
+      } } 
 
   const handlePrev = () => {
     setCurrentIndex((prevIndex) =>
@@ -47,16 +94,16 @@ const Candidates = () => {
     );
   };
 
-  useEffect(() => {
-    setCvUrl(candidate?.cv);
-  }, [candidate]);
 
 
   const handleShow = async (candidateSelected) => {
     const user = await findUserByUid(candidateSelected.uid);
+    console.log("🚀 ~ handleShow ~ user:", user)
     setShow(true);
     setCertifications(user.certifications);
-    setCandidate(candidateSelected);
+    setCvUrl(user.cv)
+    setCandidate(user);
+    loadCandidates()
   }
 
   const handleMatch = async (element) => {
@@ -106,6 +153,11 @@ const Candidates = () => {
         }
       });
       setRefresh(!refresh);
+      setRows(prevRows =>
+      prevRows.map(row =>
+        row.uid === element.uid ? { ...row, status: 'match' } : row
+      )
+);
     } catch (error) {
         Swal.fire({
         title: "Error al hacer match",
@@ -181,6 +233,11 @@ const Candidates = () => {
       });
   
       setRefresh(!refresh);
+      setRows(prevRows =>
+  prevRows.map(row =>
+    row.uid === element.uid ? { ...row, status: 'no-match' } : row
+  )
+);
     } catch (error) {
       console.error("Error al descartar candidato:", error);
     }
@@ -465,14 +522,26 @@ const Candidates = () => {
           </ul>
         </aside>
         <section className="table-candidates">
-        {state?.interestedUsers?.length === 0 ? (
+        {loading ? (
+          <div className="d-flex justify-content-center align-items-center" style={{ height: "300px" }}>
+            <div className="spinner-border text-primary" role="status">
+              <span className="visually-hidden">Cargando...</span>
+            </div>
+          </div>
+        )
+              
+              
+        
+        :
+        
+        rows.length === 0 ? (
           
             <NoDataComponent />
           
         ) : (
           <DataTable
             columns={columnas}
-            data={state?.interestedUsers}
+            data={rows}
             customStyles={customStyles}
             
           />
@@ -523,7 +592,6 @@ const Candidates = () => {
 
           </div>
           <div className="candidate-modal__abilities">
-            {console.log("abilitesss",candidate?.abilities)}
             {candidate?.abilities?.map((ability, index) => (
               <div key={index} className="candidate-modal__ability">
                 {ability}
