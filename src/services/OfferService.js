@@ -22,6 +22,7 @@ export const createOffer = async (offer) => {
     country: offer.country,
     dateOffer: offer.dateOffer,
     workModality:offer.workModality,
+    expirationDate:offer.expirationDate,
     logoURL:offer.logoURL,
     uid: offer.uid,
     interestedUsers: [],

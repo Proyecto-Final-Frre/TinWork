@@ -166,7 +166,22 @@ const OfferList = () => {
             {offers.length === 0 ? (
               <NoOffersComponent />
             ) : filteredOffers.length > 0 ? (
-              filteredOffers.map((offer) => (
+              filteredOffers
+   .filter((offer) => {
+    if (!offer.expirationDate) return true;
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const cleanedDate = offer.expirationDate.trim(); // limpiamos espacios
+    const [year, month, day] = cleanedDate.split("-");
+    const expDate = new Date(+year, +month - 1, +day);
+    console.log("🚀 ~ .filter ~ expDate:", expDate)
+    expDate.setHours(0, 0, 0, 0);
+
+    return expDate >= today;
+  })
+              .map((offer) => (
                 <Offer
                   key={offer.id}
                   companyName={offer.companyName}
@@ -180,6 +195,7 @@ const OfferList = () => {
                   offerObj={offer}
                   workModality={offer.workModality}
                   companyLogo={offer.logoURL}
+                  expirationDate={offer.expirationDate}
                 />
               ))
             ) : (

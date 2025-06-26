@@ -32,7 +32,7 @@ const FormOffer = () => {
   const [logo, setLogo] = useState(null)
   const [workModality, setWorkModality] = useState(null)
   const [loading, setLoading] = useState(false)
-
+  const [expirationDate,setExpirationDate] = useState(false)
   const findAllProvinces = async () => {
     const prov = await todasProvincias();
     setProvincias(prov);
@@ -121,6 +121,7 @@ const FormOffer = () => {
       dateOffer,
       logoURL,
       workModality,
+      expirationDate,
       uid: user.uid,
     };
     createOffer(offer).then(() => {
@@ -190,6 +191,21 @@ const FormOffer = () => {
                   required
                 />
               </div>
+                 <div className="form-group">
+                <label htmlFor="expiration-date">🗓️ Fecha de caducidad</label>
+                <input
+                  type="date"
+                  id="expiration-date"
+                  className="form-control bg-light"
+                  value={expirationDate}
+                  onChange={(e) => setExpirationDate(e.target.value)}
+                  min={new Date().toISOString().split("T")[0]} // No permite fechas pasadas
+                  required
+                />
+                {/* <small className="text-muted">
+                  Indica hasta qué día estará activa esta oferta para los candidatos.
+                </small> */}
+              </div>
               <div className="form-group">
                 <label htmlFor="company-logo">Logo de la empresa</label>
                 <div className="logo-upload-container">
@@ -240,6 +256,7 @@ const FormOffer = () => {
                   required
                 />
               </div>
+           
               <div className="form-group">
                 <label>Modalidad de trabajo</label>
                 <div className="radio-group">
@@ -389,7 +406,7 @@ const FormOffer = () => {
 
               />
 
-              <button type="submit" className="submit-button" disabled={buttonDisable || !companyName || !workModality || !title || !logo || (requiredAbilities.length === 0) || loading}>
+              <button type="submit" className="submit-button" disabled={buttonDisable || !companyName || !expirationDate || !workModality || !title || !logo || (requiredAbilities.length === 0) || loading}>
                 {loading ? "Cargando..." : "Cargar oferta"}
               </button>
             </div>

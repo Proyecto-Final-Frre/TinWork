@@ -6,24 +6,32 @@
 }
 
 .company-header {
-    display: flex;
-    align-items: center; /* Alineación vertical */
-    padding: 1%;
-    border-bottom: 1px solid #b2d3f4;
-    border-radius: 8px;
-    width: 100%;   
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  border-bottom: 1px solid #b2d3f4;
+  border-radius: 8px;
+  width: 100%;
 }
-
 .logo-image {
     width: 50px;
     height: 50px;
     border-radius: 8px;
     object-fit: cover;
-    margin-right: -55px; /* Espacio entre el logo y el nombre */
 }
 
+.company-info {
+    display: flex;
+  align-items: center;
+  flex: 1; /* Ocupa el espacio disponible */
+  min-width: 0; /* Previene overflow del texto */
+}
+
+
+
  .company-name {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     font-weight: 700;
     font-family: 'Montserrat', sans-serif;
     color: #2E81FB; 
@@ -35,7 +43,12 @@
 }
 
 
-
+.expiration-info {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.9rem;
+}
 .offer-header {
     border-bottom: 1px solid #b2d3f4;
     padding: 1%;
@@ -166,3 +179,58 @@
     background:var(--primary-hover)
  
   }
+
+  .expiration-badge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-left: auto;
+  white-space: nowrap;
+}
+.expiration-badge.expired {
+  background-color: #fee2e2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+
+.expiration-badge.expires-today {
+  background-color: #fef3c7;
+  color: #d97706;
+  border: 1px solid #fed7aa;
+  animation: pulse 2s infinite;
+}
+
+.expiration-badge.expires-soon {
+  background-color: #fef3c7;
+  color: #d97706;
+  border: 1px solid #fed7aa;
+}
+
+.expiration-badge.expires-week {
+  background-color: #dbeafe;
+  color: #2563eb;
+  border: 1px solid #bfdbfe;
+}
+
+.expiration-badge.expires-normal {
+  background-color: #f0f9ff;
+  color: #0369a1;
+  border: 1px solid #e0f2fe;
+}
+
+/* Animación para ofertas que vencen hoy */
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.02);
+  }
+}
