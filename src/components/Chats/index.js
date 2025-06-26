@@ -28,7 +28,33 @@ const Chats = () => {
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
   const [user, setUser] = useState('');
-
+  const [rows, setRows] = useState([])
+  const [loading, setLoading] = useState(false);
+  
+    useEffect(() => {
+      const loadCandidatesWithProfiles = async () => {
+      setLoading(true);
+          try {
+          const candidatesWithProfile = await Promise.all(
+            state.interestedUsers.map(async (candidate) => {
+              const user = await findUserByUid(candidate.uid);
+              return {
+                ...candidate,
+                imageProfile: user?.imageProfile || null,
+              };
+            })
+          );
+          setRows(candidatesWithProfile);
+        } catch (error) {
+          console.error("Error al cargar candidatos:", error);
+        } finally {
+         setLoading(false);
+        }
+      };
+  
+      loadCandidatesWithProfiles();
+    }, []);
+  
   useEffect(() => {
     // Obtener el usuario autenticado
     const getUser = async () => {
@@ -313,14 +339,24 @@ const Chats = () => {
         </aside>
 
         <section className="table-candidates">
-        {state?.interestedUsers?.length === 0 ? (
+        {
+             loading ? (
+          <div className="d-flex justify-content-center align-items-center" style={{ height: "300px" }}>
+            <div className="spinner-border text-primary" role="status">
+              <span className="visually-hidden">Cargando...</span>
+            </div>
+          </div>
+        )
+              
+              :
+        rows.length === 0 ? (
           
           <NoDataComponent />
         
       ) : (
         <DataTable
           columns={columnas}
-          data={state?.interestedUsers}
+          data={rows}
           customStyles={customStyles}
         />
       )}
