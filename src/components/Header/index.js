@@ -7,6 +7,8 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import "./style.css";
 import { VscWand } from "react-icons/vsc";
 import { RiNewspaperLine } from "react-icons/ri";
+import { RiNewspaperFill } from "react-icons/ri";
+
 import { logout } from "../../services/UserService";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -42,7 +44,7 @@ const Header = () => {
               <NavDropdown.Item as={Link} to="/offers">
                 <RiNewspaperLine /> Ver ofertas activas
               </NavDropdown.Item>
-                {/* <NavDropdown.Item>
+                <NavDropdown.Item>
                   <RiNewspaperFill />{" "}
                   <Link
                     to={"/offers"}
@@ -50,7 +52,7 @@ const Header = () => {
                   >
                     Ver ofertas inactivas
                   </Link>
-                </NavDropdown.Item> */}
+                </NavDropdown.Item>
               </NavDropdown>
             </Nav>
           </Navbar.Collapse>
