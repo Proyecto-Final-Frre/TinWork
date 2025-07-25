@@ -78,6 +78,27 @@ export const pushNotification = (token, offer) => {
     .catch((err) => console.log("error", err));
 };
 
+export const pushNotificationUnskilledCandidate= (token, offer) => {
+
+  const headers = {
+    "Content-Type": "application/json",
+  };
+
+  return axios
+    .post(
+      // "http://localhost:5000",
+      "https://tinwork-back-fzsq.onrender.com",
+      {
+        token: token,
+        title: "Ya no coincidís con una oferta laboral",
+        body: `El reclutador actualizó los requisitos del puesto "${offer.title}" y ya no coincide con tus habilidades.`,
+      },
+      headers
+    )
+    .then(() => console.log("Notificación de descarte enviada"))
+    .catch((err) => console.log("Error al enviar notificación", err));
+};
+
 export const updateProfile = async (dataProfile, uid) => {
   const q = query(collection(db, "Users"), where("uid", "==", uid), limit(1));
 

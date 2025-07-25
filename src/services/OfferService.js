@@ -7,6 +7,7 @@ import {
   doc as docFirebase,
   updateDoc,
   onSnapshot,
+  getDoc
 } from "firebase/firestore";
 import { db } from "../config/firebase.js";
 
@@ -54,4 +55,22 @@ export const findOfferByUserUid = (uid, setOffers) => {
   });
 
   return unsubscribe;
+};
+
+
+export const findByOfferUid = async (offerId) => {
+  try {
+    const offerRef = docFirebase(db, "Offers", offerId);
+    const offerSnap = await getDoc(offerRef);
+    
+    if (offerSnap.exists()) {
+      return { ...offerSnap.data(), id: offerSnap.id };
+    } else {
+      console.log("No se encontró la oferta con ID:", offerId);
+      return null;
+    }
+  } catch (error) {
+    console.error("Error al buscar la oferta:", error);
+    throw error;
+  }
 };
