@@ -43,32 +43,29 @@
 }
 
 
+.offer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #b2d3f4;
+  padding: 1%;
+  position: relative;
+}
+
+.offer-name {
+  flex: 1;
+  text-align: center;
+  margin: 0;
+  font-weight: bold;
+}
+
 .expiration-info {
   display: flex;
   align-items: center;
   gap: 4px;
   font-size: 0.9rem;
+  white-space: nowrap;
 }
-.offer-header {
-    border-bottom: 1px solid #b2d3f4;
-    padding: 1%;
-    display: flex;
-    flex-direction: row;
-    align-items: flex-end;
-    justify-content: center;
-}
-
-.offer-name {
-    font-size: 1.5rem;
-    font-weight: 500;
-    font-family: 'Roboto', sans-serif;
-    color: #000000;
-    margin: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
 .search {
     margin: 0;
     font-size: 35px;
@@ -234,3 +231,72 @@
     transform: scale(1.02);
   }
 }
+
+
+/* Required Abilities Styling */
+.required-abilities {
+  margin-top: 12px;
+  margin-bottom: 16px;
+  padding-left: 5%;
+  /* background-color: #d97706;  */
+}
+
+.abilities-container {
+  display: flex;
+  flex-direction: row; /* Asegura que sea en fila */
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.ability-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 14px;
+  background-color: #0d6efd;
+  color: white;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  cursor: default;
+  flex-shrink: 0; /* Evita que se compriman */
+}
+
+.ability-tag:hover {
+  background-color: #0056b3;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(25, 118, 210, 0.3);
+}
+
+.ability-tag.remaining-count {
+  background-color: white;
+  color: #1976d2;
+  border: 1.5px solid #1976d2;
+  font-weight: 600;
+  min-width: 40px;
+  justify-content: center;
+}
+
+.ability-tag.remaining-count:hover {
+  background-color: #f5f5f5;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(25, 118, 210, 0.2);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .abilities-container {
+    gap: 6px;
+  }
+  
+  .ability-tag {
+    padding: 5px 12px;
+    font-size: 13px;
+  }
+}
+
+
