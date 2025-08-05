@@ -60,7 +60,7 @@ function Register() {
             setError("Su contraseña debe tener al menos 6 caracteres");
           }
           if (error.code === "auth/email-already-in-use") {
-            setError("El email ingresado ya esta en uso");
+            setError("El email ingresado ya está en uso");
           }
         }
         finally {

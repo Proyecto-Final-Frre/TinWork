@@ -9,6 +9,9 @@ import Register from "./components/Register";
 import Candidates from "./components/Candidates";
 import ProfileReclutier from "./components/ProfileReclutier";
 import Chats from "./components/Chats";
+import EditOfferForm from "./components/EditOfferForm";
+import OfferListDisabled from "./components/OfferListDisabled";
+import ActivateOfferForm from "./components/ActivateOfferForm";
 function App() {
   return (
     <AuthProvider>
@@ -31,6 +34,17 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route path="/edit-offer/:offerId" 
+                  element={ <ProtectedRoute>
+                    <EditOfferForm />
+                    </ProtectedRoute>} />
+
+        <Route path="/activate-offer/:offerId" 
+              element={ 
+              <ProtectedRoute>
+                <ActivateOfferForm />
+              </ProtectedRoute>} />
+
           <Route
             path="/candidates"
             element={
@@ -51,6 +65,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/" element={<Login />} />
           <Route path="/offers" element={<OfferList />} />
+          <Route path="/offersDisabled" element={<OfferListDisabled />} />
+
           <Route path="/profile" element={
           <ProtectedRoute>
             <ProfileReclutier/>
