@@ -28,6 +28,7 @@ import searchCandidate from "../../logos/search_candidate.gif"
 import SplashScreen from "../Splash/SplashScreen";
 const Candidates = () => {
   const { state } = useLocation();
+  console.log("🚀 ~ Candidates ~ state:", state)
   const [rows, setRows] = useState([])
   const currentLocation = useLocation();
   const [refresh, setRefresh] = useState(false);
@@ -39,7 +40,11 @@ const Candidates = () => {
   const [loading, setLoading] = useState(false);
 
   
-
+  const calcularAptitudesCoincidentes = (candidato, habilidadesOferta) => { 
+  const habilidadesUsuario = candidato.abilities || [];
+  const coincidentes = habilidadesUsuario.filter(hab => habilidadesOferta.includes(hab));
+  return coincidentes.length;
+};
 
    useEffect(() => {
     const loadCandidatesWithProfiles = async () => {
@@ -48,12 +53,17 @@ const Candidates = () => {
         const candidatesWithProfile = await Promise.all(
           state.interestedUsers.map(async (candidate) => {
             const user = await findUserByUid(candidate.uid);
+            console.log("🚀 ~ loadCandidatesWithProfiles ~ user:", user)
             return {
               ...candidate,
               imageProfile: user?.imageProfile || null,
+                        aptcoincidentes: calcularAptitudesCoincidentes(user, state.requiredAbilities)
+
             };
           })
         );
+        
+
         setRows(candidatesWithProfile);
       } catch (error) {
         console.error("Error al cargar candidatos:", error);
@@ -74,6 +84,7 @@ const Candidates = () => {
             return {
               ...candidate,
               imageProfile: user?.imageProfile || null,
+               aptcoincidentes: calcularAptitudesCoincidentes(user, state.requiredAbilities)
             };
           })
         );
@@ -441,23 +452,23 @@ const Candidates = () => {
     },
   ]
 
-  let count = 0;
-  const abilitiesOffer = state?.requiredAbilities;
-  state?.interestedUsers.map((e) => {
-    const abilitiesUser = e.abilities;
-    abilitiesUser.forEach((ability) => {
-      if (abilitiesOffer.includes(ability)) {
-        count++;
-      }
-    });
-    const apt = {
-      aptcoincidentes: count,
-    };
+  // let count = 0;
+  // const abilitiesOffer = state?.requiredAbilities;
+  // state?.interestedUsers.map((e) => {
+  //   const abilitiesUser = e.abilities;
+  //   abilitiesUser.forEach((ability) => {
+  //     if (abilitiesOffer.includes(ability)) {
+  //       count++;
+  //     }
+  //   });
+  //   const apt = {
+  //     aptcoincidentes: count,
+  //   };
 
-    Object.assign(e, apt);
-    count = 0;
-    return true
-  });
+  //   Object.assign(e, apt);
+  //   count = 0;
+  //   return true
+  // });
 
   const handleClose = () => {
     setShow(!show)
