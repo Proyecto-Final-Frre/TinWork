@@ -1,0 +1,9 @@
+select.no-arrow:disabled {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: none !important;
+  background-color: #e9ecef; /* misma que .bg-light */
+  color: #6c757d; /* un gris tipo texto deshabilitado */
+  cursor: not-allowed;
+}
