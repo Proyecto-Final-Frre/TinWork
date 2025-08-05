@@ -7,6 +7,7 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   updateProfile,
+  sendPasswordResetEmail
 } from "firebase/auth";
 import { auth } from "../config/firebase";
 import { findUserByUid } from "../services/UserService";
@@ -18,6 +19,7 @@ export const useAuth = () => {
   if (!context) throw new Error("There is no Auth provider");
   return context;
 };
+
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
@@ -45,6 +47,16 @@ export function AuthProvider({ children }) {
     const googleProvider = new GoogleAuthProvider();
     return signInWithPopup(auth, googleProvider);
   };
+
+  // Nueva función para recuperación de contraseña
+const resetPassword = async (email) => {
+  try {
+    auth.languageCode = 'es';
+    await sendPasswordResetEmail(auth, email.trim());
+  } catch (error) {
+    console.error("❌ Error al enviar correo:", error.code, error.message);
+  }
+};
 
   const logout = () => signOut(auth);
 
@@ -83,7 +95,8 @@ export function AuthProvider({ children }) {
         logout,
         loading,
         loginWithGoogle,
-        updateUserProfile 
+        updateUserProfile,
+        resetPassword 
       }}
     >
       {children}
