@@ -1,12 +1,17 @@
 import { useEffect, useState } from "react";
 import Offer from "../Offer";
-// import "./style.css";
+import "./style.css";
 import { findOfferByUserUid } from "../../services/OfferService";
 import { useAuth } from "../../context/AuthContext";
 import { todasProvincias } from "../../services/ProvinceService";
 import SkeletonOfferScreen from "../SkeletonOffer/SkeletonOfferScreen"
 import maletinOffer from "../../logos/maletinTransparent.gif"
 import lupaOffer from "../../logos/lupaOffer.gif"
+import { MdOutlineWorkHistory } from "react-icons/md";
+// import { Md2AlertCircleOutline } from "react-icons/md"
+import { GrAlert } from "react-icons/gr";
+import { GrCircleAlert } from "react-icons/gr";
+
 const OfferListDisabled = () => {
   const { user } = useAuth();
 
@@ -30,11 +35,28 @@ const OfferListDisabled = () => {
   }, [user]);
 
   useEffect(() => {
-    const filtered = offers.filter((offer) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const filteredInactive = offers.filter((offer) => {
+      if (!offer.expirationDate) return false;
+
+      // parseamos fecha de expiración
+      const cleanedDate = offer.expirationDate.trim();
+      const [year, month, day] = cleanedDate.split("-");
+      const expDate = new Date(+year, +month - 1, +day);
+      expDate.setHours(0, 0, 0, 0);
+
+      // solo considerar inactivas
+      const isInactive = expDate < today;
+
+      if (!isInactive) return false;
+
+      // ahora aplicar filtros de búsqueda
       const title = offer.title?.toLowerCase() || "";
       const province = offer.province?.toLowerCase() || "";
       const workDay = offer.workDay?.toLowerCase() || "";
-      // const workModality = offer.workModality?.toLowerCase() || "";
+
       const matchesTitle = title.includes(searchTitle.toLowerCase());
       const matchesProvince =
         searchLocation === "seleccione" || province.includes(searchLocation.toLowerCase());
@@ -44,9 +66,8 @@ const OfferListDisabled = () => {
       return matchesTitle && matchesProvince && matchesWorkDay;
     });
 
-    setFilteredOffers(filtered);
+    setFilteredOffers(filteredInactive);
   }, [searchTitle, searchLocation, searchWorkDay, offers]);
-
   const findAllProvinces = async () => {
     const prov = await todasProvincias();
     setProvincias(prov);
@@ -63,7 +84,7 @@ const OfferListDisabled = () => {
   };
 
   const NoOffersComponent = () => (
-    <div style={{ textAlign: 'center',padding: '60px 20px', color: '#444' }}>
+    <div style={{ textAlign: 'center', padding: '60px 20px', color: '#444' }}>
       <img
         src={maletinOffer}
         alt="Sin ofertas laborales"
@@ -78,8 +99,8 @@ const OfferListDisabled = () => {
     </div>
   );
 
-    const NoOffersFound = () => (
-    <div style={{ textAlign: 'center',padding: '60px 20px', color: '#444' }}>
+  const NoOffersFound = () => (
+    <div style={{ textAlign: 'center',/*padding: '190px 10px',*/ marginBottom: "70%", height: "10%", color: '#444' }}>
       <img
         src={lupaOffer}
         alt="Sin ofertas laborales"
@@ -95,8 +116,8 @@ const OfferListDisabled = () => {
   );
 
 
-   
-  
+
+
   return (
     <div >
       {loading ? (
@@ -106,8 +127,27 @@ const OfferListDisabled = () => {
         </div>
 
       ) : (
-      <div className="container-offers">
-            <div className="filters-container">
+<div className="inactive-offers-container">
+          <div className="page-title-section-inactive">
+            <h1 className="page-title-centered">
+
+
+              Listado de ofertas laborales inactivas
+                <span className="offers-count-badge">
+
+                {filteredOffers.length === 1
+                  ? "1 oferta inactiva"
+                  : `${filteredOffers.length} ofertas inactivas`}
+              </span>
+                
+            </h1>
+             <div className="status-indicator">
+                Estas ofertas han vencido o fueron desactivadas
+              </div> 
+          </div>
+        <div className="container-offers-inactive">
+          
+          <div className="filters-container-inactive">
             <div className="filters-grid">
               <div className="filter-item">
                 <label htmlFor="title-filter" className="filter-label">Título del Puesto</label>
@@ -150,7 +190,7 @@ const OfferListDisabled = () => {
                   <option value="">Todas las jornadas</option>
                   <option value="jornada completa">Jornada Completa</option>
                   <option value="media jornada">Media Jornada</option>
-                   <option value="Pasantía">Pasantía</option>
+                  <option value="Pasantía">Pasantía</option>
                   <option value="Freelance">Freelance</option>
                   <option value="Temporario">Temporario</option>
                   <option value="Práctica Profesional">Práctica Profesional</option>
@@ -162,53 +202,55 @@ const OfferListDisabled = () => {
             </div>
           </div>
 
-          <div className={`${offers.length === 0 ||  !filteredOffers.length > 0   ? 'no-offers-center' : 'offer-list-container '}`}>
+          <div className={`${offers.length === 0 || !filteredOffers.length > 0 ? 'no-offers-center-inactive' : 'offer-list-container '}`}>
             {offers.length === 0 ? (
               <NoOffersComponent />
             ) : filteredOffers.length > 0 ? (
               filteredOffers
-                .filter((offer) => {
-                  if (!offer.expirationDate) return true;
+                // .filter((offer) => {
+                //   if (!offer.expirationDate) return true;
 
-                  const today = new Date();
-                  today.setHours(0, 0, 0, 0);
+                //   const today = new Date();
+                //   today.setHours(0, 0, 0, 0);
 
-                  const cleanedDate = offer.expirationDate.trim(); // limpiamos espacios
-                  const [year, month, day] = cleanedDate.split("-");
-                  const expDate = new Date(+year, +month - 1, +day);
-                  expDate.setHours(0, 0, 0, 0);
+                //   const cleanedDate = offer.expirationDate.trim(); // limpiamos espacios
+                //   const [year, month, day] = cleanedDate.split("-");
+                //   const expDate = new Date(+year, +month - 1, +day);
+                //   expDate.setHours(0, 0, 0, 0);
 
-                  return expDate < today;
-                })
-              .map((offer) => (
-                <Offer
-                  key={offer.id}
-                  offerId={offer.id}  // <-- esta línea es la clave
-                  companyName={offer.companyName}
-                  title={offer.title}
-                  description={offer.description}
-                  province={offer.province}
-                  workDay={offer.workDay}
-                  country={offer.country}
-                  dateOffer={offer.dateOffer}
-                  interestedUsers={offer.interestedUsers}
-                  offerObj={offer}
-                  workModality={offer.workModality}
-                  companyLogo={offer.logoURL}
-                  expirationDate={offer.expirationDate}
-                  requiredAbilities={offer.requiredAbilities}
-                  desiredAbilities={offer.desiredAbilities}
-                  disabled={true}
-                />
-              ))
+                //   return expDate < today;
+                // })
+                .map((offer) => (
+                  <Offer
+                    key={offer.id}
+                    offerId={offer.id}  // <-- esta línea es la clave
+                    companyName={offer.companyName}
+                    title={offer.title}
+                    description={offer.description}
+                    province={offer.province}
+                    workDay={offer.workDay}
+                    country={offer.country}
+                    dateOffer={offer.dateOffer}
+                    interestedUsers={offer.interestedUsers}
+                    offerObj={offer}
+                    workModality={offer.workModality}
+                    companyLogo={offer.logoURL}
+                    expirationDate={offer.expirationDate}
+                    requiredAbilities={offer.requiredAbilities}
+                    desiredAbilities={offer.desiredAbilities}
+                    disabled={true}
+                  />
+                ))
             ) : (
               // <p>No se encontraron resultados de su búsqueda.</p>
               <NoOffersFound />
             )}
           </div>
-      </div>
+        </div>
+        </div>
+      
 
-    )}
+      )}
     </div>
 
 
