@@ -67,3 +67,82 @@
     color: #000;
   }
   
+  /* Estilos para el botón de Google */
+.google-signin-btn {
+  transition: all 0.2s ease !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24) !important;
+}
+
+.google-signin-btn:hover {
+  background-color: #f8f9fa !important;
+  border-color: #dadce0 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+  transform: translateY(-1px);
+  color: #3c4043 !important;
+}
+
+.google-signin-btn:active {
+  background-color: #f1f3f4 !important;
+  transform: translateY(0);
+}
+
+.google-signin-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* Separador con texto */
+.divider-container {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 20px 0;
+}
+
+.divider-container hr {
+  margin: 0;
+}
+
+.divider-container span {
+  white-space: nowrap;
+  font-weight: 500;
+}
+
+/* Mejoras generales para el formulario */
+.form-control:focus {
+  border-color: #2E81FB;
+  box-shadow: 0 0 0 0.2rem rgba(46, 129, 251, 0.25);
+}
+
+/* Animación suave para los botones */
+.btn {
+  transition: all 0.2s ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+/* Loading spinner personalizado */
+.spinner-border-sm {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Responsive para el botón de Google */
+@media (max-width: 768px) {
+  .google-signin-btn {
+    font-size: 15px;
+    padding: 10px;
+  }
+  
+  .divider-container span {
+    font-size: 13px;
+    padding: 0 12px;
+  }
+}
