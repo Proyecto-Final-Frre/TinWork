@@ -7,9 +7,12 @@ import { BsPeople } from "react-icons/bs";
 import { intlFormatDistance } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import { Tooltip, IconButton, Button } from "@mui/material"
-import { BiSolidEdit } from "react-icons/bi";
+import { BiSolidEdit ,BiPowerOff ,BiSolidAlarmOff ,BiRepost   } from "react-icons/bi";
 import { MdExpandLess, MdOutlineWorkOff } from "react-icons/md";
 import Swal from "sweetalert2";
+import clockTime from "../../logos/clock-time.gif"
+import { updateOffer } from "../../services/OfferService";
+import { FaToggleOff } from "react-icons/fa";
 
 const Offer = ({
   offerId,
@@ -26,8 +29,10 @@ const Offer = ({
   companyLogo,
   expirationDate,
   requiredAbilities,
-  desiredAbilities
+  desiredAbilities,
+  disabled
 }) => {
+  console.log("🚀 ~ Offer ~ offerObj:", offerObj)
   const [isReadMoreShown, setReadMoreShown] = useState(false);
   const [showAllAbilities, setShowAllAbilities] = useState(false)
 
@@ -61,9 +66,15 @@ const Offer = ({
   // };
 
     const onDeactivate = async (offerObj) => {
-    console.log("🚀 ~ onDeactivate ~ offerObj:", offerObj)
     const result = await Swal.fire({
-      title: `¿Estás seguro que querés desactivar la oferta ${offerObj.title} publicada por ${offerObj.companyName} ?`,
+        title: "Confirmar desactivación",
+  html: `
+    <p style="font-size: 18px;">
+      ¿Estás seguro que querés desactivar la oferta 
+      <strong style="color:#2E81FB; font-size: 18px;">${offerObj.title}</strong> en 
+      <strong style="color:#2E81FB; font-size: 18px;">${offerObj.companyName}</strong>?
+    </p>
+  `,
       icon: "warning",
       showCancelButton: true,
       background: "#e3f2fd", 
@@ -76,65 +87,66 @@ const Offer = ({
     if (!result.isConfirmed) return;
   
     Swal.fire({
-      title: "Descartando...",
-      text: "Por favor, espere",
-      // imageUrl: noLike, 
+      title: "Desactivando oferta...",
+       html: `
+    <p style="font-size: 18px;">
+   
+      <strong style="color:#2E81FB; font-size: 18px;">Por favor espere...</strong> 
+    
+    </p>
+  `,
+      imageUrl: clockTime,
       imageWidth: 150,
       imageHeight: 150,
       background: "#e3f2fd", 
       allowOutsideClick: false,
       didOpen: () => {
         Swal.showLoading();
-      }
+      },
+      timer: 15000,
     });
   
-//     try {
-//       const user = await findUserByUid(element.uid);
+    try {
+     
   
-//       // Cambiar el estado del interesado a "no-match"
-//       state.interestedUsers.forEach((interestedUser) => {
-//         if (interestedUser.uid === element.uid) {
-//           interestedUser.status = "no-match";
-//         }
-//       });
+        // Fecha de ayer (un día antes de hoy)
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    console.log("🚀 ~ onDeactivate ~     yesterday.setDate(yesterday.getDate() - 1);:",     yesterday.setDate(yesterday.getDate() - 1))
+    console.log(`🚀 ~ onDeactivate ~  yesterday.toISOString().split("T")[0]:`,  yesterday.toISOString().split("T")[0])
+    // yesterday.setHours(0, 0, 0, 0); // Normaliza la hora a medianoche
   
-//       // Actualizar la oferta con el nuevo estado
-//       await updateOffer({
-//         id: state.id,
-//         interestedUsers: state.interestedUsers,
-//       });
-  
-//       // Remover la oferta del array offersMatch del usuario
-//       const updatedOffersMatch = user.offersMatch.filter(
-//         (offer) => offer.id !== state.id
-//       );
-  
-//       await updateUser({
-//         id: user.id,
-//         offersMatch: updatedOffersMatch,
-//       });
-//       Swal.fire({
-//         title: "Descartado",
-//         text: `Se descartó correctamente a ${element.name} de la oferta.`,
-//         icon: "success",
-//         confirmButtonText: "Aceptar", 
-//         background: "#e3f2fd",       
-//         confirmButtonColor: "#1976d2" 
-//       });
-  
-//       setRefresh(!refresh);
-//       setRows(prevRows =>
-//   prevRows.map(row =>
-//     row.uid === element.uid ? { ...row, status: 'no-match' } : row
-//   )
-// );
-//     } catch (error) {
-//       console.error("Error al descartar candidato:", error);
-//     }
+    await updateOffer({
+      id: offerObj.id, // Asegurate de tener el id correcto
+      expirationDate: yesterday.toISOString().split("T")[0], // O el formato que uses en tu BD
+    });
+
+    Swal.fire({
+      title: "Oferta desactivada",
+      html: `
+        <p style="font-size: 17px; margin-top: 10px;">
+          La oferta <strong style="color:#1e88e5; font-weight: 600;">${offerObj.title}</strong> en 
+          <strong style="color:#1e88e5; font-weight: 600;">${offerObj.companyName}</strong> se desactivó correctamente.
+        </p>
+      `,
+      icon: "success",
+      confirmButtonText: "Aceptar",
+      background: "#e3f2fd",
+      confirmButtonColor: "#1976d2"
+    });
+      // setRefresh(!refresh);
+      
+    } catch (error) {
+      console.error("Error al descartar candidato:", error);
+    }
   };
   const onEdit = () => {
-    console.log("ir a editar", offerId)
     navigate(`/edit-offer/${offerId}`,{ state: offerObj })
+
+  }
+
+   const onActivate = () => {
+    navigate(`/activate-offer/${offerId}`,{ state: offerObj })
 
   }
 
@@ -151,7 +163,6 @@ const Offer = ({
 
     const diffTime = expDate.getTime() - today.getTime()
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
-    console.log("🚀 ~ getExpirationInfo ~ diffDays:", diffDays)
 
     if (diffDays <= 0) {
       return { message: "Vence hoy", icon: "⏰" }
@@ -184,7 +195,9 @@ const Offer = ({
           <h4 className="company-name">{companyName}</h4>
         </div>
         <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
-             <Tooltip title="Editar oferta" placement="top" arrow>
+          {!disabled ?
+          <>
+            <Tooltip title="Editar oferta" placement="top" arrow>
           <IconButton
             size="small"
             onClick={onEdit}
@@ -203,14 +216,14 @@ const Offer = ({
               boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
             }}
           >
-            <BiSolidEdit size={20} color="#1976d2" />
+            <BiSolidEdit size={25} color="#1976d2" />
 
           </IconButton>
         </Tooltip>
         <Tooltip title="Desactivar oferta" placement="top" arrow>
           <IconButton
             size="small"
-            onClick={onDeactivate(offerObj)}
+            onClick={()=> onDeactivate(offerObj) }
             sx={{
               backgroundColor: "rgba(255, 255, 255, 0.95)",
               backdropFilter: "blur(8px)",
@@ -226,22 +239,58 @@ const Offer = ({
               boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
             }}
           >
-            <MdOutlineWorkOff size={20} color="#1976d2" />
+            {/* <MdOutlineWorkOff size={20} color="#1976d2" /> */}
+            <BiPowerOff size={25} color="#1976d2" />
 
           </IconButton>
         </Tooltip>
 
+          </>
+        : 
+        
+          <Tooltip title="Activar oferta" placement="top" arrow>
+          <IconButton
+            size="small"
+            onClick={()=> onActivate(offerObj) }
+            sx={{
+              backgroundColor: "rgba(255, 255, 255, 0.95)",
+              backdropFilter: "blur(8px)",
+              border: "1px solid #e0e0e0",
+              width: 42,
+              height: 42,
+              "&:hover": {
+                backgroundColor: "#e3f2fd",
+                borderColor: "#1976d2",
+                transform: "scale(1.05)",
+              },
+              transition: "all 0.2s ease-in-out",
+              boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+            }}
+          >
+            <BiRepost size={25} color="#1976d2" />
+
+          </IconButton>
+        </Tooltip>
+        
+
+
+          }
+          
         </div>
      
       </div>
       <div className="offer-header">
         <h5 className="offer-name" >{title} </h5>
+       
+     {!disabled  && 
         <div className="expiration-info">
 
           <span>{expirationInfo?.icon}</span>
           <span>{expirationInfo?.message}</span>
 
         </div>
+
+     }  
       </div>
       <div className="card-location">
         <h6 >
