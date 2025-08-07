@@ -57,76 +57,80 @@ const Offer = ({
   const obtnInteresed = () => {
     navigate("/candidates", { state: offerObj });
   };
-  // const onDeactivate = () => {
-  //   const confirmed = window.confirm("¿Estás seguro de desactivar esta oferta?");
-  //   if (confirmed) {
-  //     console.log("Oferta desactivada:", offerId);
-  //     // Aquí podés llamar a tu lógica para actualizar el estado de la oferta en Firebase o backend
-  //   }
-  // };
+  
+  const onDeactivate = async (offerObj) => {
+  const result = await Swal.fire({
+    title: "Confirmar desactivación",
+    html: `
+      <p style="font-size: 18px;">
+        ¿Estás seguro que querés desactivar la oferta 
+        <strong style="color:#2E81FB; font-size: 18px;">${offerObj.title}</strong> en 
+        <strong style="color:#2E81FB; font-size: 18px;">${offerObj.companyName}</strong>?
+      </p>
+    `,
+    icon: "warning",
+    showCancelButton: true,
+    background: "#e3f2fd", 
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Sí, desactivar",
+    cancelButtonText: "Cancelar"
+  });
 
-    const onDeactivate = async (offerObj) => {
-    const result = await Swal.fire({
-        title: "Confirmar desactivación",
-  html: `
-    <p style="font-size: 18px;">
-      ¿Estás seguro que querés desactivar la oferta 
-      <strong style="color:#2E81FB; font-size: 18px;">${offerObj.title}</strong> en 
-      <strong style="color:#2E81FB; font-size: 18px;">${offerObj.companyName}</strong>?
-    </p>
-  `,
-      icon: "warning",
-      showCancelButton: true,
-      background: "#e3f2fd", 
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Sí, desactivar",
-      cancelButtonText: "Cancelar"
-    });
-  
-    if (!result.isConfirmed) return;
-  
-    Swal.fire({
-      title: "Desactivando oferta...",
+  if (!result.isConfirmed) return;
+
+  // Mostrar loading (sin timer)
+  Swal.fire({
+    title: "Desactivando oferta...",
        html: `
-    <p style="font-size: 18px;">
-   
-      <strong style="color:#2E81FB; font-size: 18px;">Por favor espere...</strong> 
-    
-    </p>
-  `,
-      imageUrl: clockTime,
-      imageWidth: 150,
-      imageHeight: 150,
-      background: "#e3f2fd", 
-      allowOutsideClick: false,
-      didOpen: () => {
-        Swal.showLoading();
-      },
-      timer: 15000,
-    });
+      <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+        <div class="custom-spinner" style="
+          width: 50px;
+          height: 50px;
+          border: 6px solid #cce0ff;
+          border-top: 6px solid #2E81FB;
+          border-radius: 50%;
+          animation: spin 1s linear infinite;
+          margin-bottom: 15px;
+        "></div>
+        <p style="font-size: 18px; color: #2E81FB;"><strong>Por favor espere...</strong></p>
+      </div>
+    `,
+    background: "#e3f2fd",
+    allowOutsideClick: false,
+    showConfirmButton: false,  
   
-    try {
-     
-  
-        // Fecha de ayer (un día antes de hoy)
-    const yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
-    console.log("🚀 ~ onDeactivate ~     yesterday.setDate(yesterday.getDate() - 1);:",     yesterday.setDate(yesterday.getDate() - 1))
-    console.log(`🚀 ~ onDeactivate ~  yesterday.toISOString().split("T")[0]:`,  yesterday.toISOString().split("T")[0])
-    // yesterday.setHours(0, 0, 0, 0); // Normaliza la hora a medianoche
-  
-    await updateOffer({
-      id: offerObj.id, // Asegurate de tener el id correcto
-      expirationDate: yesterday.toISOString().split("T")[0], // O el formato que uses en tu BD
-    });
+  });
 
-    Swal.fire({
+  try {
+    // Fecha de ayer
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 2);
+     // Iniciar temporizador
+    const startTime = Date.now();
+
+    await updateOffer({
+      id: offerObj.id,
+      expirationDate: yesterday.toISOString().split("T")[0],
+    });
+    
+     // Asegurarse de que Swal se muestre al menos 2 segundos
+  const elapsed = Date.now() - startTime;
+  const minDisplayTime = 1000;
+  if (elapsed < minDisplayTime) {
+    await new Promise((res) => setTimeout(res, minDisplayTime - elapsed));
+  }
+
+    // Cerrar el loading
+    Swal.close();
+
+    // Mostrar éxito
+    await Swal.fire({
       title: "Oferta desactivada",
       html: `
-        <p style="font-size: 17px; margin-top: 10px;">
-          La oferta <strong style="color:#1e88e5; font-weight: 600;">${offerObj.title}</strong> en 
-          <strong style="color:#1e88e5; font-weight: 600;">${offerObj.companyName}</strong> se desactivó correctamente.
+        <p style="font-size: 18px; margin-top: 10px;">    
+          La oferta <strong style="color:#2E81FB; font-size: 18px;">${offerObj.title}</strong> en 
+          <strong style="color:#2E81FB; font-size: 18px;">${offerObj.companyName}</strong> se desactivó correctamente.
         </p>
       `,
       icon: "success",
@@ -134,12 +138,21 @@ const Offer = ({
       background: "#e3f2fd",
       confirmButtonColor: "#1976d2"
     });
-      // setRefresh(!refresh);
-      
-    } catch (error) {
-      console.error("Error al descartar candidato:", error);
-    }
-  };
+
+  } catch (error) {
+    Swal.close(); // Cerrar loading si hay error también
+    console.error("Error al desactivar oferta:", error);
+    Swal.fire({
+      title: "Error",
+      text: "Hubo un problema al desactivar la oferta. Intenta nuevamente.",
+      icon: "error",
+      confirmButtonColor: "#d33"
+    });
+  }
+};
+
+
+
   const onEdit = () => {
     navigate(`/edit-offer/${offerId}`,{ state: offerObj })
 
