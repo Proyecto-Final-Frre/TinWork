@@ -30,11 +30,28 @@ const OfferList = () => {
   }, [user]);
 
   useEffect(() => {
-    const filtered = offers.filter((offer) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const filteredInactive = offers.filter((offer) => {
+      if (!offer.expirationDate) return false;
+
+      // parseamos fecha de expiración
+      const cleanedDate = offer.expirationDate.trim();
+      const [year, month, day] = cleanedDate.split("-");
+      const expDate = new Date(+year, +month - 1, +day);
+      expDate.setHours(0, 0, 0, 0);
+
+      // solo considerar inactivas
+      const isInactive = expDate >= today;
+
+      if (!isInactive) return false;
+
+      // ahora aplicar filtros de búsqueda
       const title = offer.title?.toLowerCase() || "";
       const province = offer.province?.toLowerCase() || "";
       const workDay = offer.workDay?.toLowerCase() || "";
-      // const workModality = offer.workModality?.toLowerCase() || "";
+
       const matchesTitle = title.includes(searchTitle.toLowerCase());
       const matchesProvince =
         searchLocation === "seleccione" || province.includes(searchLocation.toLowerCase());
@@ -44,7 +61,7 @@ const OfferList = () => {
       return matchesTitle && matchesProvince && matchesWorkDay;
     });
 
-    setFilteredOffers(filtered);
+    setFilteredOffers(filteredInactive);
   }, [searchTitle, searchLocation, searchWorkDay, offers]);
 
   const findAllProvinces = async () => {
@@ -107,23 +124,22 @@ const OfferList = () => {
         </div>
 
       ) : (
-        <>
-          <div className="page-title-container">
-            <div className="page-title-box">
-              <h1 className="page-title-centered">
-                Listado de ofertas laborales activas
-                <span className="offers-count-badge">
-                  {filteredOffers.length} ofertas
-                </span>
-              </h1>
-              <div className="status-indicator">
-                Estas ofertas han vencido o fueron desactivadas
-              </div>
+        <div className="offers-container">
+          <div className="page-title-section">
+
+            <h1 className="page-title-centered">
+              Listado de ofertas laborales activas
+              <span className="offers-count-badge">
+                {filteredOffers.length} ofertas
+              </span>
+            </h1>
+            <div className="status-indicator active">
+              Estas ofertas están disponibles para candidatos
             </div>
           </div>
           <div className="container-offers">
 
-            <div className="filters-container">
+            <div className="filters-container-inactive">
               <div className="filters-grid">
                 <div className="filter-item">
                   <label htmlFor="title-filter" className="filter-label">Título del Puesto</label>
@@ -183,19 +199,19 @@ const OfferList = () => {
                 <NoOffersComponent />
               ) : filteredOffers.length > 0 ? (
                 filteredOffers
-                  .filter((offer) => {
-                    if (!offer.expirationDate) return true;
+                  // .filter((offer) => {
+                  //   if (!offer.expirationDate) return true;
 
-                    const today = new Date();
-                    today.setHours(0, 0, 0, 0);
+                  //   const today = new Date();
+                  //   today.setHours(0, 0, 0, 0);
 
-                    const cleanedDate = offer.expirationDate.trim(); // limpiamos espacios
-                    const [year, month, day] = cleanedDate.split("-");
-                    const expDate = new Date(+year, +month - 1, +day);
-                    expDate.setHours(0, 0, 0, 0);
+                  //   const cleanedDate = offer.expirationDate.trim(); // limpiamos espacios
+                  //   const [year, month, day] = cleanedDate.split("-");
+                  //   const expDate = new Date(+year, +month - 1, +day);
+                  //   expDate.setHours(0, 0, 0, 0);
 
-                    return expDate >= today;
-                  })
+                  //   return expDate >= today;
+                  // })
                   .map((offer) => (
                     <Offer
                       key={offer.id}
@@ -223,7 +239,7 @@ const OfferList = () => {
             </div>
           </div>
 
-        </>
+        </div>
 
       )}
     </div>

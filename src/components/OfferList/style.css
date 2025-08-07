@@ -1,17 +1,4 @@
 
-.container-offers {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  position: relative;
-  width: 100%;
-  padding: 20px;
-  padding-top: 120px; /* Space at the top for filters */
-  background:linear-gradient(to bottom, rgba(245, 250, 255, 0.9), rgba(225, 240, 255, 0.9));
-  height: calc(100vh - 58px);
-  overflow-y: auto; /* Activa el scroll vertical si el contenido es grande */
-
-}
 /* Container principal del título */
 .page-title-container {
   display: flex;
@@ -21,33 +8,6 @@
   padding: 0 1rem;
 }
 
-/* Cajita que contiene el título - diseño minimalista y elegante */
-.page-title-box {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(248, 250, 252, 0.95));
-  border: 1px solid rgba(226, 232, 240, 0.8);
-  border-radius: 16px;
-  /* padding: 1.1rem; */
-   padding:1%;
-  text-align: center;
-  box-shadow: 
-    0 1px 3px rgba(0, 0, 0, 0.08),
-    0 4px 12px rgba(0, 0, 0, 0.05);
-  max-width: 1300px;
-  width: 90%;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
-  position: relative;
-  overflow: hidden;
-}
-
-/* Efecto sutil en hover */
-.page-title-box:hover {
-  box-shadow: 
-    0 4px 8px rgba(0, 0, 0, 0.1),
-    0 8px 24px rgba(59, 130, 246, 0.1);
-  transform: translateY(-1px);
-  border-color: rgba(59, 130, 246, 0.3);
-}
 
 /* Título principal - más compacto */
 .page-title-centered {
@@ -95,23 +55,28 @@
   box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
 }
 
-/* Status indicator */
+/* CSS correspondiente */
 .status-indicator {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  background: rgba(239, 68, 68, 0.1);
-  color: #dc2626;
   font-size: 0.85rem;
   font-weight: 500;
   padding: 0.4rem 1rem;
   border-radius: 25px;
-  border: 1px solid rgba(239, 68, 68, 0.2);
+  border: 1px solid;
   margin-top: 0.5rem;
 }
 
-.status-indicator::before {
-  content: "⚠️";
+/* Variante para ofertas activas */
+.status-indicator.active {
+  background: rgba(34, 197, 94, 0.1);
+  color: #16a34a;
+  border-color: rgba(34, 197, 94, 0.2);
+}
+
+.status-indicator.active::before {
+  content: "✅";
   font-size: 0.9rem;
 }
 
@@ -155,25 +120,6 @@
   width: 100%;
   padding-top: 10px; /* Añade espacio en la parte superior para el filtro */
 }
-
-.filters-container {
-  position: absolute;
-  top: 20px; /* Ajusta la posición vertical del filtro */
-  left: 50%; /* Centra el filtro horizontalmente */
-  transform: translateX(-50%); /* Ajusta el centrado */
-  padding: 10px;
-  border: 1px solid #b2d3f4;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  background: linear-gradient(to bottom,rgba(245, 250, 255, 0.9), rgba(225, 240, 255, 0.9)); 
-  max-width: 1300px; /* Coincide con el max-width de las ofertas */
-  width: 90%; /* Ajusta el ancho para que no se desborde */
-  z-index: 10; /* Asegura que el filtro esté por encima de otros elementos */
-}
-
 
 
 .filters-title {
