@@ -7,10 +7,6 @@ import { todasProvincias } from "../../services/ProvinceService";
 import SkeletonOfferScreen from "../SkeletonOffer/SkeletonOfferScreen"
 import maletinOffer from "../../logos/maletinTransparent.gif"
 import lupaOffer from "../../logos/lupaOffer.gif"
-import { MdOutlineWorkHistory } from "react-icons/md";
-// import { Md2AlertCircleOutline } from "react-icons/md"
-import { GrAlert } from "react-icons/gr";
-import { GrCircleAlert } from "react-icons/gr";
 
 const OfferListDisabled = () => {
   const { user } = useAuth();
@@ -127,128 +123,128 @@ const OfferListDisabled = () => {
         </div>
 
       ) : (
-<div className="inactive-offers-container">
-          <div className="page-title-section-inactive">
+        <div className="offers-container">
+          <div className="page-title-section">
             <h1 className="page-title-centered">
 
 
               Listado de ofertas laborales inactivas
-                <span className="offers-count-badge">
+              <span className="offers-count-badge">
 
                 {filteredOffers.length === 1
                   ? "1 oferta inactiva"
-                  : `${filteredOffers.length} ofertas inactivas`}
+                  : `${filteredOffers.length} ofertas`}
               </span>
-                
+
             </h1>
-             <div className="status-indicator">
-                Estas ofertas han vencido o fueron desactivadas
-              </div> 
-          </div>
-        <div className="container-offers-inactive">
-          
-          <div className="filters-container-inactive">
-            <div className="filters-grid">
-              <div className="filter-item">
-                <label htmlFor="title-filter" className="filter-label">Título del Puesto</label>
-                <input
-                  id="title-filter"
-                  type="text"
-                  className="filter-input"
-                  placeholder="Ej: Desarrollador Frontend"
-                  value={searchTitle}
-                  onChange={(e) => setSearchTitle(e.target.value)}
-                />
-
-              </div>
-
-              <div className="filter-item">
-                <label htmlFor="province-filter" className="filter-label">Provincia</label>
-                <select
-                  id="province-filter"
-                  className="filter-select"
-                  value={searchLocation}
-                  onChange={(e) => setSearchLocation(e.target.value)}
-                >
-                  <option value="seleccione">Todas las provincias</option>
-                  {provincias.map((provincia) => (
-                    <option key={provincia.id} value={provincia.nombre.toLowerCase()}>
-                      {provincia.nombre}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="filter-item">
-                <label htmlFor="workday-filter" className="filter-label">Jornada</label>
-                <select
-                  id="workday-filter"
-                  className="filter-select"
-                  value={searchWorkDay}
-                  onChange={(e) => setSearchWorkDay(e.target.value)}
-                >
-                  <option value="">Todas las jornadas</option>
-                  <option value="jornada completa">Jornada Completa</option>
-                  <option value="media jornada">Media Jornada</option>
-                  <option value="Pasantía">Pasantía</option>
-                  <option value="Freelance">Freelance</option>
-                  <option value="Temporario">Temporario</option>
-                  <option value="Práctica Profesional">Práctica Profesional</option>
-                </select>
-              </div>
-              <div className="filter-button">
-                <button onClick={clearFilters} className="clear-button">Limpiar Filtros</button>
-              </div>
+            <div className="status-indicator">
+              Estas ofertas han vencido o fueron desactivadas
             </div>
           </div>
+          <div className="container-offers">
 
-          <div className={`${offers.length === 0 || !filteredOffers.length > 0 ? 'no-offers-center-inactive' : 'offer-list-container '}`}>
-            {offers.length === 0 ? (
-              <NoOffersComponent />
-            ) : filteredOffers.length > 0 ? (
-              filteredOffers
-                // .filter((offer) => {
-                //   if (!offer.expirationDate) return true;
-
-                //   const today = new Date();
-                //   today.setHours(0, 0, 0, 0);
-
-                //   const cleanedDate = offer.expirationDate.trim(); // limpiamos espacios
-                //   const [year, month, day] = cleanedDate.split("-");
-                //   const expDate = new Date(+year, +month - 1, +day);
-                //   expDate.setHours(0, 0, 0, 0);
-
-                //   return expDate < today;
-                // })
-                .map((offer) => (
-                  <Offer
-                    key={offer.id}
-                    offerId={offer.id}  // <-- esta línea es la clave
-                    companyName={offer.companyName}
-                    title={offer.title}
-                    description={offer.description}
-                    province={offer.province}
-                    workDay={offer.workDay}
-                    country={offer.country}
-                    dateOffer={offer.dateOffer}
-                    interestedUsers={offer.interestedUsers}
-                    offerObj={offer}
-                    workModality={offer.workModality}
-                    companyLogo={offer.logoURL}
-                    expirationDate={offer.expirationDate}
-                    requiredAbilities={offer.requiredAbilities}
-                    desiredAbilities={offer.desiredAbilities}
-                    disabled={true}
+            <div className="filters-container-inactive">
+              <div className="filters-grid">
+                <div className="filter-item">
+                  <label htmlFor="title-filter" className="filter-label">Título del Puesto</label>
+                  <input
+                    id="title-filter"
+                    type="text"
+                    className="filter-input"
+                    placeholder="Ej: Desarrollador Frontend"
+                    value={searchTitle}
+                    onChange={(e) => setSearchTitle(e.target.value)}
                   />
-                ))
-            ) : (
-              // <p>No se encontraron resultados de su búsqueda.</p>
-              <NoOffersFound />
-            )}
+
+                </div>
+
+                <div className="filter-item">
+                  <label htmlFor="province-filter" className="filter-label">Provincia</label>
+                  <select
+                    id="province-filter"
+                    className="filter-select"
+                    value={searchLocation}
+                    onChange={(e) => setSearchLocation(e.target.value)}
+                  >
+                    <option value="seleccione">Todas las provincias</option>
+                    {provincias.map((provincia) => (
+                      <option key={provincia.id} value={provincia.nombre.toLowerCase()}>
+                        {provincia.nombre}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="filter-item">
+                  <label htmlFor="workday-filter" className="filter-label">Jornada</label>
+                  <select
+                    id="workday-filter"
+                    className="filter-select"
+                    value={searchWorkDay}
+                    onChange={(e) => setSearchWorkDay(e.target.value)}
+                  >
+                    <option value="">Todas las jornadas</option>
+                    <option value="jornada completa">Jornada Completa</option>
+                    <option value="media jornada">Media Jornada</option>
+                    <option value="Pasantía">Pasantía</option>
+                    <option value="Freelance">Freelance</option>
+                    <option value="Temporario">Temporario</option>
+                    <option value="Práctica Profesional">Práctica Profesional</option>
+                  </select>
+                </div>
+                <div className="filter-button">
+                  <button onClick={clearFilters} className="clear-button">Limpiar Filtros</button>
+                </div>
+              </div>
+            </div>
+
+            <div className={`${offers.length === 0 || !filteredOffers.length > 0 ? 'no-offers-center-inactive' : 'offer-list-container '}`}>
+              {offers.length === 0 ? (
+                <NoOffersComponent />
+              ) : filteredOffers.length > 0 ? (
+                filteredOffers
+                  // .filter((offer) => {
+                  //   if (!offer.expirationDate) return true;
+
+                  //   const today = new Date();
+                  //   today.setHours(0, 0, 0, 0);
+
+                  //   const cleanedDate = offer.expirationDate.trim(); // limpiamos espacios
+                  //   const [year, month, day] = cleanedDate.split("-");
+                  //   const expDate = new Date(+year, +month - 1, +day);
+                  //   expDate.setHours(0, 0, 0, 0);
+
+                  //   return expDate < today;
+                  // })
+                  .map((offer) => (
+                    <Offer
+                      key={offer.id}
+                      offerId={offer.id}  // <-- esta línea es la clave
+                      companyName={offer.companyName}
+                      title={offer.title}
+                      description={offer.description}
+                      province={offer.province}
+                      workDay={offer.workDay}
+                      country={offer.country}
+                      dateOffer={offer.dateOffer}
+                      interestedUsers={offer.interestedUsers}
+                      offerObj={offer}
+                      workModality={offer.workModality}
+                      companyLogo={offer.logoURL}
+                      expirationDate={offer.expirationDate}
+                      requiredAbilities={offer.requiredAbilities}
+                      desiredAbilities={offer.desiredAbilities}
+                      disabled={true}
+                    />
+                  ))
+              ) : (
+                // <p>No se encontraron resultados de su búsqueda.</p>
+                <NoOffersFound />
+              )}
+            </div>
           </div>
         </div>
-        </div>
-      
+
 
       )}
     </div>

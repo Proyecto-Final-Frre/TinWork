@@ -1,9 +1,20 @@
-.container-offers-inactive {
+
+.offers-container {
+  background: linear-gradient(to bottom, 
+    rgba(240, 249, 255, 0.6) 0%, 
+    rgba(224, 242, 254, 0.4) 50%, 
+    rgba(240, 249, 255, 0.6) 100%
+  );
+  min-height: 100vh;
+  padding: 1rem 0;
+    height: calc(100vh - 58px);
+
+}
+
+.container-offers {
   display: flex;
   flex-direction: column;
   align-items: center; /* Centra el contenido horizontalmente */
-
-
   width: 100%;
   padding: 10px; /* Padding general para el contenido */
   /* Fondo gris más notorio */
@@ -12,17 +23,25 @@
   overflow-y: auto; /* Activa el scroll vertical si el contenido es grande */
 
 }  
-/* O si preferís un fondo más sutil */
-.inactive-offers-container {
-  background: linear-gradient(to bottom, 
-    rgba(240, 249, 255, 0.6) 0%, 
-    rgba(224, 242, 254, 0.4) 50%, 
-    rgba(240, 249, 255, 0.6) 100%
-  );
-  min-height: 100vh;
-  padding: 1rem 0;
+/* Status indicator */
+.status-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(239, 68, 68, 0.1);
+  color: #dc2626;
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 0.4rem 1rem;
+  border-radius: 25px;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  margin-top: 0.5rem;
 }
 
+.status-indicator::before {
+  content: "⚠️";
+  font-size: 0.9rem;
+}
 .skeleton-container-inactive {
   position: relative;
   background: linear-gradient(to bottom, #f0f0f0, #e0e0e0);
@@ -160,7 +179,7 @@
 }
 
 /* Estilos para el título de ofertas inactivas */
-.page-title-section-inactive {
+.page-title-section {
   text-align: center;
   margin: 1%  auto auto ;
  padding:1%;
