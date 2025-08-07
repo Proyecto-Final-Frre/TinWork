@@ -76,20 +76,20 @@ const StyledTabs = styled(Tabs)(({ theme }) => ({
           </Navbar.Brand>
         </Link>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        {/* {user && (
+        {user && (
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
-              <NavDropdown title="Ofertas" id="basic-nav-dropdown">
+              <NavDropdown title="Ofertas laborales" id="basic-nav-dropdown">
               <NavDropdown.Item as={Link} to="/create-offer">
-                <VscWand /> Crear oferta
+                <VscWand color="#0d6efd" /> Crear oferta laboral
               </NavDropdown.Item>
               <NavDropdown.Item as={Link} to="/offers">
-                <RiNewspaperLine /> Ver ofertas activas
+                <RiNewspaperLine color="#0d6efd" /> Ver ofertas activas
               </NavDropdown.Item>
                 <NavDropdown.Item>
-                  <RiNewspaperFill />{" "}
+                  <RiNewspaperFill color="#0d6efd"/>{" "}
                   <Link
-                    to={"/offers"}
+                    to={"/offersDisabled"}
                     style={{ textDecoration: "none", color: "black" }}
                   >
                     Ver ofertas inactivas
@@ -98,9 +98,9 @@ const StyledTabs = styled(Tabs)(({ theme }) => ({
               </NavDropdown>
             </Nav>
           </Navbar.Collapse>
-        )} */}
+        )}
            {/* Tabs integrados en lugar del dropdown */}
-              <div className="mx-3">
+              {/* <div className="mx-3">
                 <StyledTabs
                   value={value}
                   onChange={handleChange}
@@ -144,7 +144,7 @@ const StyledTabs = styled(Tabs)(({ theme }) => ({
                     }}
                   />
                 </StyledTabs>
-              </div>
+              </div> */}
         {user && (
           <Dropdown className="dropdown-cuenta">
             <Dropdown.Toggle className="dropdown-toggle" variant="light" id="dropdown-basic">
