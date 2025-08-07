@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
-import { updateOffer,findByOfferUid, createOffer } from "../../services/OfferService"
+import { updateOffer, findByOfferUid, createOffer } from "../../services/OfferService"
 import Abilities from "../Abilities"
 import "./style.css"
 import { findAll, findAllCategories } from "../../services/AbilityService"
@@ -14,10 +14,10 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage"
 import { GrLocation } from "react-icons/gr"
 import maletinOffer from "../../logos/maletinOffer.gif"
 import SplashScreen from "../Splash/SplashScreen"
-import {findUserByUid, pushNotificationUnskilledCandidate, updateUser } from "../../services/UserService";
+import { findUserByUid, pushNotificationUnskilledCandidate, updateUser } from "../../services/UserService";
 
-const ActivateOfferForm = () => { 
-  
+const ActivateOfferForm = () => {
+
   const { user } = useAuth()
   const { offerId } = useParams() // Assuming you pass the offer ID in the URL
   const [title, setTitle] = useState("")
@@ -39,9 +39,9 @@ const ActivateOfferForm = () => {
   const [loading, setLoading] = useState(false)
   const [expirationDate, setExpirationDate] = useState("")
   const [initialLoading, setInitialLoading] = useState(true)
-  const [offerResg,setOfferResg] = useState([])
+  const [offerResg, setOfferResg] = useState([])
   const navigate = useNavigate()
-    const dateOffer = new Date();
+  const dateOffer = new Date();
 
 
 
@@ -73,7 +73,7 @@ const ActivateOfferForm = () => {
               typeof ability === "string" ? { title: ability } : ability,
             ) || []
 
-        setRequiredAbilities(reqAbilities)
+          setRequiredAbilities(reqAbilities)
           setDesiredAbilities(desAbilities)
         }
         setInitialLoading(false)
@@ -132,8 +132,8 @@ const ActivateOfferForm = () => {
       setCategories((prev) => [...prev, newCategory])
     }
   }
- 
-  
+
+
   const uploadLogo = async (file) => {
     if (!file) return null
     const storageRef = ref(storage, `logos/${file.name}`)
@@ -143,104 +143,148 @@ const ActivateOfferForm = () => {
 
 
   const updateExistingOffer = async () => {
-  try {
-    Swal.fire({ title: "Activando oferta...", allowOutsideClick: false, showConfirmButton: false });
-    let logoURL = currentLogoURL // Keep current logo by default
-    if (logo) {
-      logoURL = await uploadLogo(logo) // Upload new logo if selected
-    }
-    const updatedOffer = {
-      id: offerId,
-      companyName,
-      title,
-      description,
-      requiredAbilities: requiredAbilities.map((a) => a.title),
-      desiredAbilities: desiredAbilities.map((a) => a.title),
-      workDay,
-      province,
-      country,
-      workModality,
-      expirationDate,
-      uid: user.uid,
-      logoURL
-    };
+try {
+  Swal.fire({
+    title: "Activando oferta...",
+    html: `
+      <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+        <div class="custom-spinner" style="
+          width: 50px;
+          height: 50px;
+          border: 6px solid #cce0ff;
+          border-top: 6px solid #2E81FB;
+          border-radius: 50%;
+          animation: spin 1s linear infinite;
+          margin-bottom: 15px;
+        "></div>
+        <p style="font-size: 18px; color: #2E81FB;"><strong>Por favor espere...</strong></p>
+      </div>
+    `,
+    background: "#e3f2fd",
+    allowOutsideClick: false,
+    showConfirmButton: false,
+    
+  });
 
-    await updateOffer(updatedOffer);
-    mostrarAlerta("Se ha actualizado correctamente su oferta laboral");
-  } catch (error) {
-    console.error("Error actualizando oferta:", error);
-    setLoading(false);
+  // Iniciar temporizador
+  const startTime = Date.now();
+
+  let logoURL = currentLogoURL;
+  if (logo) {
+    logoURL = await uploadLogo(logo);
   }
-};
+
+  const updatedOffer = {
+    id: offerId,
+    companyName,
+    title,
+    description,
+    requiredAbilities: requiredAbilities.map((a) => a.title),
+    desiredAbilities: desiredAbilities.map((a) => a.title),
+    workDay,
+    province,
+    country,
+    workModality,
+    expirationDate,
+    uid: user.uid,
+    logoURL,
+  };
+
+  await updateOffer(updatedOffer);
+
+  // Asegurarse de que Swal se muestre al menos 2 segundos
+  const elapsed = Date.now() - startTime;
+  const minDisplayTime = 1000;
+  if (elapsed < minDisplayTime) {
+    await new Promise((res) => setTimeout(res, minDisplayTime - elapsed));
+  }
+
+  Swal.close(); // cerrar manualmente
+
+  mostrarAlerta("Se ha activado correctamente su oferta laboral");
+} catch (error) {
+  Swal.close();
+  console.error("Error actualizando oferta:", error);
+  setLoading(false);
+}
+  };
 
   const createNewOffer = async () => {
-  try {
-    Swal.fire({ title: "Creando nueva oferta...", allowOutsideClick: false, showConfirmButton: false });
-    
-     let requiredAbilitiesStr = requiredAbilities.map(
-      (ability) => ability.title
-    );
-    let desiredAbilitiesStr = desiredAbilities.map((ability) => ability.title);
-    let logoURL = currentLogoURL // Keep current logo by default
-    if (logo) {
-      logoURL = await uploadLogo(logo) // Upload new logo if selected
+    try {
+          Swal.fire({
+    title: "Creando nueva oferta...",
+    html: `
+      <p style="font-size: 18px;">
+        <strong style="color:#2E81FB; font-size: 18px;">Por favor espere...</strong> 
+      </p>
+    `,    
+    background: "#e3f2fd", 
+    allowOutsideClick: false,
+    didOpen: () => {
+      Swal.showLoading();
     }
-    const offer = {
-      companyName,
-      title,
-      description,
-      requiredAbilities: requiredAbilitiesStr,
-      desiredAbilities: desiredAbilitiesStr,
-      workDay,
-      province,
-      country,
-      dateOffer,
-      logoURL,
-      workModality,
-      expirationDate,
-      uid: user.uid,
-    };
-    await createOffer(offer); // 🔹 tu servicio de creación
-    mostrarAlerta("Se ha creado una nueva oferta laboral");
-  } catch (error) {
-    console.error("Error creando oferta:", error);
-    setLoading(false);
-  }
-};
+  });
+      let requiredAbilitiesStr = requiredAbilities.map(
+        (ability) => ability.title
+      );
+      let desiredAbilitiesStr = desiredAbilities.map((ability) => ability.title);
+      let logoURL = currentLogoURL // Keep current logo by default
+      if (logo) {
+        logoURL = await uploadLogo(logo) // Upload new logo if selected
+      }
+      const offer = {
+        companyName,
+        title,
+        description,
+        requiredAbilities: requiredAbilitiesStr,
+        desiredAbilities: desiredAbilitiesStr,
+        workDay,
+        province,
+        country,
+        dateOffer,
+        logoURL,
+        workModality,
+        expirationDate,
+        uid: user.uid,
+      };
+      await createOffer(offer); // 🔹 tu servicio de creación
+      mostrarAlerta("Se ha creado una nueva oferta laboral");
+    } catch (error) {
+      setLoading(false);
+    }
+  };
 
   const activateOfferData = async (e) => {
     e.preventDefault()
     setLoading(true)
 
-     const hasInterestedUsers = offerResg?.interestedUsers?.length > 0;
-     console.log("🚀 ~ activateOfferData ~ hasInterestedUsers:", hasInterestedUsers)
-  const sensitiveChanged = handleSensitiveChange();
-  console.log("🚀 ~ activateOfferData ~ sensitiveChanged:", sensitiveChanged)
+    const hasInterestedUsers = offerResg?.interestedUsers?.length > 0;
+    const sensitiveChanged = handleSensitiveChange();
 
-  // ✅ Si tiene interesados y cambió información sensible → advertir y crear nueva oferta
-  if (hasInterestedUsers && sensitiveChanged) {
-    Swal.fire({
-      title: "Cambiaste información sensible",
-      text: "Esta oferta laboral tiene candidatos interesados. Si confirmás, se publicará como una NUEVA oferta y los candidatos actuales ya no estarán asociados a ella.",
-      icon: "warning",
-      showCancelButton: true,
-      background: "#e3f2fd", 
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Sí, activar",
-      cancelButtonText: "Cancelar"
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        await createNewOffer(); // 🔹 función separada para crear nueva oferta
-      } else {
-        setLoading(false);
-      }
-    });
-    return;
-  }
+    // ✅ Si tiene interesados y cambió información sensible → advertir y crear nueva oferta
+    if (hasInterestedUsers && sensitiveChanged) {
+      Swal.fire({
+        title: "Cambiaste información sensible",
+        text: "Esta oferta laboral tiene candidatos interesados. Si confirmás, se publicará como una NUEVA oferta y los candidatos actuales ya no estarán asociados a ella.",
+        icon: "warning",
+        showCancelButton: true,
+        background: "#e3f2fd",
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Sí, activar",
+        cancelButtonText: "Cancelar"
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          await createNewOffer(); // 🔹 función separada para crear nueva oferta
+        } else {
+          setLoading(false);
+        }
+      });
+      return;
+    }
 
-  // ✅ Si no hay interesados o no cambió info sensible → actualizar normal
-  await updateExistingOffer();
+    // ✅ Si no hay interesados o no cambió info sensible → actualizar normal
+    await updateExistingOffer();
   }
 
   const addRequiredAbilities = (abilities) => {
@@ -251,12 +295,12 @@ const ActivateOfferForm = () => {
     setDesiredAbilities(abilities)
   }
 
-  const mostrarAlerta = () => {
+  const mostrarAlerta = (msje) => {
     setLoading(false)
     Swal.fire({
       position: "top-center",
       icon: "success",
-      title: "Se ha actualizado correctamente su oferta laboral",
+      title: msje,
       showConfirmButton: false,
       timer: 2500,
       background: "#e3f2fd",
@@ -280,21 +324,21 @@ const ActivateOfferForm = () => {
   if (initialLoading) {
     return (
       <div className="container-card">
-                     <SplashScreen />
+        <SplashScreen />
       </div>
     )
   }
 
   const handleSensitiveChange = () => {
-  if (!offerResg) return false;
-  
-  // Comparar valores originales con los actuales
-  return (
-    offerResg.workModality !== workModality ||
-    offerResg.workDay !== workDay ||
-    offerResg.province !== province
-  );
-};
+    if (!offerResg) return false;
+
+    // Comparar valores originales con los actuales
+    return (
+      offerResg.workModality !== workModality ||
+      offerResg.workDay !== workDay ||
+      offerResg.province !== province
+    );
+  };
 
   return (
     <div className="container-card">
@@ -392,7 +436,7 @@ const ActivateOfferForm = () => {
                       value="Presencial"
                       checked={workModality === "Presencial"}
                       onChange={(e) => setWorkModality(e.target.value)}
-                      
+
                     />
                     <span className="radio-text">🏢 Presencial</span>
                   </label>
@@ -413,7 +457,7 @@ const ActivateOfferForm = () => {
                       value="Remoto"
                       checked={workModality === "Remoto"}
                       onChange={(e) => setWorkModality(e.target.value)}
-                      
+
                     />
                     <span className="radio-text">🏠 Remoto</span>
                   </label>
@@ -430,7 +474,7 @@ const ActivateOfferForm = () => {
                   value={workDay}
                   onChange={(e) => setWorkDay(e.target.value)}
                   required
-                  
+
                 >
                   <option value="" disabled>
                     Seleccione tipo de jornada
@@ -470,7 +514,7 @@ const ActivateOfferForm = () => {
                   value={province}
                   onChange={(e) => setProvince(e.target.value)}
                   required
-                  
+
                 >
                   <option value="" disabled>
                     Seleccione provincia
