@@ -86,12 +86,26 @@ const OfferList = () => {
         alt="Sin ofertas laborales"
         style={{ width: '180px', opacity: 0.7, marginBottom: '20px' }}
       />
-      <h2 style={{ fontSize: '20px', fontWeight: 600 }}>
+      {offers.length === 0 ? ( 
+        <>
+         <h2 style={{ fontSize: '20px', fontWeight: 600 }}>
         Usted aún no creó ninguna oferta laboral
       </h2>
       <p style={{ marginTop: '10px', fontSize: '16px', color: '#666' }}>
         Comience a publicar ofertas para atraer candidatos interesados.
       </p>
+        </>
+       ) : (
+        <>
+         <h2 style={{ fontSize: '20px', fontWeight: 600 }}>
+        Actualmente no tiene ofertas laborales activas
+      </h2>
+      <p style={{ marginTop: '10px', fontSize: '16px', color: '#666' }}>
+        Puede crear nuevas ofertas o reactivar alguna de sus ofertas.
+      </p>
+        </>
+      ) }
+      
     </div>
   );
 
@@ -111,8 +125,14 @@ const OfferList = () => {
     </div>
   );
 
+  const today = new Date();
 
-
+  // Verificar si hay al menos una oferta activa
+  const hayOfertasActivas = offers.some(offer => {
+    const expDate = new Date(offer.expirationDate);
+    return expDate >= today; // activa si no venció
+  });
+s
 
   return (
     <div >
@@ -195,7 +215,7 @@ const OfferList = () => {
             </div>
 
             <div className={`${offers.length === 0 || !filteredOffers.length > 0 ? 'no-offers-center' : 'offer-list-container '}`}>
-              {offers.length === 0 ? (
+              {offers.length === 0 || !hayOfertasActivas ? (
                 <NoOffersComponent />
               ) : filteredOffers.length > 0 ? (
                 filteredOffers
